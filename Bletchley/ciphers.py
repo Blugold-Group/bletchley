@@ -1,6 +1,10 @@
-# Provides vigenere cipheretext based on random word keys and text from books
-# For each ciphertext it returns. it also returns a random string of the same length
-# All characters are lowercase
+"""
+This file provides the backend of ciphers. 
+
+Cases are preserved where possible
+
+
+"""
 
 import random
 import string
@@ -9,20 +13,65 @@ from faker import Faker
 import re 
 import json
 
+global lower_alphabet
+global upper_alphabet
+global alphabet
+global punctuation
+global numbers
+
+lower_alphabet="abcdefghijklmnopqrstuvwxyz"
+upper_alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+alphabet=lower_alphabet+upper_alphabet
+punctuation=".,></;:'[]!@#$%^&*()-_=+`~|\"\\"
+numbers="1234567890"
 
 faker = Faker()
 
-def is_this_real(text):
-    # This function is used to determine if decrypted text is still ciphertext or a real sentence
+def is_this_real(word):
+    # This function is used to determine if string is a word, only takes words, not sentences
+    print(word)
+    word=word.lower()
 
-    f = open("words_dictionary.json", "r")
-
+    f = open("wordlists/words_dictionary.json", "r")
     data = json.load(f)
-    print(data)
-
     f.close()
 
-is_this_real("wfebwjebfjwef")
+    if word in data:
+        return True
+    else:
+        return False
+
+def ceaser(text, increment):
+    # Increments the text based on the increment
+    # Leaves spaces, punctuation, and numbers alone. Breaks with special characters
+
+    global punctuation
+    global lower_alphabet
+    global upper_alphabet
+    global alphabet
+    global numbers
+
+    encrypted=""
+
+    for i in text:
+        if i in punctuation:
+            encrypted+=i
+            continue
+        elif i in numbers:
+            encrypted+=i
+            continue
+        elif i == " ":
+            encrypted+=i
+            continue
+        elif i in upper_alphabet:
+            letter_index=upper_alphabet.index(i)+1
+            if letter_index==26: letter_index=0
+            encrypted+=upper_alphabet[letter_index]
+        elif i in lower_alphabet:
+            letter_index=lower_alphabet.index(i)+1
+            if letter_index==26: letter_index=0
+            encrypted+=lower_alphabet[letter_index]
+    return(encrypted)
 
 
 def password():

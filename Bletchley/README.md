@@ -52,18 +52,29 @@ Bletchley has a number of tools to help in cryptanalysis, including
     - SHAKE128
     - SHAKE256
 
-
 3. A static tool which tests a ciphertext for the above ciphers
+    - Uses hardcoded values with distinct characteristics of ciphertexts goven by these algorithms
+4. Case transformers (upper to lowercase and vice versa)
 
+And the crown jewel 
+5. A dynamic tool built on machine learning which analyses ciphertext and gives best guesses as to what the cipher is and what steps can be taken to decrypt the ciphertext. Can also work with modern ciphers such as
+    - AES-128
+    - AES-256
+    - ChaCha20
 
+The power givin by this repo is the ability to string various "departments" (tools) together, creating a dynamic solution finding tool. 
 
 Find what the plaintexts are likely to be, probably mostly quotes from GoodReads or something. 
 
 Encrypt lots of plaintexts with various algorithms, and ML it to detect what cipher was used
 
+## Description of wordlists
+quotes.csv - A file given by DOI:10.13140/RG.2.1.4386.4561 (10.8MB)
+words_dictionary.json - A json-izes version of quotes.csv (6.8 MB)
+words.txt - A file of the top 20000 most commonly used elgish words (155.4 kB)
 
 
 
-The quotes database used to train the models are credited to
+## Sources
 
 Madadipouya, Kasra. (2016). CSV dataset of 76,000 quotes, suitable for quotes recommender systems or other analysis.. 10.13140/RG.2.1.4386.4561. 
