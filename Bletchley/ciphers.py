@@ -22,24 +22,44 @@ global numbers
 lower_alphabet="abcdefghijklmnopqrstuvwxyz"
 upper_alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 alphabet=lower_alphabet+upper_alphabet
-punctuation=".,></;:'[]!@#$%^&*()-_=+`~|\"\\"
+punctuation=".,></;:'[]!@#$%^&*()—-_=+`~|\"\\"
 numbers="1234567890"
 
 faker = Faker()
 
-def is_this_real(word):
-    # This function is used to determine if string is a word, only takes words, not sentences
-    print(word)
-    word=word.lower()
+class realEngine:
+    def __init__(self, corpus="small_specialized"):
 
-    f = open("wordlists/words_dictionary.json", "r")
-    data = json.load(f)
-    f.close()
+        if corpus=="large":
+            f = open("wordlists/words_dictionary.json", "r")
+            self.data = json.load(f)
+            f.close()
+        elif corpus=="small":
+            with open("wordlists/words.txt") as f:
+                self.data = f.read().splitlines() 
+            f.close()
+        elif corpus=="small_specialized":
+            with open("wordlists/words_specialized.txt") as f:
+                self.data = f.read().splitlines() 
+            f.close()
+        elif corpus=="large_specialized":
+            with open("wordlists/words_dictionary_specialized.txt") as f:
+                self.data = f.read().splitlines() 
+            f.close()
+        elif corpus=="dictionary":
+            with open("wordlists/dictionary.txt") as f:
+                self.data = f.read().splitlines() 
+            f.close()
 
-    if word in data:
-        return True
-    else:
-        return False
+        self.corpus=corpus
+
+    def is_this_real(self, word):
+        word=word.lower()
+
+        if word in self.data:
+            return True
+        else:
+            return False
 
 def ceaser(text, increment):
     # Increments the text based on the increment
@@ -64,12 +84,13 @@ def ceaser(text, increment):
             encrypted+=i
             continue
         elif i in upper_alphabet:
-            letter_index=upper_alphabet.index(i)+1
-            if letter_index==26: letter_index=0
+            letter_index=upper_alphabet.index(i)+increment
+            letter_index=letter_index%26
             encrypted+=upper_alphabet[letter_index]
+
         elif i in lower_alphabet:
-            letter_index=lower_alphabet.index(i)+1
-            if letter_index==26: letter_index=0
+            letter_index=lower_alphabet.index(i)+increment
+            letter_index=letter_index%26
             encrypted+=lower_alphabet[letter_index]
     return(encrypted)
 
