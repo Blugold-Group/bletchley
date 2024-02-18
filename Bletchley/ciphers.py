@@ -8,6 +8,9 @@ This file was reused from an old file, some of the functions might not fit the s
 TODO:
     - vigenere_backend doesn't preserve cases, numbers, or punctuation
     - Get rid of unessecary funtions from old project
+    - Add an option to ignore special charcetrs in frequency analysis
+    - Add iptions to frequency analysis to display analysis from most to least frequent, vice versa, or alphabetical order 
+    - Add option to combine upper and lowercase letters
 
 """
 
@@ -141,3 +144,25 @@ def vigenere(text, password):
             passIndex+=1
 
     return(encrypted)
+
+def frequencyAnalysis(text):
+    # Performs frequency analysis on a text and displays it in graphs
+    import plotext as plt
+
+
+    foundCharacters=[]
+    counts=[]
+
+    for i in text:
+        if i not in foundCharacters:
+            foundCharacters.append(i)
+            counts.append(1)
+        else:
+            counts[foundCharacters.index(i)]+=1
+    
+    print(foundCharacters)
+    print(counts)
+
+    plt.bar(foundCharacters, counts)
+    plt.title("Frequency Analysis")
+    plt.show()

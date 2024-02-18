@@ -1,6 +1,6 @@
 # Bletchley
 
-A Ciphersuite 
+A Cryptanalysis Suite 
 
 Bletchley has a number of tools to aid in cryptanalysis, including
 
