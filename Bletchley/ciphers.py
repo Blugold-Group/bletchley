@@ -3,12 +3,15 @@ This file provides the backend of ciphers.
 
 Cases are preserved where possible
 
+This file was reused from an old file, some of the functions might not fit the same coding style and may need to be deleted or rewritten
+
+TODO:
+    - vigenere_backend doesn't preserve cases, numbers, or punctuation
+    - Get rid of unessecary funtions from old project
 
 """
 
 import random
-import string
-import os
 from faker import Faker
 import re 
 import json
@@ -96,63 +99,45 @@ def ceaser(text, increment):
 
 
 def password():
+    # Returns a random word of 10 characters or longer (usually for a password)
+
     password=""
     while len(password)<9:
         password=faker.word()
     return((password).lower())
 
-def randome(length):
-    lowercase_letters = string.ascii_lowercase
-    random_sentence = ''.join(random.choices(lowercase_letters, k=length))
+def randomText(length):
+    # Returns a string of (length) random letters
+
+    global lower_alphabet
+    random_sentence = ''.join(random.choices(lower_alphabet, k=length))
     return random_sentence
 
-def randomText():
-    length=random.randint(1,50)
-    return(randome(length))
+def randomTextRandomLength(start=1, stop=50):
+    # Returns randomText with a random length (length defaults to somewhere between 1 and 50)
 
-def vigenere_backend(text):
+    length=random.randint(start, stop)
+    return(randomText(length))
+
+def vigenere(text, password):
+    # The vigenere cipher
+
+    global lower_alphabet
     text=''.join(e for e in text if e.isalnum())
     text=text.replace("ù", "u").replace("é", "e").replace("æ", "ae").replace("ê", "e").replace("è", "e").replace("ç", "c").replace("ô", "o")
     text=re.sub(r'\d+', '', text)
     text=text.lower()
 
-
-    passw=password()
-    alphabet="abcdefghijklmnopqrstuvwxyz"
     encrypted=""
     passIndex=0
 
     for i in text:
-        value = alphabet.index(i)
-        value = (value+alphabet.index(passw[passIndex]))%26
-        encrypted+=alphabet[value]
-        if passIndex==len(passw)-1:
+        value = lower_alphabet.index(i)
+        value = (value+lower_alphabet.index(password[passIndex]))%26
+        encrypted+=lower_alphabet[value]
+        if passIndex==len(password)-1:
             passIndex=0
         else:
             passIndex+=1
 
     return(encrypted)
-
-def vigenere():
-    f=open("quotes.csv", "r")
-    quotes=f.readlines()
-    for i in quotes:
-        print(vigenere_backend(i))
-    f.close()
-
-def randomSentence():
-    book=random.choice(os.listdir('texts'))
-    with open("texts/"+book) as f:
-        lines = f.readlines()
-    return(random.choice(lines))
-
-def ciphertext():
-    line=""
-    while line=="" or line=="\n" or line==" " or len(line)<5:
-        line=randomSentence()
-    return vigenere(line)
-
-def randomData():
-    ciph=ciphertext()
-    length=len(ciph)
-    return(ciph, randome(length))
