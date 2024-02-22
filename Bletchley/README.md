@@ -5,6 +5,9 @@ A Cryptanalysis Suite
 Bletchley has a number of tools to aid in cryptanalysis, including
 
 1. Frequency analysis
+    - [ ] Frequency analysis displayed in graphs orall characters
+    - [ ] Automatic decryption using frequency analysis
+    
 2. Automatic recognition and attempted decryption of various weak ciphers, including
     - [x] Ceaser
     - [ ] Vigenere
@@ -57,6 +60,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
 4. Case transformers (upper to lowercase and vice versa)
 
 And the crown jewel 
+
 5. A dynamic tool built on machine learning which analyses ciphertext and gives best guesses as to what the cipher is and what steps can be taken to decrypt the ciphertext. Can also work with modern ciphers such as
     - AES-128
     - AES-256
