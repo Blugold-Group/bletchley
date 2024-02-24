@@ -18,6 +18,7 @@ import random
 from faker import Faker
 import re 
 import json
+from random import randrange
 
 global lower_alphabet
 global upper_alphabet
@@ -67,7 +68,7 @@ class realEngine:
         else:
             return False
 
-def ceaser(text, increment):
+def ceaser(text, increment=randrange(1,27)):
     # Increments the text based on the increment
     # Leaves spaces, punctuation, and numbers alone. Breaks with special characters
 
@@ -122,7 +123,7 @@ def randomTextRandomLength(start=1, stop=50):
     length=random.randint(start, stop)
     return(randomText(length))
 
-def vigenere(text, password):
+def vigenere(text, password=faker.word()):
     # The vigenere cipher
 
     global lower_alphabet

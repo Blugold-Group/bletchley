@@ -5,6 +5,7 @@ from sklearn.metrics import classification_report
 import joblib
 import ciphers
 import time
+import random
 
 texts = []
 labels = []
@@ -13,19 +14,26 @@ answers = []
 
 start=time.time()
 
-ciphers.vigenere()
+print("Adding encrypted values... ")
 
-end=time.time()
-print("Time taken  :  ", end-start)
+f=open("wordlists/quotes.csv", "r")
+quotes=f.readlines()
+f.close()
 
-input("  -------   Stop Here   -------  ")
-for i in range(10000):
-    data=vigenere.randomData()
+rounds=10
+for j in range(1,rounds+1):
+    print("Round "+str(j)+" out of "+str(rounds)+" complete")
 
-    texts.append(data[0])
-    labels.append("cipher")
-    texts.append(data[1])
-    labels.append("random")
+    for i in quotes:
+        data=ciphers.ceaser(i)
+        texts.append(data)
+        labels.append("ceaser")
+        data=ciphers.vigenere(i)
+        texts.append(data)
+        labels.append("vigenere")
+
+
+print("Training... ")
 
 # Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(texts, labels, test_size=0.2, random_state=42)
@@ -60,6 +68,45 @@ while (i<100):
     answers.append("cipher")
     i+=1
 
+"""
+
+end=time.time()
+print("Time taken  :  ", end-start)
+
+new_texts=[]
+test="s"
+
+"""
+while test!= "":
+    test=input("What do you want to test? [exit]   ")
+    new_texts.append(test)
+    ans=input("c/v?   ")
+    if ans=="v":
+        answers.append("vigenere")
+    else:
+        answers.append("ceaser")
+"""
+
+print("Running test cases... ")
+
+test_ceaser_quotes=[]
+test_vigenere_quotes=[]
+
+testCases=10
+for i in range(testCases//2):
+    test_ceaser_quotes.append(ciphers.ceaser(random.choice(quotes)))
+for i in range(testCases//2):
+    test_vigenere_quotes.append(ciphers.vigenere(random.choice(quotes)))
+
+for i in test_ceaser_quotes:
+    print("Added to ceaser list")
+    new_texts.append(i)
+    answers.append("ceaser")
+for i in test_vigenere_quotes:
+    print("Added to vigenere list")
+    new_texts.append(i)
+    answers.append("vigenere")
+
 # Vectorize the new texts using the same TF-IDF vectorizer
 new_texts_tfidf = vectorizer.transform(new_texts)
 
@@ -68,28 +115,30 @@ new_predictions = clf.predict(new_texts_tfidf)
 
 correct=0
 incorrect=0
-cipherPredictedAsRandom=0
-randomPredictedAsCipher=0
-cipherPredictedAsCipher=0
-randomPredictedAsRandom=0
+a="ceaser"
+b="vigenere"
+
+aPredictedAsa=0
+aPredictedAsb=0
+bPredictedAsa=0
+bPredictedAsb=0
 
 for text, prediction, answer in zip(new_texts, new_predictions, answers):
     if prediction==answer:
         correct+=1
-        if prediction=="cipher":
-            cipherPredictedAsCipher+=1
+        if prediction==a:
+            aPredictedAsa+=1
         else:
-            randomPredictedAsRandom+=1
+            bPredictedAsb+=1
     else:
         incorrect+=1
-        if prediction=="cipher":
-            randomPredictedAsCipher+=1
+        if prediction==b:
+            bPredictedAsa+=1
         else:
-            cipherPredictedAsRandom+=1
+            aPredictedAsb+=1
     
 print("Correct: ", str(correct) + " ("+str(correct/(incorrect+correct)*100)[0:5]+"%),   Incorrect: ", str(incorrect)+ " ("+str(incorrect/(incorrect+correct)*100)[0:5]+"%)")
-print("Cipher predicted as cipher: ", cipherPredictedAsCipher)
-print("Random predicted as random: ", randomPredictedAsRandom)
-print("Cipher predicted as random: ", cipherPredictedAsRandom)
-print("Random predicted as Cipher: ", randomPredictedAsCipher)
-"""
+print(a+" predicted as "+a+": ", aPredictedAsa)
+print(a+" predicted as "+b+": ", aPredictedAsb)
+print(b+" predicted as "+a+": ", bPredictedAsa)
+print(b+" predicted as "+b+": ", bPredictedAsb)
