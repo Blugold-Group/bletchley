@@ -25,9 +25,9 @@ for j in range(1,rounds+1):
     print("Round "+str(j)+" out of "+str(rounds)+" complete")
 
     for i in quotes:
-        data=ciphers.ceaser(i)
+        data=ciphers.caesar(i)
         texts.append(data)
-        labels.append("ceaser")
+        labels.append("caesar")
         data=ciphers.vigenere(i)
         texts.append(data)
         labels.append("vigenere")
@@ -84,24 +84,24 @@ while test!= "":
     if ans=="v":
         answers.append("vigenere")
     else:
-        answers.append("ceaser")
+        answers.append("caesar")
 """
 
 print("Running test cases... ")
 
-test_ceaser_quotes=[]
+test_caesar_quotes=[]
 test_vigenere_quotes=[]
 
 testCases=10
 for i in range(testCases//2):
-    test_ceaser_quotes.append(ciphers.ceaser(random.choice(quotes)))
+    test_caesar_quotes.append(ciphers.caesar(random.choice(quotes)))
 for i in range(testCases//2):
     test_vigenere_quotes.append(ciphers.vigenere(random.choice(quotes)))
 
-for i in test_ceaser_quotes:
-    print("Added to ceaser list")
+for i in test_caesar_quotes:
+    print("Added to caesar list")
     new_texts.append(i)
-    answers.append("ceaser")
+    answers.append("caesar")
 for i in test_vigenere_quotes:
     print("Added to vigenere list")
     new_texts.append(i)
@@ -115,7 +115,7 @@ new_predictions = clf.predict(new_texts_tfidf)
 
 correct=0
 incorrect=0
-a="ceaser"
+a="caesar"
 b="vigenere"
 
 aPredictedAsa=0

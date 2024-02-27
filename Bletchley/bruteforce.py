@@ -6,9 +6,9 @@ This file provides funtions to brute force weak ciphers
 
 import ciphers
 
-def ceaser(text, return_type="bg"):
+def caesar(text, return_type="bg"):
     """
-    Brute forces the ceaser cipher
+    Brute forces the caesar cipher
     Takes a string text and an optional string return_type
 
     return_type can be: 
@@ -23,10 +23,10 @@ def ceaser(text, return_type="bg"):
 
     """
 
-    # A list of the text encrypted which each possible key for ceaser cipher
+    # A list of the text encrypted which each possible key for caesar cipher
     test_texts=[]
     for i in range(1,26):
-        test_texts.append(ciphers.ceaser(text, i))
+        test_texts.append(ciphers.caesar(text, i))
     
     # Creates an object for testing if a text is a word or is ciphertext
     realTest = ciphers.realEngine("small_specialized")

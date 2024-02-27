@@ -2,6 +2,12 @@
 
 A Cryptanalysis Suite 
 
+## Pre-Requisites
+
+Requires python and pip:
+```
+pip install scikit-learn faker plotext
+```
 Bletchley has a number of tools to aid in cryptanalysis, including
 
 1. Frequency analysis
@@ -9,7 +15,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [ ] Automatic decryption using frequency analysis
     
 2. Automatic recognition and attempted decryption of various weak ciphers, including
-    - [x] Ceaser
+    - [x] Caesar
     - [ ] Vigenere
     - [ ] Rot13
     - [ ] Enigma

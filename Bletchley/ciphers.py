@@ -68,7 +68,7 @@ class realEngine:
         else:
             return False
 
-def ceaser(text, increment=randrange(1,27)):
+def caesar(text, increment=randrange(1,27)):
     # Increments the text based on the increment
     # Leaves spaces, punctuation, and numbers alone. Breaks with special characters
 
@@ -145,6 +145,38 @@ def vigenere(text, password=faker.word()):
             passIndex+=1
 
     return(encrypted)
+'''
+def formatToPlayfair(text):
+    text = text.lower()
+    temp = ""
+    for i in text:
+        if i == " ":
+            continue
+        else:
+            temp+=i
+    text = temp
+    temp = ""
+    for index, i in enumerate(text):
+        if index == 0:
+            continue
+        if index % 2 == 0:
+            temp+= " "
+        else:
+            temp+=text[index-1]
+            temp+=i
+    text = temp
+    return text
+
+def playfairDiagraph(key):
+    diagraphText = ""
+
+
+def playfair(text, key='monarchy'):
+    text = formatToPlayfair(text)
+    print(playfairDiagraph(key))
+'''
+
+
 
 def frequencyAnalysis(text):
     # Performs frequency analysis on a text and displays it in graphs
