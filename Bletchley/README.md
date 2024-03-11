@@ -5,7 +5,7 @@ A Cryptanalysis Suite
 Bletchley has a number of tools to aid in cryptanalysis, including
 
 1. Frequency analysis
-    - [ ] Frequency analysis displayed in graphs orall characters
+    - [ ] Frequency analysis displayed in graphs
     - [ ] Automatic decryption using frequency analysis
     
 2. Automatic recognition and attempted decryption of various weak ciphers, including
@@ -81,7 +81,6 @@ words_dictionary.json - A json-izes version of quotes.csv (6.8 MB)
 words.txt - A file of the top 20000 most commonly used elgish words (155.4 kB)
 dictionary.txt - The lowercase verion of https://pypi.org/project/english-dictionary/ (1.2 MB)
 words_dictionary_specialized.txt - words_dictionary.json except all words with less than 4 charcaters and which aren't in dictionary.txt are removed (1.0 MB)
-words_specialized.txt - words.txt except all words with less than 4 charcaters and which aren't in dictionary.txt are removed (150.1 kB)
 
 
 

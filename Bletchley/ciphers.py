@@ -1,16 +1,16 @@
 """
-This file provides the backend of ciphers. 
+Provides the backend of ciphers. 
 
 Cases are preserved where possible
-
-This file was reused from an old file, some of the functions might not fit the same coding style and may need to be deleted or rewritten
 
 TODO:
     - vigenere_backend doesn't preserve cases, numbers, or punctuation
     - Get rid of unessecary funtions from old project
     - Add an option to ignore special charcetrs in frequency analysis
-    - Add iptions to frequency analysis to display analysis from most to least frequent, vice versa, or alphabetical order 
+    - Add options to frequency analysis to display analysis from most to least frequent, vice versa, or alphabetical order 
     - Add option to combine upper and lowercase letters
+    - Allow realEngine to work with sentences not seperated by spaces
+    - Add a standardized text cleaning function
 
 """
 
@@ -38,23 +38,23 @@ class realEngine:
     def __init__(self, corpus="small_specialized"):
 
         if corpus=="large":
-            f = open("wordlists/words_dictionary.json", "r")
+            f = open("Bletchley/wordlists/words_dictionary.json", "r")
             self.data = json.load(f)
             f.close()
         elif corpus=="small":
-            with open("wordlists/words.txt") as f:
+            with open("Bletchley/wordlists/words.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="small_specialized":
-            with open("wordlists/words_specialized.txt") as f:
+            with open("Bletchley/wordlists/words_specialized.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="large_specialized":
-            with open("wordlists/words_dictionary_specialized.txt") as f:
+            with open("Bletchley/wordlists/words_dictionary_specialized.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="dictionary":
-            with open("wordlists/dictionary.txt") as f:
+            with open("Bletchley/wordlists/dictionary.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
 
@@ -67,6 +67,31 @@ class realEngine:
             return True
         else:
             return False
+    
+    def plaintext_or_ciphertext(self, sentence, tolerance=0.5):
+        """
+        A method to determine if a string is english 
+
+        The tolerance is the percentage/100 of the text which has to be english words in order to be labelled as "real"
+
+        Sentences are determined by splitting the sentence by spaces
+        """
+        words=sentence.split()
+        length=len(words)
+        count=0
+        for i in words:
+            if self.is_this_real(i):
+                count+=1
+        
+        if count/length>=tolerance:
+            return True
+        return False
+
+
+def clean(text):
+    # Add a standard way to clean the given text
+
+    return text
 
 def ceaser(text, increment=randrange(1,27)):
     # Increments the text based on the increment
@@ -123,21 +148,40 @@ def randomTextRandomLength(start=1, stop=50):
     length=random.randint(start, stop)
     return(randomText(length))
 
-def vigenere(text, password=faker.word()):
+def vigenere(text, password=faker.word(), action="e"):
     # The vigenere cipher
 
     global lower_alphabet
-    text=''.join(e for e in text if e.isalnum())
+    #text=''.join(e for e in text if e.isalnum())
     text=text.replace("ù", "u").replace("é", "e").replace("æ", "ae").replace("ê", "e").replace("è", "e").replace("ç", "c").replace("ô", "o")
-    text=re.sub(r'\d+', '', text)
+    #text=re.sub(r'\d+', '', text)
     text=text.lower()
 
     encrypted=""
     passIndex=0
 
+
     for i in text:
+        if i==" ":
+            encrypted+=" "
+            continue
         value = lower_alphabet.index(i)
-        value = (value+lower_alphabet.index(password[passIndex]))%26
+        try:
+            if action=="d":
+                value = (value-lower_alphabet.index(password[passIndex].lower()))
+                if value<0: # If value is a negative number, wrap around the alphabet
+                    value+=26
+            else:
+                value = (value+lower_alphabet.index(password[passIndex].lower()))%26
+        except:
+            print("~~~ Failed ~~~")
+            print(password)
+            print(passIndex)
+            print(text)
+            print("===========\n\n")
+
+            value=1
+
         encrypted+=lower_alphabet[value]
         if passIndex==len(password)-1:
             passIndex=0
@@ -148,8 +192,6 @@ def vigenere(text, password=faker.word()):
 
 def frequencyAnalysis(text):
     # Performs frequency analysis on a text and displays it in graphs
-    import plotext as plt
-
 
     foundCharacters=[]
     counts=[]
@@ -160,10 +202,8 @@ def frequencyAnalysis(text):
             counts.append(1)
         else:
             counts[foundCharacters.index(i)]+=1
-    
-    print(foundCharacters)
-    print(counts)
 
-    plt.bar(foundCharacters, counts)
-    plt.title("Frequency Analysis")
-    plt.show()
+
+    else:
+        return foundCharacters, counts
+
