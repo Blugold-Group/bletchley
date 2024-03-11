@@ -1,10 +1,15 @@
 """
 This file provides funtions to brute force weak ciphers
 
+All brute force methods need to be able to work with spaces and no spaces
+
+TODO:
+    - Add threaading on Vigenere brute force (caesar probably doesn't need it)
 
 """
 
 import ciphers
+from english_dictionary.scripts.read_pickle import get_dict
 
 def caesar(text, return_type="bg"):
     """
@@ -15,11 +20,12 @@ def caesar(text, return_type="bg"):
         bg "best guess" (the version which has the most real words in it)
         all "all" (a list of all of the possible solutions)
 
-    In bg mode, returns the best guess, which is the string with the most instances of real words (as dictated by words.txt)
+    In bg mode, returns the best guess, which is the string with the most instances of real words
     If there are two strings with the same amount of instances 
 
     TODO:
         - Also return the key which was used to encrypt the text
+        - Allow passing which wordlist to use
 
     """
 
@@ -41,7 +47,7 @@ def caesar(text, return_type="bg"):
         test=i.split()
 
         for j in test:
-            if realTest.is_this_real(j):
+            if realTest.plaintext_or_ciphertext(j):
                 count+=1
         if count>best_guess_count:
             best_guess_string=i
@@ -50,3 +56,36 @@ def caesar(text, return_type="bg"):
 
     return(best_guess_string)
     
+def vigenere(text):
+    count=0
+    decrypted=False
+    decryptedText=[]
+    keys=[]
+    english_dict = get_dict()
+    realTest = ciphers.realEngine("small_specialized")
+
+    for i in english_dict:
+        count+=1
+
+        if len(i)>0:
+            print(str(count+1)+" / "+str(len(english_dict)))
+            i=i.lower()
+            
+            if (realTest.plaintext_or_ciphertext(ciphers.vigenere(text, i, "d"))):
+                decrypted=True
+                decryptedText.append(ciphers.vigenere(text, i, "d"))
+                keys.append(i)
+
+    if decrypted:
+        if len(keys)>1:
+            print("Found", str(len(keys)), "combinations")
+        else:
+            print("Found 1 combination")
+
+        for text, key in zip(decryptedText, keys):
+            print(key, ": ", text)
+    else:
+        print("Nothing found")
+
+
+vigenere("Twt byirz")
