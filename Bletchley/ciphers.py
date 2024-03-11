@@ -189,8 +189,8 @@ def vigenere(text, password=faker.word(), action="e"):
             passIndex+=1
 
     return(encrypted)
-'''
-def formatToPlayfair(text):
+
+def playfairFormat(text):
     text = text.lower()
     temp = ""
     for i in text:
@@ -209,16 +209,64 @@ def formatToPlayfair(text):
             temp+=text[index-1]
             temp+=i
     text = temp
+
+    if len(text) % 2 == 1:
+        text+="z"
+    
     return text
 
 def playfairDiagraph(key):
-    diagraphText = ""
+    diagraphText = lower_alphabet.replace('j','-')
+    key = key.lower()
+    print(list(diagraphText))
+    diagraph=['' for i in range(5)]
+
+    i=0;j=0
+
+    for char in key:
+        if char in diagraphText:
+            diagraph[i]+=char
+            diagraphText=diagraphText.replace(char,'-')
+
+            j+=1
+
+            if j>4:
+                i+=1
+                j=0
+
+    for char in diagraphText:
+        if char != '-':
+            diagraph[i]+=char
+
+            j+=1
+
+            if j>4:
+                i+=1
+                j=0
+        
+    return(diagraph)
+
+def playfairDecryption(text,keyMatrix):
+
+    textPairs = []
+    
+    for i in range(len(text)):
+        if i == " ":
+            a=text[i-2]
+            b=text[i-1]
+            textPairs.append(a+b)
+
+            i+=2
+        
+
+
+
 
 
 def playfair(text, key='monarchy'):
-    text = formatToPlayfair(text)
-    print(playfairDiagraph(key))
-'''
+    text = playfairFormat(text)
+    keyMatrix = playfairDiagraph(key)
+
 
 
 
