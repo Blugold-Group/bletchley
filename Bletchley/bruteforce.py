@@ -7,7 +7,7 @@ TODO:
     - Add threaading on Vigenere brute force (caesar probably doesn't need it)
 
 """
-
+import time
 import ciphers
 from english_dictionary.scripts.read_pickle import get_dict
 
@@ -63,15 +63,17 @@ def vigenere(text):
     keys=[]
     english_dict = get_dict()
     realTest = ciphers.realEngine("small_specialized")
+    total=str(len(english_dict))
 
     for i in english_dict:
         count+=1
 
         if len(i)>0:
-            print(str(count+1)+" / "+str(len(english_dict)))
+            print(str(count+1)+" / "+total)
             i=i.lower()
+
             
-            if (realTest.plaintext_or_ciphertext(ciphers.vigenere(text, i, "d"))):
+            if (realTest.plaintext_or_ciphertext(ciphers.vigenere(text, i, "d"), 0.9)):
                 decrypted=True
                 decryptedText.append(ciphers.vigenere(text, i, "d"))
                 keys.append(i)
@@ -87,5 +89,6 @@ def vigenere(text):
     else:
         print("Nothing found")
 
-
-vigenere("Twt byirz")
+start=time.time()
+vigenere("I qte coj rlrt gtlh twxd")
+print(time.time()-start)
