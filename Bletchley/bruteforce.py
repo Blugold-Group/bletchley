@@ -7,9 +7,17 @@ TODO:
     - Add threaading on Vigenere brute force (caesar probably doesn't need it)
 
 """
-
+import time
 import ciphers
 from english_dictionary.scripts.read_pickle import get_dict
+import itertools
+import threading
+import sqlite3
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import alert
 
 def caesar(text, return_type="bg"):
     """
@@ -56,36 +64,51 @@ def caesar(text, return_type="bg"):
 
     return(best_guess_string)
     
-def vigenere(text):
-    count=0
-    decrypted=False
-    decryptedText=[]
-    keys=[]
-    english_dict = get_dict()
+def vigenere(text, keycode="w", length=None):
+    """
+    Based on flags, encrypts with all versions of a keyspace or english words
+
+    Saves all versions to a sql db
+
+    Runs through db to find most likely match
+
+    flags:
+        - w : english words
+        - l : english letters
+    """
     realTest = ciphers.realEngine("small_specialized")
 
-    for i in english_dict:
-        count+=1
+    keys=[]
 
-        if len(i)>0:
-            print(str(count+1)+" / "+str(len(english_dict)))
-            i=i.lower()
-            
-            if (realTest.plaintext_or_ciphertext(ciphers.vigenere(text, i, "d"))):
-                decrypted=True
-                decryptedText.append(ciphers.vigenere(text, i, "d"))
+    if "w" in keycode:
+        for i in get_dict():
+            if len(i)>0:
                 keys.append(i)
+    if "l" in keycode:
+        lower="abcdefghijklmnopqrstuvwxyz"
+        combinations = itertools.product(lower, repeat=length)
+        for combo in combinations:
+            keys.append(''.join(combo))
 
-    if decrypted:
-        if len(keys)>1:
-            print("Found", str(len(keys)), "combinations")
-        else:
-            print("Found 1 combination")
+    def calculate_square(text, key):
+        tr=ciphers.vigenere(text, key, "d")
 
-        for text, key in zip(decryptedText, keys):
-            print(key, ": ", text)
-    else:
-        print("Nothing found")
+        if realTest.plaintext_or_ciphertext(tr, 0.8):
+            alert.notify("WOAH")
+
+            ciphers.writeToDatabase("vigenere", (key, ciphers.vigenere(text, key, "d")))
+
+    threads = []
+
+    for i in keys:
+        thread = threading.Thread(target=calculate_square, args=(text, i,))
+        threads.append(thread)
+        thread.start()
+
+    for thread in threads:
+        thread.join()
 
 
-vigenere("Twt byirz")
+start=time.time()
+vigenere("I qte coj rlrt gtlh twxd", "wl", 4)
+print(time.time()-start)

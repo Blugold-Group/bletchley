@@ -87,11 +87,25 @@ class realEngine:
             return True
         return False
 
-
 def clean(text):
     # Add a standard way to clean the given text
 
     return text
+
+def writeToDatabase(db, data):
+    f=open("test.txt", "a")
+    wr=data[0]+" : "+data[1]+"\n"
+    f.write(wr)
+    f.close()
+
+    """
+    conn = sqlite3.connect('test')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO "+db+" (pass, result) VALUES (?, ?)", data)
+    conn.commit()
+    cursor.close()
+    conn.close()
+    """
 
 def caesar(text, increment=randrange(1,27)):
     # Increments the text based on the increment
@@ -125,7 +139,6 @@ def caesar(text, increment=randrange(1,27)):
             letter_index=letter_index%26
             encrypted+=lower_alphabet[letter_index]
     return(encrypted)
-
 
 def password():
     # Returns a random word of 10 characters or longer (usually for a password)
