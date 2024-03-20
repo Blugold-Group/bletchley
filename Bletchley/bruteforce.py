@@ -12,11 +12,8 @@ import ciphers
 from english_dictionary.scripts.read_pickle import get_dict
 import itertools
 import threading
-import sqlite3
 import sys
 import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import alert
 
 def caesar(text, return_type="bg"):
@@ -110,5 +107,5 @@ def vigenere(text, keycode="w", length=None):
 
 
 start=time.time()
-vigenere("I qte coj rlrt gtlh twxd", "wl", 4)
+vigenere("Twt byirz mvolc qsx yjxts dkpv twt wezn szk", "w")
 print(time.time()-start)

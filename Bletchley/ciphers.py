@@ -120,24 +120,59 @@ def caesar(text, increment=randrange(1,27)):
     encrypted=""
 
     for i in text:
-        if i in punctuation:
-            encrypted+=i
-            continue
-        elif i in numbers:
-            encrypted+=i
-            continue
-        elif i == " ":
+        if i in punctuation or i in numbers or i == " ":
             encrypted+=i
             continue
         elif i in upper_alphabet:
             letter_index=upper_alphabet.index(i)+increment
             letter_index=letter_index%26
             encrypted+=upper_alphabet[letter_index]
-
         elif i in lower_alphabet:
             letter_index=lower_alphabet.index(i)+increment
             letter_index=letter_index%26
             encrypted+=lower_alphabet[letter_index]
+    return(encrypted)
+
+def rot13(text, mode="e"):
+    # Increments the text by 13
+    # Leaves spaces, punctuation, and numbers alone. Breaks with special characters
+
+    global punctuation
+    global lower_alphabet
+    global upper_alphabet
+    global alphabet
+    global numbers
+
+    encrypted=""
+
+    if mode=="e":
+        for i in text:
+            if i in punctuation or i in numbers or i == " ":
+                encrypted+=i
+                continue
+            elif i in upper_alphabet:
+                letter_index=upper_alphabet.index(i)+13
+                letter_index=letter_index%26
+                encrypted+=upper_alphabet[letter_index]
+            elif i in lower_alphabet:
+                letter_index=lower_alphabet.index(i)+13
+                letter_index=letter_index%26
+                encrypted+=lower_alphabet[letter_index]
+
+    if mode=="d":
+        for i in text:
+            if i in punctuation or i in numbers or i == " ":
+                encrypted+=i
+                continue
+            elif i in upper_alphabet:
+                letter_index=upper_alphabet.index(i)-13
+                letter_index=letter_index%26
+                encrypted+=upper_alphabet[letter_index]
+            elif i in lower_alphabet:
+                letter_index=lower_alphabet.index(i)-13
+                letter_index=letter_index%26
+                encrypted+=lower_alphabet[letter_index]
+
     return(encrypted)
 
 def password():
@@ -161,7 +196,7 @@ def randomTextRandomLength(start=1, stop=50):
     length=random.randint(start, stop)
     return(randomText(length))
 
-def vigenere(text, password=faker.word(), action="e"):
+def vigenere(text, password=faker.word(), mode="e"):
     # The vigenere cipher
 
     global lower_alphabet
@@ -180,7 +215,7 @@ def vigenere(text, password=faker.word(), action="e"):
             continue
         value = lower_alphabet.index(i)
         try:
-            if action=="d":
+            if mode=="d":
                 value = (value-lower_alphabet.index(password[passIndex].lower()))
                 if value<0: # If value is a negative number, wrap around the alphabet
                     value+=26
@@ -271,32 +306,19 @@ def playfairDecryption(text,keyMatrix):
 
             i+=2
         
-
-
-
-
-
 def playfair(text, key='monarchy'):
     text = playfairFormat(text)
     keyMatrix = playfairDiagraph(key)
 
-
-
-
-def frequencyAnalysis(text):
-    # Performs frequency analysis on a text and displays it in graphs
-
-    foundCharacters=[]
-    counts=[]
+def atbash(text):
+    global lower_alphabet
+    global upper_alphabet
+    encrypted=""
 
     for i in text:
-        if i not in foundCharacters:
-            foundCharacters.append(i)
-            counts.append(1)
-        else:
-            counts[foundCharacters.index(i)]+=1
-
-
-    else:
-        return foundCharacters, counts
-
+        if i in lower_alphabet:
+            encrypted+=lower_alphabet[25-lower_alphabet.index(i)]
+        elif i in upper_alphabet:
+            encrypted+=upper_alphabet[25-upper_alphabet.index(i)]
+    
+    return(encrypted)
