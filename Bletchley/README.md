@@ -8,9 +8,9 @@ All of the required packages are located in requirments.txt
 
 You can install them by running 
 
-'''
+```
 pip install -r requirements.txt
-'''
+```
 
 ## Overview
 
