@@ -322,3 +322,44 @@ def atbash(text):
             encrypted+=upper_alphabet[25-upper_alphabet.index(i)]
     
     return(encrypted)
+
+def baconian(text, l1="a", l2="b", mode="old"):
+    """
+    Baconian cipher
+
+    Ignores non alphabetic characters, cipher doesn't differentiate between cases, so everything is treated as lowercase
+
+    There are two versions, old and new
+        - The old version translates (i and j) and (u and v) to the same binay representation 
+        - The new version doesn't do any of that nonsense
+    """
+
+    global lower_alphabet
+    global upper_alphabet
+    encrypted=""
+    text=text.lower()
+
+    for i in text:
+        bacon=""
+        if i not in lower_alphabet:
+            continue
+        else:
+            ind=lower_alphabet.index(i)
+            if mode=="old":
+                if ind > 20:
+                    ind-=2
+                elif ind > 8:
+                    ind-=1
+            binary = "{0:b}".format(int(ind))
+        for j in binary:
+            if j=="0":
+                bacon+=l1
+            if j=="1":
+                bacon+=l2
+        while len(bacon)<5:
+            bacon="a"+bacon
+
+        encrypted+=bacon+" "
+
+    return(encrypted[:-1])
+
