@@ -28,7 +28,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [x] Atbash
     - [x] Playfair
     - [ ] Affine
-    - [ ] Baconian
+    - [x] Baconian
     - [ ] Rail-Fence
     - [ ] Substitution Cipher
     - [ ] Columnar Transposition Cipher
@@ -45,7 +45,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [ ] Trifid Cipher
     - [ ] Straddle Checkerboard Cipher 
 
-    Also, basic encodings such as 
+    Also, common encodings such as 
     - [ ] Base32
     - [ ] Base64
     - [ ] ASCII85

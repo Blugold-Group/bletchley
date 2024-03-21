@@ -332,6 +332,10 @@ def baconian(text, l1="a", l2="b", mode="old"):
     There are two versions, old and new
         - The old version translates (i and j) and (u and v) to the same binay representation 
         - The new version doesn't do any of that nonsense
+
+    There is some more to the Baconian cipher, something about typefaces, but that's not included in this implementation
+
+    See https://en.wikipedia.org/wiki/Bacon's_cipher for details
     """
 
     global lower_alphabet
