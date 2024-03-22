@@ -16,7 +16,7 @@ start=time.time()
 
 print("Adding encrypted values... ")
 
-f=open("wordlists/quotes.csv", "r")
+f=open("Bletchley/wordlists/quotes.csv", "r")
 quotes=f.readlines()
 f.close()
 
