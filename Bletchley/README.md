@@ -27,8 +27,8 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [ ] Enigma
     - [x] Atbash
     - [x] Playfair
-    - [ ] Affine
-    - [ ] Baconian
+    - [x] Affine
+    - [x] Baconian
     - [ ] Rail-Fence
     - [ ] Substitution Cipher
     - [ ] Columnar Transposition Cipher
@@ -45,7 +45,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [ ] Trifid Cipher
     - [ ] Straddle Checkerboard Cipher 
 
-    Also, basic encodings such as 
+    Also, common encodings such as 
     - [ ] Base32
     - [ ] Base64
     - [ ] ASCII85
@@ -71,13 +71,19 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [x] Keccack
 
 3. A static tool which tests a ciphertext for the above ciphers
-    - Uses hardcoded values with distinct characteristics of ciphertexts goven by these algorithms
+    - Uses hardcoded values with distinct characteristics of ciphertexts given by these algorithms
   
 4. Case transformers (upper to lowercase and vice versa)
 
 And the crown jewel 
 
-5. A dynamic tool built on machine learning which analyses ciphertext and gives best guesses as to what the cipher is and what steps can be taken to decrypt the ciphertext
+5. A dynamic tool using machine learning to guess what cipher was used to encrypt a ciphertext (works with the following ciphers)
+   
+     - [x] Vigenere
+     - [x] Atbash
+     - [x] Baconian
+     - [ ] Caesar
+     - [ ] Affine
 
 The power givin by this repo is the ability to string various "departments" (tools) together, creating a dynamic solution finding tool. 
 
@@ -89,7 +95,8 @@ Encrypt lots of plaintexts with various algorithms, and ML it to detect what cip
 
 The specialized wordlists have been modified to perform better 
 
-quotes.csv - A file given by DOI:10.13140/RG.2.1.4386.4561 (10.8MB)
+small_quotes.txt - A file given by DOI:10.13140/RG.2.1.4386.4561 (10.8MB)
+large_quotes.txt - A file adapted from kaggle.com/datasets/manann/quotes-500k
 words_dictionary.json - A json-izes version of quotes.csv (6.8 MB)
 words.txt - A file of the top 20000 most commonly used elgish words (155.4 kB)
 dictionary.txt - The lowercase verion of https://pypi.org/project/english-dictionary/ (1.2 MB)

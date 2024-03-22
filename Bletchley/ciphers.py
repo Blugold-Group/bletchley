@@ -4,11 +4,8 @@ Provides the backend of ciphers.
 Cases are preserved where possible
 
 TODO:
-    - vigenere_backend doesn't preserve cases, numbers, or punctuation
-    - Get rid of unessecary funtions from old project
     - Add an option to ignore special charcetrs in frequency analysis
     - Add options to frequency analysis to display analysis from most to least frequent, vice versa, or alphabetical order 
-    - Add option to combine upper and lowercase letters
     - Allow realEngine to work with sentences not seperated by spaces
     - Add a standardized text cleaning function
 
@@ -109,7 +106,7 @@ def writeToDatabase(db, data):
 
 def caesar(text, increment=randrange(1,27)):
     # Increments the text based on the increment
-    # Leaves spaces, punctuation, and numbers alone. Breaks with special characters
+    # Leaves spaces, punctuation, numbers, and special characters alone
 
     global punctuation
     global lower_alphabet
@@ -120,7 +117,7 @@ def caesar(text, increment=randrange(1,27)):
     encrypted=""
 
     for i in text:
-        if i in punctuation or i in numbers or i == " ":
+        if i not in lower_alphabet and i not in upper_alphabet:
             encrypted+=i
             continue
         elif i in upper_alphabet:
@@ -210,8 +207,8 @@ def vigenere(text, password=faker.word(), mode="e"):
 
 
     for i in text:
-        if i==" ":
-            encrypted+=" "
+        if i not in lower_alphabet and i not in upper_alphabet:
+            encrypted+=i
             continue
         value = lower_alphabet.index(i)
         try:
@@ -322,3 +319,83 @@ def atbash(text):
             encrypted+=upper_alphabet[25-upper_alphabet.index(i)]
     
     return(encrypted)
+
+def baconian(text, l1="a", l2="b", mode="old"):
+    """
+    Baconian cipher
+
+    Ignores non alphabetic characters, cipher doesn't differentiate between cases, so everything is treated as lowercase
+
+    There are two versions, old and new
+        - The old version translates (i and j) and (u and v) to the same binay representation 
+        - The new version doesn't do any of that nonsense
+
+    There is some more to the Baconian cipher, something about typefaces, but that's not included in this implementation
+
+    See https://en.wikipedia.org/wiki/Bacon's_cipher for details
+    """
+
+    global lower_alphabet
+    global upper_alphabet
+    encrypted=""
+    text=text.lower()
+
+    for i in text:
+        bacon=""
+        if i not in lower_alphabet:
+            continue
+        else:
+            ind=lower_alphabet.index(i)
+            if mode=="old":
+                if ind > 20:
+                    ind-=2
+                elif ind > 8:
+                    ind-=1
+            binary = "{0:b}".format(int(ind))
+        for j in binary:
+            if j=="0":
+                bacon+=l1
+            if j=="1":
+                bacon+=l2
+        while len(bacon)<5:
+            bacon="a"+bacon
+
+        encrypted+=bacon+" "
+
+    return(encrypted[:-1])
+
+def affine(text, key1=randrange(1,25), key2=randrange(1,25), mode="e"):
+    """
+    Affine cipher
+    
+    Ignores non alphabetic characters and preserves cases
+
+    mode
+        - e = encryption
+        - d = decryption
+
+    TODO:
+        - Make decryption work
+    """
+
+    global lower_alphabet
+    global upper_alphabet
+    encrypted=""
+
+    for i in text:
+        if i.lower() in lower_alphabet:
+            if mode=="e":
+                index=((key1*lower_alphabet.index(i.lower())) + key2) % 26
+            elif mode=="d":
+                index=((lower_alphabet.index(i.lower())) + key2) % 26
+
+            if i in lower_alphabet:
+                encrypted+=lower_alphabet[index]
+            else:
+                encrypted+=upper_alphabet[index]
+        else:
+            encrypted+=i
+            continue
+
+    return(encrypted)
+
