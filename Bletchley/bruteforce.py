@@ -14,7 +14,7 @@ import itertools
 import threading
 import sys
 import os
-import alert
+#import alert
 
 def caesar(text, return_type="bg"):
     """
@@ -59,7 +59,9 @@ def caesar(text, return_type="bg"):
             best_guess_count=count
         counts.append(count)
 
-    return(best_guess_string)
+    if realTest.plaintext_or_ciphertext(best_guess_string, 0.8):
+        return(best_guess_string)
+    return(False)
     
 def vigenere(text, keycode="w", length=None):
     """
@@ -105,7 +107,6 @@ def vigenere(text, keycode="w", length=None):
     for thread in threads:
         thread.join()
 
+def substitution(text):
+    print("substitution")
 
-start=time.time()
-vigenere("Twt byirz mvolc qsx yjxts dkpv twt wezn szk", "w")
-print(time.time()-start)

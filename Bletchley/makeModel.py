@@ -6,14 +6,15 @@ import ciphers
 import time
 import joblib
 
-exported_model_name="cipher_classifier_model.pkl"
+exported_model_name="Bletchley/cipher_classifier_model.pkl"
+exported_vectorizer_name="Bletchley/count_vectorizer.pkl"
 
 start=time.time()
 # Sample dataset (ciphertext samples with corresponding cipher labels)
 ciphertext_samples = []
 
 print("Reading and appending data...")
-q=open("Bletchley/wordlists/quotes.txt", "r")
+q=open("Bletchley/wordlists/large_quotes.txt", "r")
 quotes=q.read().splitlines()
 q.close()
 
@@ -22,6 +23,7 @@ for i in quotes:
     ciphertext_samples.append((ciphers.caesar(i), "caesar"))
     ciphertext_samples.append((ciphers.baconian(i), "baconian"))
     ciphertext_samples.append((ciphers.atbash(i), "atbash"))
+    ciphertext_samples.append((ciphers.affine(i), "affine"))
 
 
 
@@ -41,7 +43,7 @@ classifier.fit(X, labels)
 
 print("Exporting the model")
 joblib.dump(classifier, exported_model_name)
-joblib.dump(vectorizer, 'count_vectorizer.pkl')
+joblib.dump(vectorizer, exported_vectorizer_name)
 
 print("Model trained and exported to '"+exported_model_name+"'")
 
