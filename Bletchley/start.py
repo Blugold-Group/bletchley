@@ -10,7 +10,10 @@ The first things ran against a ciphertext
 
 3. Brute force the best guess
 
+TODO:
+    - Don't make finding one option end the script, try them all and return all results
 
+    
 """
 
 import ciphers
@@ -37,10 +40,20 @@ def run(ciphertext):
         print("Substitution :", test)
         exit()
 
+    test=ciphers.atbash(ciphertext)
+    if (realTest.plaintext_or_ciphertext(test, 0.8)):
+        print("Atbash :", test)
+        exit()
+
+    print("Starting machine learning analysis")
+
     # ML Guess what the cipher is
     predicted=predict.predict_cipher(ciphertext)
     if predicted == "vigenere":
         bruteforce.vigenere(ciphertext)
 
+    print(predicted)
 
-run(ciphers.rot13("Hello world"))
+
+
+run(ciphers.atbash("attack at dawn"))

@@ -108,5 +108,6 @@ def vigenere(text, keycode="w", length=None):
         thread.join()
 
 def substitution(text):
-    print("substitution")
+    #print("substitution")
+    return(False)
 
