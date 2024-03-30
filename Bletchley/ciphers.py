@@ -332,7 +332,7 @@ def atbash(text):
     
     return(encrypted)
 
-def baconian(text, l1="a", l2="b", mode="old"):
+def baconian(text, mode="e", l1="a", l2="b", type="old"):
     """
     Baconian cipher
 
@@ -358,7 +358,7 @@ def baconian(text, l1="a", l2="b", mode="old"):
             continue
         else:
             ind=lower_alphabet.index(i)
-            if mode=="old":
+            if type=="old":
                 if ind > 20:
                     ind-=2
                 elif ind > 8:
