@@ -99,10 +99,6 @@ if argsnum > 1:
             # Guess
             print("Guess which cipher was used using ml model")
 
-        
-
-
-
 
 
         print(f"Argument {i}:", sys.argv[i])

@@ -82,8 +82,7 @@ And the crown jewel
      - [x] Vigenere
      - [x] Atbash
      - [x] Baconian
-     - [ ] Caesar
-     - [ ] Affine
+
 
 The power givin by this repo is the ability to string various "departments" (tools) together, creating a dynamic solution finding tool. 
 
