@@ -45,6 +45,11 @@ def run(ciphertext):
     if (realTest.plaintext_or_ciphertext(test, 0.8)):
         print("Atbash :", test)
         return
+    
+    test=ciphers.substitution(ciphertext)
+    if (realTest.plaintext_or_ciphertext(test, 0.8)):
+        print("Subsitution :", test)
+        return
 
     #print("Starting machine learning analysis")
 
