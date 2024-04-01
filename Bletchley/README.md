@@ -30,20 +30,20 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [x] Affine
     - [x] Baconian
     - [ ] Rail-Fence
-    - [ ] Substitution Cipher
-    - [ ] Columnar Transposition Cipher
-    - [ ] Autokey Cipher
-    - [ ] Beaufort Cipher
-    - [ ] Porta Cipher
-    - [ ] Running Key Cipher
-    - [ ] Homophonic Substitution Cipher
-    - [ ] Four Square Cipher
-    - [ ] Hill Cipher
-    - [ ] ADFGVX Cipher
-    - [ ] ADFGX Cipher
-    - [ ] Bifid Cipher
-    - [ ] Trifid Cipher
-    - [ ] Straddle Checkerboard Cipher 
+    - [ ] Substitution
+    - [ ] Columnar Transposition
+    - [ ] Autokey
+    - [ ] Beaufort
+    - [ ] Porta
+    - [ ] Running Key
+    - [ ] Homophonic Substitution
+    - [ ] Four Square
+    - [ ] Hill
+    - [ ] ADFGVX
+    - [ ] ADFGX
+    - [ ] Bifid
+    - [ ] Trifid
+    - [ ] Straddle Checkerboard 
 
     Also, common encodings such as 
     - [ ] Base32

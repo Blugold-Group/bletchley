@@ -6,6 +6,19 @@ import ciphers
 import time
 import joblib
 
+"""
+Characteristics: 
+    - Letter frequency:
+        Some ciphers preserve letter frequency (caesar) and some don't, and some manipulate it in different ways
+
+    - Length:
+        Block ciphers (AES256, DES, etc.) always produce ciphertext in blocks (usually devisable by four)
+
+    - Entropy 
+        Measure the randomness of the text
+        
+"""
+
 exported_model_name="Bletchley/cipher_classifier_model.pkl"
 exported_vectorizer_name="Bletchley/count_vectorizer.pkl"
 
@@ -14,15 +27,15 @@ start=time.time()
 ciphertext_samples = []
 
 print("Reading and appending data...")
-q=open("Bletchley/wordlists/large_quotes.txt", "r")
+q=open("Bletchley/wordlists/small_quotes.txt", "r")
 quotes=q.read().splitlines()
 q.close()
 
+#Only try to find vigenere, baconian, affine ciphers because the rest can be brute forced completely in under a second
+
 for i in quotes:
     ciphertext_samples.append((ciphers.vigenere(i), "vigenere"))
-    ciphertext_samples.append((ciphers.caesar(i), "caesar"))
     ciphertext_samples.append((ciphers.baconian(i), "baconian"))
-    ciphertext_samples.append((ciphers.atbash(i), "atbash"))
     ciphertext_samples.append((ciphers.affine(i), "affine"))
 
 

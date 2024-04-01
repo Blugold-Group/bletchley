@@ -104,7 +104,7 @@ def writeToDatabase(db, data):
     conn.close()
     """
 
-def caesar(text, increment=randrange(1,27)):
+def caesar(text, increment=randrange(1,26)):
     # Increments the text based on the increment
     # Leaves spaces, punctuation, numbers, and special characters alone
 
@@ -197,10 +197,10 @@ def vigenere(text, password=faker.word(), mode="e"):
     # The vigenere cipher
 
     global lower_alphabet
+    global upper_alphabet
     #text=''.join(e for e in text if e.isalnum())
     text=text.replace("ù", "u").replace("é", "e").replace("æ", "ae").replace("ê", "e").replace("è", "e").replace("ç", "c").replace("ô", "o")
     #text=re.sub(r'\d+', '', text)
-    text=text.lower()
 
     encrypted=""
     passIndex=0
@@ -210,12 +210,18 @@ def vigenere(text, password=faker.word(), mode="e"):
         if i not in lower_alphabet and i not in upper_alphabet:
             encrypted+=i
             continue
-        value = lower_alphabet.index(i)
+
+        value = lower_alphabet.index(i.lower())
         try:
             if mode=="d":
-                value = (value-lower_alphabet.index(password[passIndex].lower()))
-                if value<0: # If value is a negative number, wrap around the alphabet
-                    value+=26
+                if i in lower_alphabet:
+                    value = (value-lower_alphabet.index(password[passIndex].lower()))
+                    if value<0: # If value is a negative number, wrap around the alphabet
+                        value+=26
+                else:
+                    value = (value-upper_alphabet.index(password[passIndex].lower()))
+                    if value<0: # If value is a negative number, wrap around the alphabet
+                        value+=26
             else:
                 value = (value+lower_alphabet.index(password[passIndex].lower()))%26
         except:
@@ -227,7 +233,11 @@ def vigenere(text, password=faker.word(), mode="e"):
 
             value=1
 
-        encrypted+=lower_alphabet[value]
+        if i in lower_alphabet:
+            encrypted+=lower_alphabet[value]
+        else:
+            encrypted+=upper_alphabet[value]
+
         if passIndex==len(password)-1:
             passIndex=0
         else:
@@ -317,10 +327,12 @@ def atbash(text):
             encrypted+=lower_alphabet[25-lower_alphabet.index(i)]
         elif i in upper_alphabet:
             encrypted+=upper_alphabet[25-upper_alphabet.index(i)]
+        else:
+            encrypted+=i
     
     return(encrypted)
 
-def baconian(text, l1="a", l2="b", mode="old"):
+def baconian(text, mode="e", l1="a", l2="b", type="old"):
     """
     Baconian cipher
 
@@ -346,7 +358,7 @@ def baconian(text, l1="a", l2="b", mode="old"):
             continue
         else:
             ind=lower_alphabet.index(i)
-            if mode=="old":
+            if type=="old":
                 if ind > 20:
                     ind-=2
                 elif ind > 8:
