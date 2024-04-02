@@ -69,38 +69,35 @@ if argsnum > 1:
 
             bruteforce=False
 
-        elif i == "-f":
+        elif sys.argv[i] == "-f":
             # Frequency analysis
             print("Frequency anlysys")
 
-        elif i == "-fv":
+        elif sys.argv[i] == "-fv":
             # Frequency analysis verbose
             print("Frequency analysis with charts")
 
-        elif i == "-hc":
+        elif sys.argv[i] == "-hc":
             # Hash crack
             print("Hash crack")
             hashcrack=True
         
-        elif i == "-hr":
+        elif sys.argv[i] == "-hr":
             # Hash Recognize
             print("Hash recognize")
 
-        elif i == "-b":
+        elif sys.argv[i] == "-b":
             # Brute force
             print("Brute force")
             bruteforce=True
 
-        elif i == "-e":
+        elif sys.argv[i] == "-e":
             # Encoding
             print("Recognize and decode encoding")
 
-        elif i == "-g":
+        elif sys.argv[i] == "-g":
             # Guess
             print("Guess which cipher was used using ml model")
 
-
-
-        print(f"Argument {i}:", sys.argv[i])
 else:
     print("No arguments provided.")
