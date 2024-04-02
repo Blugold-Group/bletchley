@@ -5,6 +5,8 @@ Can return the analysis programatically or in graphical charts
 
 """
 
+import plotext as plt
+
 def frequencyAnalysis(text, mode="c"):
     # Performs frequency analysis on a text and displays it in graphs
 
@@ -19,8 +21,10 @@ def frequencyAnalysis(text, mode="c"):
             counts[foundCharacters.index(i)]+=1
 
     if mode=="c":
+        #count
         return foundCharacters, counts
     elif mode=="p":
+        #percentage
         textlength=len(text)
         length=len(counts)
         i=0
@@ -30,6 +34,31 @@ def frequencyAnalysis(text, mode="c"):
             i+=1
         
         return foundCharacters, counts
+    
+    elif mode=="vsbc":
+        #verbose simple bar - cout
+        plt.simple_bar(foundCharacters, counts)
+        plt.title("Frequency Analysis")
+        plt.ticks_color('red')
+        plt.ticks_style('bold')
+
+        return(plt.show())
+
+    elif mode=="vbc":
+        #verbose bar - cout
+        plt.bar(foundCharacters, counts)
+        plt.title("Frequency Analysis")
+        plt.ticks_color('red')
+        plt.ticks_style('bold')
+        #plt.yticks(list(range(1,max(counts))))
+
+        #plt.show()
+        return(plt.show())
+    
+    raise ValueError("No recognized mode given")
+
+
+        
 
 
 

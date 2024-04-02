@@ -79,6 +79,7 @@ class realEngine:
         length=len(words)
         count=0
         for i in words:
+            #if len(i)>1:
             if self.is_this_real(i):
                 count+=1
         
@@ -472,3 +473,6 @@ def rail_fence(text, n=randrange(2,7), mode="e"):
                 index = -index
 
     return toReturn
+
+def substitution(text):
+    return("Add substitution here")
