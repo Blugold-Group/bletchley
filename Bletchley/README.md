@@ -19,7 +19,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [x] Playfair
     - [x] Affine
     - [x] Baconian
-    - [ ] Rail-Fence
+    - [x] Rail-Fence
     - [ ] Substitution
     - [ ] Columnar Transposition
     - [ ] Autokey

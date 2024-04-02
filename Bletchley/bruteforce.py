@@ -16,6 +16,9 @@ import sys
 import os
 #import alert
 
+global tolerance
+tolerance=0.8
+
 def caesar(text, return_type="bg"):
     """
     Brute forces the caesar cipher
@@ -33,6 +36,8 @@ def caesar(text, return_type="bg"):
         - Allow passing which wordlist to use
 
     """
+
+    global tolerance
 
     # A list of the text encrypted which each possible key for caesar cipher
     test_texts=[]
@@ -59,7 +64,7 @@ def caesar(text, return_type="bg"):
             best_guess_count=count
         counts.append(count)
 
-    if realTest.plaintext_or_ciphertext(best_guess_string, 0.8):
+    if realTest.plaintext_or_ciphertext(best_guess_string, tolerance):
         return(best_guess_string)
     return(False)
     
@@ -75,6 +80,9 @@ def vigenere(text, keycode="w", length=None):
         - w : english words
         - l : english letters
     """
+
+    global tolerance
+    
     realTest = ciphers.realEngine("small_specialized")
 
     keys=[]
@@ -92,7 +100,7 @@ def vigenere(text, keycode="w", length=None):
     def calculate_square(text, key):
         tr=ciphers.vigenere(text, key, "d")
 
-        if realTest.plaintext_or_ciphertext(tr, 0.8):
+        if realTest.plaintext_or_ciphertext(tr, tolerance):
             alert.notify("WOAH")
 
             ciphers.writeToDatabase("vigenere", (key, ciphers.vigenere(text, key, "d")))
@@ -109,5 +117,19 @@ def vigenere(text, keycode="w", length=None):
 
 def substitution(text):
     #print("substitution")
+
+    global tolerance
+
     return(False)
 
+def railfence(text):
+    global tolerance
+
+    realTest = ciphers.realEngine("small_specialized")
+
+    for i in range(2,200):
+        test=(ciphers.rail_fence(text, i, "d"))
+        if realTest.plaintext_or_ciphertext(test, tolerance):
+            return(test, i)
+        
+    return(False)
