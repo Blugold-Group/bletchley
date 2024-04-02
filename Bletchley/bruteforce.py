@@ -111,3 +111,13 @@ def substitution(text):
     #print("substitution")
     return(False)
 
+def railfence(text):
+    realTest = ciphers.realEngine("small_specialized")
+
+    for i in range(2,1000):
+        test=(ciphers.rail_fence(text, i, "d"))
+        if realTest.plaintext_or_ciphertext(test):
+            return(test, i)
+        
+    return()
+

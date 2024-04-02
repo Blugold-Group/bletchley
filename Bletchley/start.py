@@ -36,6 +36,11 @@ def run(ciphertext):
         print("Caesar :", test)
         return
 
+    test=bruteforce.railfence(ciphertext)
+    if (test):
+        print("Railfence :", test[0], "key :", test[1])
+        return
+    
     test=bruteforce.substitution(ciphertext)
     if (test):
         print("Substitution :", test)
@@ -70,3 +75,4 @@ ciphertexts=["Aol xbpjr iyvdu mve qbtwz vcly aol shgf kvn.", "Zrc kewsg npaov ha
 
 for i in ciphertexts:
     run(i)
+

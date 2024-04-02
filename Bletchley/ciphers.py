@@ -16,6 +16,8 @@ from faker import Faker
 import re 
 import json
 from random import randrange
+from itertools import chain, cycle
+
 
 global lower_alphabet
 global upper_alphabet
@@ -65,7 +67,7 @@ class realEngine:
         else:
             return False
     
-    def plaintext_or_ciphertext(self, sentence, tolerance=0.5):
+    def plaintext_or_ciphertext(self, sentence, tolerance=0.51):
         """
         A method to determine if a string is english 
 
@@ -411,3 +413,62 @@ def affine(text, key1=randrange(1,25), key2=randrange(1,25), mode="e"):
 
     return(encrypted)
 
+def rail_fence(text, n=randrange(2,7), mode="e"):
+    if n < 2:
+        raise Exception("Rail fence requires a key above 1") 
+    
+    fence = []
+    rail = 0
+    index = 1
+    toReturn = ""
+
+    if mode == "e":
+        for i in range(n):
+            fence.append([])
+
+        for character in text:
+            fence[rail].append(character)
+            rail+=index
+
+            if rail == n-1 or rail == 0:
+                index = -index
+
+        for i in fence:
+            for j in i:
+                toReturn += j
+
+    elif mode == "d":
+        reverseFence = []
+
+        for i in range(n):
+            fence.append([])
+            reverseFence.append([])
+
+        for character in text:
+            fence[rail].append(character)
+            rail+=index
+
+            if rail == n-1 or rail == 0:
+                index = -index
+
+        i = 0
+        length = len(text)
+        text = list(text)
+        for k in fence:
+            for j in range(len(k)):
+                reverseFence[i].append(text[0])
+                text.remove(text[0])
+            i += 1
+
+        rail = 0
+        index  = 1
+
+        for i in range(length):
+            toReturn += reverseFence[rail][0]
+            reverseFence[rail].remove(reverseFence[rail][0])
+            rail += index
+
+            if rail == n-1 or rail == 0:
+                index = -index
+
+    return toReturn
