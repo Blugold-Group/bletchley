@@ -84,12 +84,12 @@ Encrypt lots of plaintexts with various algorithms, and ML it to detect what cip
 
 The specialized wordlists have been modified to perform better 
 
-small_quotes.txt - A file given by DOI:10.13140/RG.2.1.4386.4561 (10.8MB)
-large_quotes.txt - A file adapted from kaggle.com/datasets/manann/quotes-500k
-words_dictionary.json - A json-izes version of quotes.csv (6.8 MB)
-words.txt - A file of the top 20000 most commonly used elgish words (155.4 kB)
-dictionary.txt - The lowercase verion of https://pypi.org/project/english-dictionary/ (1.2 MB)
-words_dictionary_specialized.txt - words_dictionary.json except all words with less than 4 charcaters and which aren't in dictionary.txt are removed (1.0 MB)
+*small_quotes.txt - A file given by DOI:10.13140/RG.2.1.4386.4561 (10.8MB)
+*large_quotes.txt - A file adapted from kaggle.com/datasets/manann/quotes-500k
+*words_dictionary.json - A json-izes version of quotes.csv (6.8 MB)
+*words.txt - A file of the top 20000 most commonly used elgish words (155.4 kB)
+*dictionary.txt - The lowercase verion of https://pypi.org/project/english-dictionary/ (1.2 MB)
+*words_dictionary_specialized.txt - words_dictionary.json except all words with less than 4 charcaters and which aren't in dictionary.txt are removed (1.0 MB)
 
 ## Sources
 
