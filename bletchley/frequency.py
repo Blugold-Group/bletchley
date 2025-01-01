@@ -21,10 +21,10 @@ def frequencyAnalysis(text, mode="c"):
             counts[foundCharacters.index(i)]+=1
 
     if mode=="c":
-        #count
+        # List of counts
         return foundCharacters, counts
     elif mode=="p":
-        #percentage
+        # List of percentages
         textlength=len(text)
         length=len(counts)
         i=0
@@ -36,29 +36,177 @@ def frequencyAnalysis(text, mode="c"):
         return foundCharacters, counts
     
     elif mode=="vsbc":
-        #verbose simple bar - cout
+        # Verbose simple bar - count
         plt.simple_bar(foundCharacters, counts)
         plt.title("Frequency Analysis")
         plt.ticks_color('red')
         plt.ticks_style('bold')
 
-        return(plt.show())
+        plt.show()
+        return
 
     elif mode=="vbc":
-        #verbose bar - cout
-        plt.bar(foundCharacters, counts)
+        # Verbose bar - count
+        plt.bar(foundCharacters, counts, marker="fhd")
+
+        plt.yticks(range(min(counts), max(counts) + 1, 1))  # Make Y axis increment by 1
+        plt.title("Frequency Analysis")
+        plt.theme("pro")
+
+        plt.show()
+        return
+
+    elif mode=="vsbca":
+        # Verbose simple bar - count, alphabetized
+
+        # Alphabetize the lists
+        combined = list(zip(foundCharacters, counts))
+        sorted_combined = sorted(combined, key=lambda x: x[0])
+        sorted_foundCharacters, sorted_counts = zip(*sorted_combined)
+        foundCharacters = list(sorted_foundCharacters)
+        counts = list(sorted_counts)
+
+        plt.simple_bar(foundCharacters, counts)
         plt.title("Frequency Analysis")
         plt.ticks_color('red')
         plt.ticks_style('bold')
-        #plt.yticks(list(range(1,max(counts))))
 
-        #plt.show()
-        return(plt.show())
+        plt.show()
+        return
+
+    elif mode=="vbca":
+        # Verbose bar - count, alphabetized
+
+        # Alphabetize the lists
+        combined = list(zip(foundCharacters, counts))
+        sorted_combined = sorted(combined, key=lambda x: x[0])
+        sorted_foundCharacters, sorted_counts = zip(*sorted_combined)
+        foundCharacters = list(sorted_foundCharacters)
+        counts = list(sorted_counts)
+
+        plt.bar(foundCharacters, counts, marker="fhd")
+
+        plt.yticks(range(min(counts), max(counts) + 1, 1))  # Make Y axis increment by 1
+        plt.title("Frequency Analysis")
+        plt.theme("pro")
+
+        plt.show()
+        return
+
+    elif mode=="vsbcar":
+        # Verbose simple bar - count, alphabetized reverse
+
+        # Alphabetize the lists
+        combined = list(zip(foundCharacters, counts))
+        sorted_combined = sorted(combined, key=lambda x: x[0], reverse=True)
+        sorted_foundCharacters, sorted_counts = zip(*sorted_combined)
+        foundCharacters = list(sorted_foundCharacters)
+        counts = list(sorted_counts)
+
+        plt.simple_bar(foundCharacters, counts)
+        plt.title("Frequency Analysis")
+        plt.ticks_color('red')
+        plt.ticks_style('bold')
+
+        plt.show()
+        return
+
+    elif mode=="vbcar":
+        # Verbose bar - count, alphabetized reverse
+
+        # Alphabetize the lists
+        combined = list(zip(foundCharacters, counts))
+        sorted_combined = sorted(combined, key=lambda x: x[0], reverse=True)
+        sorted_foundCharacters, sorted_counts = zip(*sorted_combined)
+        foundCharacters = list(sorted_foundCharacters)
+        counts = list(sorted_counts)
+
+        plt.bar(foundCharacters, counts, marker="fhd")
+
+        plt.yticks(range(min(counts), max(counts) + 1, 1))  # Make Y axis increment by 1
+        plt.title("Frequency Analysis")
+        plt.theme("pro")
+
+        plt.show()
+        return
+
+
+    elif mode=="vsbcos":
+        # Verbose simple bar - count ordered smallest (to largest)
+
+        # Order the lists largest to smallest
+        combined = list(zip(foundCharacters, counts))
+        sorted_combined = sorted(combined, key=lambda x: x[1])
+        sorted_foundCharacters, sorted_counts = zip(*sorted_combined)
+        foundCharacters = list(sorted_foundCharacters)
+        counts = list(sorted_counts)
+
+
+        plt.simple_bar(foundCharacters, counts)
+        plt.title("Frequency Analysis")
+        plt.ticks_color('red')
+        plt.ticks_style('bold')
+
+        plt.show()
+        return
+
+    elif mode=="vbcos":
+        # Verbose bar - count ordered smallest (to largest)
+
+        # Order the lists largest to smallest
+        combined = list(zip(foundCharacters, counts))
+        sorted_combined = sorted(combined, key=lambda x: x[1])
+        sorted_foundCharacters, sorted_counts = zip(*sorted_combined)
+        foundCharacters = list(sorted_foundCharacters)
+        counts = list(sorted_counts)
+
+        plt.bar(foundCharacters, counts, marker="fhd")
+
+        plt.yticks(range(min(counts), max(counts) + 1, 1))  # Make Y axis increment by 1
+        plt.title("Frequency Analysis")
+        plt.theme("pro")
+
+        plt.show()
+        return
     
+    elif mode=="vsbcol":
+        # Verbose simple bar - count ordered largest (to smallest)
+
+        # Order the lists largest to smallest
+        combined = list(zip(foundCharacters, counts))
+        sorted_combined = sorted(combined, key=lambda x: x[1], reverse=True)
+        sorted_foundCharacters, sorted_counts = zip(*sorted_combined)
+        foundCharacters = list(sorted_foundCharacters)
+        counts = list(sorted_counts)
+
+        plt.simple_bar(foundCharacters, counts)
+        plt.title("Frequency Analysis")
+        plt.ticks_color('red')
+        plt.ticks_style('bold')
+
+        plt.show()
+        return
+
+    elif mode=="vbcol":
+        # Verbose bar - count ordered largest (to smallest)
+
+        # Order the lists largest to smallest
+        combined = list(zip(foundCharacters, counts))
+        sorted_combined = sorted(combined, key=lambda x: x[1], reverse=True)
+        sorted_foundCharacters, sorted_counts = zip(*sorted_combined)
+        foundCharacters = list(sorted_foundCharacters)
+        counts = list(sorted_counts)
+
+        plt.bar(foundCharacters, counts, marker="fhd")
+
+        plt.yticks(range(min(counts), max(counts) + 1, 1))  # Make Y axis increment by 1
+        plt.title("Frequency Analysis")
+        plt.theme("pro")
+
+        plt.show()
+        return
     raise ValueError("No recognized mode given")
 
 
-        
 
-
-
+frequencyAnalysis("jkwbefjwbefjwetrytuyiuoplkamhbgcfyxtuvwbkxuiywqtrcfhvjuy546756uyfvtyrew243546okulwef", "vsbcar")

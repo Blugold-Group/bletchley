@@ -10,8 +10,8 @@ import recognizeHash
 def plainFrequencyAnalysis(text):
     return("Plain frequency analysis")
 
-def frequencyAnalysis(text):
-    print("Frequency analyses")
+def frequencyAnalysis(text, style="vbca"):
+    print("Frequency analyses", style)
 
 def hash(text):
     recognizeHash.guess(text)
@@ -50,6 +50,7 @@ def main():
     frequency_parser = subparsers.add_parser("freq", help="Do frequency analysis.")
     frequency_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
     frequency_parser.add_argument("-p", "--plain", action="store_true", help="Return the frequency statistics in a plain list without charts")
+    frequency_parser.add_argument("-s", "--style", choices=["c", "p", "vsbc", "vbc", "vsbca", "vbca", "vsbcar", "vbcar", "vcbcos", "vbcos", "vsbcol", "vbcol"], type=str, required=False, help="The style for the bar chart")
     
     brute_parser = subparsers.add_parser("force", help="Brute force the ciphertext knowing the cipher.")
     brute_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
@@ -78,7 +79,10 @@ def main():
             print(plainFrequencyAnalysis(args.text))
         else:
             print("Charts")
-            frequencyAnalysis(args.text)
+            if args.style is not None:
+                frequencyAnalysis(args.text, args.style)
+            else:
+                frequencyAnalysis(args.text)
     
     elif args.command == "force":
         bruteForce(args.text, args.cipher) # This will run for a while depending on how long, it should run a loading icon while working
