@@ -1,10 +1,10 @@
 """
-This file provides funtions to brute force weak ciphers
+This file provides functions to brute force weak ciphers
 
 All brute force methods need to be able to work with spaces and no spaces
 
 TODO:
-    - Add threaading on Vigenere brute force (caesar probably doesn't need it)
+    - Add threading on Vignette brute force
 
 """
 import time

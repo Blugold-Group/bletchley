@@ -4,9 +4,9 @@ Provides the backend of ciphers.
 Cases are preserved where possible
 
 TODO:
-    - Add an option to ignore special charcetrs in frequency analysis
+    - Add an option to ignore special characters in frequency analysis
     - Add options to frequency analysis to display analysis from most to least frequent, vice versa, or alphabetical order 
-    - Allow realEngine to work with sentences not seperated by spaces
+    - Allow realEngine to work with sentences not separated by spaces
     - Add a standardized text cleaning function
 
 """
@@ -37,23 +37,23 @@ class realEngine:
     def __init__(self, corpus="small_specialized"):
 
         if corpus=="large":
-            f = open("Bletchley/wordlists/words_dictionary.json", "r")
+            f = open("wordlists/words_dictionary.json", "r")
             self.data = json.load(f)
             f.close()
         elif corpus=="small":
-            with open("Bletchley/wordlists/words.txt") as f:
+            with open("wordlists/words.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="small_specialized":
-            with open("Bletchley/wordlists/words_specialized.txt") as f:
+            with open("wordlists/words_specialized.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="large_specialized":
-            with open("Bletchley/wordlists/words_dictionary_specialized.txt") as f:
+            with open("wordlists/words_dictionary_specialized.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="dictionary":
-            with open("Bletchley/wordlists/dictionary.txt") as f:
+            with open("wordlists/dictionary.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
 

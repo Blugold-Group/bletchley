@@ -18,7 +18,6 @@ TODO:
 """
 
 import ciphers
-import predict
 import bruteforce
 
 def run(ciphertext):
@@ -71,8 +70,8 @@ def run(ciphertext):
 
 
 
-ciphertexts=["Aol xbpjr iyvdu mve qbtwz vcly aol shgf kvn.", "Zrc kewsg npaov hat beqfu ajcp zrc lidy xam.", "Twt byirz mvolc qsx yjxts dkpv twt wezn szk.", "baaba aabbb aabaa abbbb baabb abaaa aaaba abaab aaaab baaaa abbab babaa abbaa aabab abbab babab abaaa baabb ababb abbba baaab abbab baabb aabaa baaaa baaba aabbb aabaa ababa aaaaa babbb babba aaabb abbab aabba", "Gur dhvpx oebja sbk whzcf bire gur ynml qbt.", "arIhtad  tete ?t  ahoehyjc fsorekr iuod edwgtiava hs teret w  th aoduhtn uao  otluwypstodon lu,n y eao  t hvgiiselaetl"]
+#ciphertexts=["Aol xbpjr iyvdu mve qbtwz vcly aol shgf kvn.", "Zrc kewsg npaov hat beqfu ajcp zrc lidy xam.", "Twt byirz mvolc qsx yjxts dkpv twt wezn szk.", "baaba aabbb aabaa abbbb baabb abaaa aaaba abaab aaaab baaaa abbab babaa abbaa aabab abbab babab abaaa baabb ababb abbba baaab abbab baabb aabaa baaaa baaba aabbb aabaa ababa aaaaa babbb babba aaabb abbab aabba", "Gur dhvpx oebja sbk whzcf bire gur ynml qbt.", "arIhtad  tete ?t  ahoehyjc fsorekr iuod edwgtiava hs teret w  th aoduhtn uao  otluwypstodon lu,n y eao  t hvgiiselaetl"]
 
-for i in ciphertexts:
-    run(i)
+#for i in ciphertexts:
+#    run(i)
 

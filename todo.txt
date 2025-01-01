@@ -1,0 +1,3 @@
+- Format into working structure
+
+- Add name-that-hash/search-that-hash

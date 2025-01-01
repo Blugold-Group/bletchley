@@ -1,103 +1,105 @@
 """
 Client facing file to interface with Bletchley tools
 
-The first argument must be the ciphertext (unless -h or --help is the first argument)
-
-Format is "Bletchley.py "ciphertexthere" -options
-
-If no flags are passed, frequency analysis and then automatic decryption is run
-
-Options are:
-    -f frequency analysis
-        Prints the raw frequency of the text
-
-    -fv frequency analysis verbose
-        Prints charts of the frequency analysis
-
-    -b brute force
-        Brute forces a given text
-
-    -hc hash crack
-        Returns a command to use with hashcat to crack the given hash
-
-    -hr hash recognize
-        Tries to recognize the given hash
-
-    -e encoding 
-        Attempts to recognize and decode a string with encoding standards
-
-            -s [blank] standard 
-                Attempts to decode with the given standard
-
-            -r [blank] rounds
-                Tries to decode the string r times over (in case a string is encoding multiple times with the same encoding)
-
-    -g [blank] guess
-        Returns the best guess for which cipher was used to encrypt a given ciphertext. Not recomended because not all ciphers are included in the model
-
-
 """
 
-import sys
+import argparse
 import start
+import recognizeHash
 
-argsnum = len(sys.argv)
-bruteforce=False
-hashcrack=False
+def plainFrequencyAnalysis(text):
+    return("Plain frequency analysis")
 
-if argsnum > 1:
+def frequencyAnalysis(text):
+    print("Frequency analyses")
 
-    if sys.argv[1] == "-h" or sys.argv[1] == "--help":
-        print("Help here")
-        exit()
+def hash(text):
+    recognizeHash.guess(text)
 
-    ciphertext = sys.argv[1]
+def bruteForce(text, cipher):
+    print("Brute force", text, cipher)
 
-    if argsnum == 2:
-        # Just a ciphertext passed, runs automatic decryption
-        start.run(ciphertext)
+def encoding(text):
+    # Decode without knowing the encoding
+    print("Recognize and decode encoding")
+
+def encode(text, encoding):
+    print("Encode")
+
+def decode(text, encoding):
+    print("Decode")
+
+def classify(text):
+    return("Using ML classification to find cipher")
+
+def run(text):
+    print("Try to automatically decrypt ciphertext without key or cipher", text)
+
+def encrypt(text, cipher, password):
+    print("encrypt")
+
+def decrypt(text, cipher, password):
+    print("encrypt")
+
+
+def main():
+    # Create the argument parser
+    parser = argparse.ArgumentParser(description="CLI for Bletchley, a cryptanalysis suite.")    
+    subparsers = parser.add_subparsers(dest="command", required=True)
     
-    # Accessing subsequent arguments in a similar way
-    for i in range(2, len(sys.argv)):
-        if bruteforce == True:
-            if "v" in i:
-                print("vigenere")
-            elif "c" in i:
-                print("caesar")
-            elif "af" in i:
-                print("atbash")
+    frequency_parser = subparsers.add_parser("freq", help="Do frequency analysis.")
+    frequency_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    frequency_parser.add_argument("-p", "--plain", action="store_true", help="Return the frequency statistics in a plain list without charts")
+    
+    brute_parser = subparsers.add_parser("force", help="Brute force the ciphertext knowing the cipher.")
+    brute_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    brute_parser.add_argument("-c", "--cipher", type=str, required=True, help="The cipher to brute force")
 
-            bruteforce=False
+    hash_parser = subparsers.add_parser("hash", help="Identify and reverse lookup a hash.")
+    hash_parser.add_argument("-t", "--text", type=str, required=True, help="The hash to process")
+    
+    encoding_parser = subparsers.add_parser("decode", help="Find the encoding the text is in and/or decode the text.")
+    encoding_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    encoding_parser.add_argument("-e", "--encoding", type=str, required=False, help="The encoding the text is in") # This is optional, if its not passed that means the encoding is unknown and should be found
+    
+    learning_parser = subparsers.add_parser("classify", help="Use the machine learning model to detect which cipher was used to encrypt the text.")
+    learning_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    
+    run_parser = subparsers.add_parser("run", help="Try to automatically decrypt the ciphertext.")
+    run_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
 
-        elif sys.argv[i] == "-f":
-            # Frequency analysis
-            print("Frequency anlysys")
 
-        elif sys.argv[i] == "-fv":
-            # Frequency analysis verbose
-            print("Frequency analysis with charts")
+    # Parse the arguments
+    args = parser.parse_args()
 
-        elif sys.argv[i] == "-hc":
-            # Hash crack
-            print("Hash crack")
-            hashcrack=True
-        
-        elif sys.argv[i] == "-hr":
-            # Hash Recognize
-            print("Hash recognize")
+    # Handle the commands
+    if args.command == "freq":
+        if args.plain:
+            print(plainFrequencyAnalysis(args.text))
+        else:
+            print("Charts")
+            frequencyAnalysis(args.text)
+    
+    elif args.command == "force":
+        bruteForce(args.text, args.cipher) # This will run for a while depending on how long, it should run a loading icon while working
+    
+    elif args.command == "hash":
+        hash(args.text)
 
-        elif sys.argv[i] == "-b":
-            # Brute force
-            print("Brute force")
-            bruteforce=True
+    elif args.command == "decode":
+        result = to_uppercase(args.text)
+        print(f"Uppercase text: {result}")
 
-        elif sys.argv[i] == "-e":
-            # Encoding
-            print("Recognize and decode encoding")
+    elif args.command == "classify":
+        result = classify(args.text)
+        print(f"Uppercase text: {result}")
 
-        elif sys.argv[i] == "-g":
-            # Guess
-            print("Guess which cipher was used using ml model")
+    elif args.command == "run":
+        run(args.text)
+    
+    else:
+        help()
 
-else:
-    print("No arguments provided.")
+
+if __name__ == "__main__":
+    main()
