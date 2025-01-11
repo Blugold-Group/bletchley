@@ -30,6 +30,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [ ] Bifid
     - [ ] Trifid
     - [ ] Straddle Checkerboard 
+    - [ ] Chaocipher
 
     Also, common encodings such as 
     - [ ] Base32
@@ -44,16 +45,60 @@ And the crown jewel
 
 Works with the following ciphers
    
-     - [x] Vigenere
-     - [x] Atbash
-     - [x] Baconian
+     - [ ] Vigenere
+     - [ ] Atbash
+     - [ ] Baconian
 
 
-The power given by this repo is the ability to string various "departments" (tools) together, creating a dynamic solution finding tool. 
+The power given by this repo is the ability to string various "huts" (tools) together, creating a dynamic solution finding tool. 
 
-## Architecture
+## Usage
 
-### ML Aided Ciphertext Classification
+```
+python3 cli.py
+
+OPTIONS
+
+freq (frequency analysis)
+    - Defaults to vbcol if -c is not passed
+
+-c,  --chart
+    c - count
+    p - percentage
+    vsbc - Verbose simple bar - count
+    vbc - Verbose bar - count
+    vsbca - Verbose simple bar - count, alphabetized
+    vbca - Verbose bar - count, alphabetized
+    vsbcar - Verbose simple bar - count, alphabetized reverse
+    vbcar - Verbose bar - count, alphabetized reverse
+    vsbcos - Verbose simple bar - count ordered smallest (to largest)
+    vbcos - Verbose bar - count ordered smallest (to largest)
+    vsbcol - Verbose simple bar - count ordered largest (to smallest)
+    vbcol - Verbose bar - count ordered largest (to smallest)
+
+run (try to automatically decrypt ciphertext)
+
+-w, --wordlist
+    large
+    small
+    small_specialized
+    large_specialized
+    dictionary
+
+-v, --verbose
+    - print the results of each test ran (true if passed, false if not)
+
+EXAMPLES
+
+bletchley freq -t "hello world" -c vbcos
+    - Return a bar chart of letter frequency of letter counts smallest to largest
+
+bletchley freq -c p -t "hello world"
+    - Return a list of letter frequency in the form of percentages
+
+bletchley freq -t "hello world"
+    - Return a bar chart of letter frequency of letter counts largest to smallest
+```
 
 ### Description of word lists
 

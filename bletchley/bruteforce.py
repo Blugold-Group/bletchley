@@ -4,7 +4,7 @@ This file provides functions to brute force weak ciphers
 All brute force methods need to be able to work with spaces and no spaces
 
 TODO:
-    - Add threading on Vignette brute force
+    - Add threading on Vigenere brute force
 
 """
 import time
@@ -72,8 +72,6 @@ def vigenere(text, keycode="w", length=None):
     """
     Based on flags, encrypts with all versions of a keyspace or english words
 
-    Saves all versions to a sql db
-
     Runs through db to find most likely match
 
     flags:
@@ -101,7 +99,6 @@ def vigenere(text, keycode="w", length=None):
         tr=ciphers.vigenere(text, key, "d")
 
         if realTest.plaintext_or_ciphertext(tr, tolerance):
-            alert.notify("WOAH")
 
             ciphers.writeToDatabase("vigenere", (key, ciphers.vigenere(text, key, "d")))
 

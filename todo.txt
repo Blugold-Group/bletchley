@@ -1,3 +1,11 @@
-- Format into working structure
+- Do encodings.py
 
-- Add name-that-hash/search-that-hash
+- Build model
+
+- Build start.py
+
+- Add more ciphers
+
+- Clean up ciphers.py
+
+- Organize and define wordlists better

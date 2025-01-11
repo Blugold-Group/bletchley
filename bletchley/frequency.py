@@ -209,4 +209,4 @@ def frequencyAnalysis(text, mode="c"):
 
 
 
-frequencyAnalysis("jkwbefjwbefjwetrytuyiuoplkamhbgcfyxtuvwbkxuiywqtrcfhvjuy546756uyfvtyrew243546okulwef", "vsbcar")
+#frequencyAnalysis("jkwbefjwbefjwetrytuyiuoplkamhbgcfyxtuvwbkxuiywqtrcfhvjuy546756uyfvtyrew243546okulwef", "vsbcar")

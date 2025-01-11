@@ -1,7 +1,10 @@
 """
-Provides the backend of ciphers. 
+Provides encryption and decryption functions for ciphers
 
-Cases are preserved where possible
+Style:
+    - Cases, spaces, and punctuation are preserved whenever possible
+    - Spaces and punctuations are skipped when ran through the algorithm
+    - Special characters not being an uppercase or lowercase letters may be changed to best fit into the alphabet (IE ù will be replaced with u)
 
 TODO:
     - Add an option to ignore special characters in frequency analysis
@@ -91,21 +94,6 @@ def clean(text):
     # Add a standard way to clean the given text
 
     return text
-
-def writeToDatabase(db, data):
-    f=open("test.txt", "a")
-    wr=data[0]+" : "+data[1]+"\n"
-    f.write(wr)
-    f.close()
-
-    """
-    conn = sqlite3.connect('test')
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO "+db+" (pass, result) VALUES (?, ?)", data)
-    conn.commit()
-    cursor.close()
-    conn.close()
-    """
 
 def caesar(text, increment=randrange(1,26)):
     # Increments the text based on the increment
@@ -342,7 +330,7 @@ def baconian(text, mode="e", l1="a", l2="b", type="old"):
     Ignores non alphabetic characters, cipher doesn't differentiate between cases, so everything is treated as lowercase
 
     There are two versions, old and new
-        - The old version translates (i and j) and (u and v) to the same binay representation 
+        - The old version translates (i and j) and (u and v) to the same binary representation 
         - The new version doesn't do any of that nonsense
 
     There is some more to the Baconian cipher, something about typefaces, but that's not included in this implementation
