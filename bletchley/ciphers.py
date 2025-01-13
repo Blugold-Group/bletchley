@@ -163,27 +163,6 @@ def rot13(text, mode="e"):
 
     return(encrypted)
 
-def password():
-    # Returns a random word of 10 characters or longer (usually for a password)
-
-    password=""
-    while len(password)<9:
-        password=faker.word()
-    return((password).lower())
-
-def randomText(length):
-    # Returns a string of (length) random letters
-
-    global lower_alphabet
-    random_sentence = ''.join(random.choices(lower_alphabet, k=length))
-    return random_sentence
-
-def randomTextRandomLength(start=1, stop=50):
-    # Returns randomText with a random length (length defaults to somewhere between 1 and 50)
-
-    length=random.randint(start, stop)
-    return(randomText(length))
-
 def vigenere(text, password=faker.word(), mode="e"):
     # The vigenere cipher
 
@@ -323,7 +302,7 @@ def atbash(text):
     
     return(encrypted)
 
-def baconian(text, mode="e", l1="a", l2="b", type="old"):
+def baconian(text, mode="e", l1="a", l2="b", style="old"):
     """
     Baconian cipher
 
@@ -349,7 +328,7 @@ def baconian(text, mode="e", l1="a", l2="b", type="old"):
             continue
         else:
             ind=lower_alphabet.index(i)
-            if type=="old":
+            if style=="old":
                 if ind > 20:
                     ind-=2
                 elif ind > 8:
@@ -403,6 +382,8 @@ def affine(text, key1=randrange(1,25), key2=randrange(1,25), mode="e"):
     return(encrypted)
 
 def rail_fence(text, n=randrange(2,7), mode="e"):
+    print("Rail fence also has an option for an offset, add that")
+    
     if n < 2:
         raise Exception("Rail fence requires a key above 1") 
     

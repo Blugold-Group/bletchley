@@ -3,11 +3,19 @@ Client facing file to interface with Bletchley tools
 
 """
 
+from sys import stdout as terminal
+from time import sleep
+from itertools import cycle
+from threading import Thread
+import itertools
+
 import argparse
 import start
 import recognizeHash
 import frequency
 import encodings
+import ciphers
+import warnings
 
 def frequencyAnalysis(text, style="vbcol"):
     if style=="p" or style=="c":
@@ -46,6 +54,44 @@ def encrypt(text, cipher, password):
 def decrypt(text, cipher, password):
     print("encrypt")
 
+def encrypt_caesar(text, password):
+    print(ciphers.caesar(text, password))
+
+def encrypt_vigenere(text, password):
+    print(ciphers.vigenere(text, password, "e"))
+
+def encrypt_rot13(text):
+    print(ciphers.rot13(text, "e"))
+
+def atbash(text):
+    print(ciphers.atbash(text))
+
+def encrypt_baconian(text, style, letter1="a", letter2="b"):
+    print(ciphers.baconian(text, "e", letter1, letter2, style))
+
+def encrypt_affine(text, p1, p2):
+    print(ciphers.affine(text, p1, p2, "e"))
+
+def encrypt_rail_fence(text, key):
+    print(ciphers.rail_fence(text, key, "e"))
+
+
+
+def check_text_password(text, password):
+    if text is None:
+        raise Exception("You need to pass a text to encrypt with `-t <plaintext>`")
+    if password is None:
+        raise Exception("This cipher requires a password, tell bletchley which password to use with `-p <password>`")
+
+def check_password_not_needed(password):
+    if password is not None:
+        warnings.warn("This cipher doesn't require a password", SyntaxWarning)
+
+def convert_num_password(password):
+    try:
+        return(int(password))
+    except:
+        raise Exception("Key for this cipher must be an integer")
 
 def main():
     # Create the argument parser
@@ -78,6 +124,11 @@ def main():
     run_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
     run_parser.add_argument("-v", "--verbose", action="store_true", help="Print the results of all tests")
     run_parser.add_argument("-w", "--wordlist", type=str, required=False, help="The word list to use when detecting whether a tested ciphertext is decrypted or not")
+
+    encoding_parser = subparsers.add_parser("encrypt", help="Encrypt a text.")
+    encoding_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    encoding_parser.add_argument("-c", "--cipher", type=str, required=True, help="The cipher to encrypt the text with")
+    encoding_parser.add_argument("-p", "--password", type=str, required=False, help="The password to encrypt the text with")
 
     # Parse the arguments
     args = parser.parse_args()
@@ -113,6 +164,47 @@ def main():
             run(args.text, args.wordlist)
         else:
             run(args.text)
+
+    elif args.command == "encrypt" or args.command == "en" or args.command == "e":
+        if args.cipher == "caesar" or args.cipher == "1":
+            check_text_password(args.text, args.password)
+
+            try: int(args.password)
+            except: raise Exception("The password must be a number")
+
+            encrypt_caesar(args.text, int(args.password))
+
+        elif args.cipher == "vigenere" or args.cipher == "2":
+            check_text_password(args.text, args.password)
+            encrypt_vigenere(args.text, args.password)
+
+        elif args.cipher == "rot13" or args.cipher == "3":
+            check_password_not_needed(args.password)
+            
+            encrypt_rot13(args.text)
+
+        elif args.cipher == "atbash" or args.cipher == "4":
+            check_password_not_needed(args.password)
+
+            atbash(args.text)
+
+        elif args.cipher == "playfair" or args.cipher == "5":
+            check_text_password(args.text, args.password)
+
+            print("The Playfair cipher has not been added yet")
+
+        elif args.cipher == "baconian" or args.cipher == "6":
+            print("I need to get the optional letter 1 and 2, and style (old or new), I could probably do this with the -p, just have them passed with commas in that")
+
+        elif args.cipher == "affine" or args.cipher == "7":
+            check_text_password(args.text, args.password)
+            print("Decryption apparently doesn't work for this")
+
+            if args.password.count(','):
+                raise Exception("The affine cipher needs two number keys, pass them with `-p num1,num2` (with a comma)")
+
+        elif args.cipher == "rail" or args.cipher == "rail_fence" or args.cipher == "8":
+            encrypt_rail_fence(args.text, convert_num_password(args.password))
     
     else:
         help()

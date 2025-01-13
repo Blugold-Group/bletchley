@@ -1,5 +1,9 @@
 # Bletchley
 
+Bletchley is a cryptography suite which provides cryptographic tools
+
+It can be used on the cli or in python code
+
 Bletchley has a number of tools to aid in cryptanalysis, including
 
 1. Frequency analysis
@@ -41,7 +45,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
 
 And the crown jewel 
 
-4. A dynamic tool using machine learning to guess what cipher was used to encrypt a ciphertext, called lightbulb 
+4. A dynamic tool using machine learning to guess what cipher was used to encrypt a ciphertext, codenamed lightbulb 
 
 Works with the following ciphers
    
@@ -87,6 +91,20 @@ run (try to automatically decrypt ciphertext)
 
 -v, --verbose
     - print the results of each test ran (true if passed, false if not)
+
+encrypt (encrypt a text)
+
+1 - Caesar cipher
+2 - Vigenere cipher
+3 - Rot13
+4 - Atbash
+5 - Playfair
+6 - Baconian
+7 - Affine
+8 - Rail Fence
+
+decrypt (decrypt a text)
+
 
 EXAMPLES
 
