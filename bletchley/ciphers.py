@@ -15,6 +15,7 @@ TODO:
 """
 
 import random
+import string
 from faker import Faker
 import re 
 import json
@@ -90,28 +91,64 @@ class realEngine:
             return True
         return False
 
-def clean(text):
-    # Add a standard way to clean the given text
+def process_text(text: str):
+    """
+    Processes the input text by separating alphanumeric characters from punctuation, spaces, and capitalization.
 
-    return text
+    Args:
+        text (str): The input text to process.
+
+    Returns:
+        tuple: A tuple containing three elements:
+            - stripped_text (str): The text with all punctuation and spaces removed.
+            - punctuation_map (list): A list of tuples, each containing the index and character
+              of punctuation or space in the original text.
+            - capitalization_map (list): A list of boolean values indicating if each character
+              in the stripped text was uppercase in the original text.
+    """
+    punctuation_map = [(i, char) for i, char in enumerate(text) if char in string.punctuation + " "]
+    stripped_text = ''.join(char for char in text if char.isalnum())
+    capitalization_map = [char.isupper() for char in stripped_text]
+    stripped_text = stripped_text.lower()
+    return stripped_text, punctuation_map, capitalization_map
+
+def reinflate(ciphertext: str, punctuation_map: list, capitalization_map: list):
+    """
+    Reinserts punctuation, spaces, and capitalization into the ciphertext based on the original text's maps.
+
+    Args:
+        ciphertext (str): The text after ciphering, without punctuation or spaces.
+        punctuation_map (list): A list of tuples, each containing the index and character
+                                of punctuation or space in the original text.
+        capitalization_map (list): A list of boolean values indicating if each character
+                                   in the stripped text was uppercase in the original text.
+
+    Returns:
+        str: The ciphertext with punctuation, spaces, and capitalization reinserted.
+    """
+    cipher_chars = list(ciphertext)
+    for i, is_upper in enumerate(capitalization_map):
+        if is_upper:
+            cipher_chars[i] = cipher_chars[i].upper()
+
+    for index, char in punctuation_map:
+        cipher_chars.insert(index, char)
+
+    return ''.join(cipher_chars)
 
 def caesar(text, increment=randrange(1,26)):
-    # Increments the text based on the increment
-    # Leaves spaces, punctuation, numbers, and special characters alone
+    # Caesar Cipher https://en.wikipedia.org/wiki/Caesar_cipher
 
-    global punctuation
     global lower_alphabet
     global upper_alphabet
     global alphabet
-    global numbers
 
     encrypted=""
 
+    text, punctuation_map, capitalization_map = process_text(text)
+
     for i in text:
-        if i not in lower_alphabet and i not in upper_alphabet:
-            encrypted+=i
-            continue
-        elif i in upper_alphabet:
+        if i in upper_alphabet:
             letter_index=upper_alphabet.index(i)+increment
             letter_index=letter_index%26
             encrypted+=upper_alphabet[letter_index]
@@ -119,7 +156,8 @@ def caesar(text, increment=randrange(1,26)):
             letter_index=lower_alphabet.index(i)+increment
             letter_index=letter_index%26
             encrypted+=lower_alphabet[letter_index]
-    return(encrypted)
+
+    return reinflate(encrypted, punctuation_map, capitalization_map)
 
 def rot13(text, mode="e"):
     # Increments the text by 13
@@ -445,3 +483,25 @@ def rail_fence(text, n=randrange(2,7), mode="e"):
 
 def substitution(text):
     return("Add substitution here")
+
+def beaufort(plaintext, key):
+    # Beaufort Cipher
+
+    plaintext, punctuation_map, capitalization_map = process_text(plaintext)
+
+    global lower_alphabet
+    key = key.lower()
+
+    ciphertext = ""
+    key_length = len(key)
+
+    for i, char in enumerate(plaintext):
+        if char in lower_alphabet:
+            key_char = key[i % key_length]
+            char_index = lower_alphabet.index(char)
+            key_index = lower_alphabet.index(key_char)
+            encrypted_index = (key_index - char_index) % len(lower_alphabet)
+            ciphertext += lower_alphabet[encrypted_index]
+
+    return reinflate(ciphertext, punctuation_map, capitalization_map)
+
