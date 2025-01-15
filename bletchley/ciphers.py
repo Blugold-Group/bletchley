@@ -1,16 +1,11 @@
 """
 Provides encryption and decryption functions for ciphers
 
-Style:
-    - Cases, spaces, and punctuation are preserved whenever possible
-    - Spaces and punctuations are skipped when ran through the algorithm
-    - Special characters not being an uppercase or lowercase letters may be changed to best fit into the alphabet (IE ù will be replaced with u)
-
 TODO:
     - Add an option to ignore special characters in frequency analysis
     - Add options to frequency analysis to display analysis from most to least frequent, vice versa, or alphabetical order 
     - Allow realEngine to work with sentences not separated by spaces
-    - Add a standardized text cleaning function
+    - Add ability to decrypt caesar
 
 """
 
@@ -135,6 +130,12 @@ def reinflate(ciphertext: str, punctuation_map: list, capitalization_map: list):
         cipher_chars.insert(index, char)
 
     return ''.join(cipher_chars)
+
+def verify_input(text):
+    if not isinstance(text, str):
+        raise TypeError("text must be a string")
+    if not text:
+        raise ValueError("text is empty")
 
 def caesar(text, increment=randrange(1,26)):
     # Caesar Cipher https://en.wikipedia.org/wiki/Caesar_cipher
@@ -505,3 +506,69 @@ def beaufort(plaintext, key):
 
     return reinflate(ciphertext, punctuation_map, capitalization_map)
 
+def autokey_encrypt(plaintext: str, key: str) -> str:
+    # Autokey cipher
+
+    verify_input(plaintext), verify_input(key)
+    plaintext, punctuation_map, capitalization_map = process_text(plaintext)
+
+
+    key += plaintext
+    plaintext = plaintext.lower()
+    key = key.lower()
+    plaintext_iterator = 0
+    key_iterator = 0
+    ciphertext = ""
+    while plaintext_iterator < len(plaintext):
+        if (
+            ord(plaintext[plaintext_iterator]) < 97
+            or ord(plaintext[plaintext_iterator]) > 122
+        ):
+            ciphertext += plaintext[plaintext_iterator]
+            plaintext_iterator += 1
+        elif ord(key[key_iterator]) < 97 or ord(key[key_iterator]) > 122:
+            key_iterator += 1
+        else:
+            ciphertext += chr(
+                (
+                    (ord(plaintext[plaintext_iterator]) - 97 + ord(key[key_iterator]))
+                    - 97
+                )
+                % 26
+                + 97
+            )
+            key_iterator += 1
+            plaintext_iterator += 1
+
+    return reinflate(ciphertext, punctuation_map, capitalization_map)
+
+
+def autokey_decrypt(ciphertext: str, key: str) -> str:
+    # Autokey cipher
+
+    verify_input(ciphertext), verify_input(key)
+    ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
+
+    key = key.lower()
+    ciphertext_iterator = 0
+    key_iterator = 0
+    plaintext = ""
+    while ciphertext_iterator < len(ciphertext):
+        if (
+            ord(ciphertext[ciphertext_iterator]) < 97
+            or ord(ciphertext[ciphertext_iterator]) > 122
+        ):
+            plaintext += ciphertext[ciphertext_iterator]
+        else:
+            plaintext += chr(
+                (ord(ciphertext[ciphertext_iterator]) - ord(key[key_iterator])) % 26
+                + 97
+            )
+            key += chr(
+                (ord(ciphertext[ciphertext_iterator]) - ord(key[key_iterator])) % 26
+                + 97
+            )
+            key_iterator += 1
+        ciphertext_iterator += 1
+
+    return reinflate(plaintext, punctuation_map, capitalization_map)

@@ -22,8 +22,8 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [x] Rail-Fence
     - [ ] Substitution
     - [ ] Columnar Transposition
-    - [ ] Autokey
-    - [ ] Beaufort
+    - [x] Autokey
+    - [x] Beaufort
     - [ ] Porta
     - [ ] Running Key
     - [ ] Homophonic Substitution
