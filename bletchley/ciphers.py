@@ -9,6 +9,8 @@ TODO:
     - Standardize ciphers to use encrypt_cipher and decrypt_cipher
     - Standardize ciphers to always use text cleaning and reinflate() when applicable
     - Standardize ciphers to use the input text plaintext or ciphertext (not text or message)
+    - Clean up playfair
+    - Add baconian cipher decryption
 
 """
 
@@ -140,12 +142,21 @@ def verify_input(text):
     if not text:
         raise ValueError("text is empty")
 
+def verify_int_key(key):
+    if not isinstance(key, int):
+        raise TypeError("key must be an integer")
+    if not key:
+        raise ValueError("key is empty")
+
+
 def caesar(text, increment=randrange(1,26)):
     # Caesar Cipher https://en.wikipedia.org/wiki/Caesar_cipher
 
     global lower_alphabet
     global upper_alphabet
     global alphabet
+
+    verify_int_key(increment)
 
     encrypted=""
 
@@ -210,9 +221,6 @@ def vigenere(text, password=faker.word(), mode="e"):
 
     global lower_alphabet
     global upper_alphabet
-    #text=''.join(e for e in text if e.isalnum())
-    text=text.replace("ù", "u").replace("é", "e").replace("æ", "ae").replace("ê", "e").replace("è", "e").replace("ç", "c").replace("ô", "o")
-    #text=re.sub(r'\d+', '', text)
 
     encrypted=""
     passIndex=0

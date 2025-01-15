@@ -102,9 +102,17 @@ encrypt (encrypt a text)
 6 - Baconian
 7 - Affine
 8 - Rail Fence
+9 - Substitution
+10 - Beaufort
+11 - Autokey
+12 - Bifid
+13 - Trifid
 
 decrypt (decrypt a text)
 
+measure (measure some characteristic of a text)
+
+classify (use lightbulb to guess what cipher was used to encrypt a text)
 
 EXAMPLES
 
