@@ -6,6 +6,9 @@ TODO:
     - Add options to frequency analysis to display analysis from most to least frequent, vice versa, or alphabetical order 
     - Allow realEngine to work with sentences not separated by spaces
     - Add ability to decrypt caesar
+    - Standardize ciphers to use encrypt_cipher and decrypt_cipher
+    - Standardize ciphers to always use text cleaning and reinflate() when applicable
+    - Standardize ciphers to use the input text plaintext or ciphertext (not text or message)
 
 """
 
@@ -507,6 +510,7 @@ def beaufort(plaintext, key):
     return reinflate(ciphertext, punctuation_map, capitalization_map)
 
 def autokey_encrypt(plaintext: str, key: str) -> str:
+    # Adapted from https://github.com/TheAlgorithms/Python/blob/master/ciphers/autokey.py
     # Autokey cipher
 
     verify_input(plaintext), verify_input(key)
@@ -544,6 +548,7 @@ def autokey_encrypt(plaintext: str, key: str) -> str:
 
 
 def autokey_decrypt(ciphertext: str, key: str) -> str:
+    # Adapted from https://github.com/TheAlgorithms/Python/blob/master/ciphers/autokey.py
     # Autokey cipher
 
     verify_input(ciphertext), verify_input(key)
@@ -572,3 +577,74 @@ def autokey_decrypt(ciphertext: str, key: str) -> str:
         ciphertext_iterator += 1
 
     return reinflate(plaintext, punctuation_map, capitalization_map)
+
+
+
+def encrypt_bifid(plaintext, square):
+    # Encryption of Bifid cipher
+
+    plaintext, punctuation_map, capitalization_map = process_text(plaintext)
+
+    square = square.replace('j', 'i')
+    square = [list(square[i:i+5]) for i in range(0, 25, 5)]
+
+    def letter_to_numbers(letter, square):
+        # Return the pair of numbers that represents the given letter in the polybius square.
+        for row_idx, row in enumerate(square):
+            if letter in row:
+                return row_idx + 1, row.index(letter) + 1
+        raise ValueError(f"Letter {letter} not found in the square")
+
+    def numbers_to_letter(row, col, square):
+        # Return the letter corresponding to the position [row, col] in the polybius square.
+        return square[row - 1][col - 1]
+
+    rows, cols = [], []
+    for letter in plaintext:
+        row, col = letter_to_numbers(letter, square)
+        rows.append(row)
+        cols.append(col)
+
+    merged = rows + cols
+    ciphertext = ""
+
+    for i in range(len(plaintext)):
+        ciphertext += numbers_to_letter(merged[2 * i], merged[2 * i + 1], square)
+
+    return reinflate(ciphertext, punctuation_map, capitalization_map)
+
+def decrypt_bifid(ciphertext, square):
+    # Decryption of Bifid cipher
+
+    ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
+
+    square = square.replace('j', 'i')
+    square = [list(square[i:i+5]) for i in range(0, 25, 5)]
+
+
+    def letter_to_numbers(letter, square):
+        # Return the pair of numbers that represents the given letter in the polybius square.
+        for row_idx, row in enumerate(square):
+            if letter in row:
+                return row_idx + 1, row.index(letter) + 1
+        raise ValueError(f"Letter {letter} not found in the square")
+
+    def numbers_to_letter(row, col, square):
+        # Return the letter corresponding to the position [row, col] in the polybius square.
+        return square[row - 1][col - 1]
+
+    length = len(ciphertext)
+    numbers = []
+    for letter in ciphertext:
+        row, col = letter_to_numbers(letter, square)
+        numbers.extend([row, col])
+
+    half_length = length
+    rows = numbers[:half_length]
+    cols = numbers[half_length:]
+
+    ciphertext = ""
+    for row, col in zip(rows, cols):
+        ciphertext += numbers_to_letter(row, col, square)
+
+    return reinflate(ciphertext, punctuation_map, capitalization_map)

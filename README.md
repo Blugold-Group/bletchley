@@ -31,7 +31,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [ ] Hill
     - [ ] ADFGVX
     - [ ] ADFGX
-    - [ ] Bifid
+    - [x] Bifid
     - [ ] Trifid
     - [ ] Straddle Checkerboard 
     - [ ] Chaocipher
