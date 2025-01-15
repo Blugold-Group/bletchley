@@ -14,13 +14,13 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [x] Caesar
     - [x] Vigenere
     - [x] Rot13
-    - [ ] Enigma
+    - [x] Enigma (through [pyenigma](https://pypi.org/project/pyenigma/))
     - [x] Atbash
     - [x] Playfair
     - [x] Affine
     - [x] Baconian
     - [x] Rail-Fence
-    - [ ] Substitution
+    - [x] Substitution
     - [ ] Columnar Transposition
     - [x] Autokey
     - [x] Beaufort

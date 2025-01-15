@@ -485,8 +485,41 @@ def rail_fence(text, n=randrange(2,7), mode="e"):
 
     return toReturn
 
-def substitution(text):
-    return("Add substitution here")
+def substitution_encrypt(plaintext, custom_alphabet):
+    # Substitution cipher encryption
+
+    plaintext, punctuation_map, capitalization_map = process_text(plaintext)
+
+    if len(custom_alphabet) != 26: raise Exception("Alphabet needs to be 26 characters long")
+
+    key = dict(zip(string.ascii_lowercase, custom_alphabet.lower()))
+    
+    plaintext = plaintext.lower()
+    ciphertext = []
+    
+    for char in plaintext:
+        ciphertext.append(key[char])
+            
+    ciphertext = ''.join(ciphertext)
+    return reinflate(ciphertext, punctuation_map, capitalization_map)
+
+def substitution_decrypt(ciphertext, custom_alphabet):
+    # Substitution cipher decryption
+
+    ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
+
+    if len(custom_alphabet) != 26: raise Exception("Alphabet needs to be 26 characters long")
+
+    key = dict(zip(string.ascii_lowercase, custom_alphabet.lower()))
+    reversed_key = {v: k for k, v in key.items()}
+    
+    plaintext = []
+    
+    for char in ciphertext:
+        plaintext.append(reversed_key[char])
+        
+    plaintext = ''.join(plaintext)
+    return reinflate(plaintext, punctuation_map, capitalization_map)
 
 def beaufort(plaintext, key):
     # Beaufort Cipher
@@ -546,7 +579,6 @@ def autokey_encrypt(plaintext: str, key: str) -> str:
 
     return reinflate(ciphertext, punctuation_map, capitalization_map)
 
-
 def autokey_decrypt(ciphertext: str, key: str) -> str:
     # Adapted from https://github.com/TheAlgorithms/Python/blob/master/ciphers/autokey.py
     # Autokey cipher
@@ -577,8 +609,6 @@ def autokey_decrypt(ciphertext: str, key: str) -> str:
         ciphertext_iterator += 1
 
     return reinflate(plaintext, punctuation_map, capitalization_map)
-
-
 
 def encrypt_bifid(plaintext, square):
     # Encryption of Bifid cipher
