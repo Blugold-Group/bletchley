@@ -5,12 +5,12 @@ TODO:
     - Add an option to ignore special characters in frequency analysis
     - Add options to frequency analysis to display analysis from most to least frequent, vice versa, or alphabetical order 
     - Allow realEngine to work with sentences not separated by spaces
-    - Add ability to decrypt caesar
-    - Standardize ciphers to use encrypt_cipher and decrypt_cipher
     - Standardize ciphers to always use text cleaning and reinflate() when applicable
     - Standardize ciphers to use the input text plaintext or ciphertext (not text or message)
     - Clean up playfair
     - Add baconian cipher decryption
+    - Add stuff for python linters, input and outputs params for functions and file
+    - Remove global variable, use a better standardized method across ciphers
 
 """
 
@@ -148,122 +148,131 @@ def verify_int_key(key):
     if not key:
         raise ValueError("key is empty")
 
+class template:
+    @staticmethod
+    def about():
+        return "A little blurb about the cipher and how it works"
 
-def caesar(text, increment=randrange(1,26)):
-    # Caesar Cipher https://en.wikipedia.org/wiki/Caesar_cipher
+    @staticmethod
+    def encrypt(text, key):
+        return "Encrypt a text"
 
-    global lower_alphabet
-    global upper_alphabet
-    global alphabet
+    @staticmethod
+    def decrypt(text, key):
+        return "Decrypt a text"
 
-    verify_int_key(increment)
+    @staticmethod
+    def extra(text, key):
+        return "Internal functions for use by the cipher"
 
-    encrypted=""
+class caesar:
+    @staticmethod
+    def about():
+        return "Caesar cipher https://en.wikipedia.org/wiki/Caesar_cipher"
 
-    text, punctuation_map, capitalization_map = process_text(text)
+    @staticmethod
+    def encrypt(text, increment=randrange(1,26)):
+        global lower_alphabet
+        global upper_alphabet
+        global alphabet
 
-    for i in text:
-        if i in upper_alphabet:
-            letter_index=upper_alphabet.index(i)+increment
-            letter_index=letter_index%26
-            encrypted+=upper_alphabet[letter_index]
-        elif i in lower_alphabet:
-            letter_index=lower_alphabet.index(i)+increment
-            letter_index=letter_index%26
-            encrypted+=lower_alphabet[letter_index]
+        verify_int_key(increment)
 
-    return reinflate(encrypted, punctuation_map, capitalization_map)
+        encrypted=""
 
-def rot13(text, mode="e"):
-    # Increments the text by 13
-    # Leaves spaces, punctuation, and numbers alone. Breaks with special characters
+        text, punctuation_map, capitalization_map = process_text(text)
 
-    global punctuation
-    global lower_alphabet
-    global upper_alphabet
-    global alphabet
-    global numbers
-
-    encrypted=""
-
-    if mode=="e":
         for i in text:
-            if i in punctuation or i in numbers or i == " ":
-                encrypted+=i
-                continue
-            elif i in upper_alphabet:
-                letter_index=upper_alphabet.index(i)+13
+            if i in upper_alphabet:
+                letter_index=upper_alphabet.index(i)+increment
                 letter_index=letter_index%26
                 encrypted+=upper_alphabet[letter_index]
             elif i in lower_alphabet:
-                letter_index=lower_alphabet.index(i)+13
+                letter_index=lower_alphabet.index(i)+increment
                 letter_index=letter_index%26
                 encrypted+=lower_alphabet[letter_index]
 
-    if mode=="d":
+        return reinflate(encrypted, punctuation_map, capitalization_map)
+
+    @staticmethod
+    def decrypt(text, increment=randrange(1,26)):
+        return caesar.encrypt(text, -increment)
+
+class vigenere:
+    @staticmethod
+    def about():
+        return "Vigenere cipher https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher"
+    
+    @staticmethod
+    def encrypt(text, key):
+        #Todo: Add standard formatting
+
+        global lower_alphabet
+        global upper_alphabet
+
+        encrypted=""
+        passIndex=0
+
         for i in text:
-            if i in punctuation or i in numbers or i == " ":
+            if i not in lower_alphabet and i not in upper_alphabet:
                 encrypted+=i
                 continue
-            elif i in upper_alphabet:
-                letter_index=upper_alphabet.index(i)-13
-                letter_index=letter_index%26
-                encrypted+=upper_alphabet[letter_index]
-            elif i in lower_alphabet:
-                letter_index=lower_alphabet.index(i)-13
-                letter_index=letter_index%26
-                encrypted+=lower_alphabet[letter_index]
 
-    return(encrypted)
+            value = lower_alphabet.index(i.lower())
+            
+            value = (value+lower_alphabet.index(key[passIndex].lower()))%26
 
-def vigenere(text, password=faker.word(), mode="e"):
-    # The vigenere cipher
-
-    global lower_alphabet
-    global upper_alphabet
-
-    encrypted=""
-    passIndex=0
-
-
-    for i in text:
-        if i not in lower_alphabet and i not in upper_alphabet:
-            encrypted+=i
-            continue
-
-        value = lower_alphabet.index(i.lower())
-        try:
-            if mode=="d":
-                if i in lower_alphabet:
-                    value = (value-lower_alphabet.index(password[passIndex].lower()))
-                    if value<0: # If value is a negative number, wrap around the alphabet
-                        value+=26
-                else:
-                    value = (value-upper_alphabet.index(password[passIndex].lower()))
-                    if value<0: # If value is a negative number, wrap around the alphabet
-                        value+=26
+            if i in lower_alphabet:
+                encrypted+=lower_alphabet[value]
             else:
-                value = (value+lower_alphabet.index(password[passIndex].lower()))%26
-        except:
-            print("~~~ Failed ~~~")
-            print(password)
-            print(passIndex)
-            print(text)
-            print("===========\n\n")
+                encrypted+=upper_alphabet[value]
 
-            value=1
+            if passIndex==len(key)-1:
+                passIndex=0
+            else:
+                passIndex+=1
 
-        if i in lower_alphabet:
-            encrypted+=lower_alphabet[value]
-        else:
-            encrypted+=upper_alphabet[value]
+        return(encrypted)
 
-        if passIndex==len(password)-1:
-            passIndex=0
-        else:
-            passIndex+=1
 
-    return(encrypted)
+    @staticmethod
+    def decrypt(text, key):
+        #Todo: Add standard formatting
+ 
+        global lower_alphabet
+        global upper_alphabet
+
+        encrypted=""
+        passIndex=0
+
+
+        for i in text:
+            if i not in lower_alphabet and i not in upper_alphabet:
+                encrypted+=i
+                continue
+
+            value = lower_alphabet.index(i.lower())
+            
+            if i in lower_alphabet:
+                value = (value-lower_alphabet.index(key[passIndex].lower()))
+                if value<0: # If value is a negative number, wrap around the alphabet
+                    value+=26
+            else:
+                value = (value-upper_alphabet.index(key[passIndex].lower()))
+                if value<0: # If value is a negative number, wrap around the alphabet
+                    value+=26
+
+            if i in lower_alphabet:
+                encrypted+=lower_alphabet[value]
+            else:
+                encrypted+=upper_alphabet[value]
+
+            if passIndex==len(key)-1:
+                passIndex=0
+            else:
+                passIndex+=1
+
+        return(encrypted)
 
 def playfairFormat(text):
     text = text.lower()

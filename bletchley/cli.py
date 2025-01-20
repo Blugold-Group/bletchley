@@ -51,22 +51,22 @@ def run(text, wordlist="small_specialized", verbose=False):
     print(start.run(text, wordlist, verbose))
 
 def encrypt_caesar(text, key):
-    print(ciphers.caesar(text, key))
+    print(ciphers.caesar.encrypt(text, key))
 
 def decrypt_caesar(text, key):
-    print(ciphers.caesar(text, 26-key))
+    print(ciphers.caesar.decrypt(text, key))
 
 def encrypt_rot13(text):
-    print(ciphers.rot13(text, "e"))
+    print(ciphers.caesar.encrypt(text, 13))
 
 def decrypt_rot13(text):
-    print(ciphers.rot13(text, "d"))
+    print(ciphers.caesar.decrypt(text, 13))
 
 def encrypt_vigenere(text, password):
-    print(ciphers.vigenere(text, password, "e"))
+    print(ciphers.vigenere.encrypt(text, password))
 
 def decrypt_vigenere(text, password):
-    print(ciphers.vigenere(text, password, "d"))
+    print(ciphers.vigenere.decrypt(text, password))
 
 def atbash(text):
     print(ciphers.atbash(text))
@@ -218,7 +218,7 @@ def main():
             check_text_password(args.text, args.password)
             encrypt_vigenere(args.text, args.password)
 
-        elif args.cipher == "rot13" or args.cipher == "3":
+        elif args.cipher == "rot13" or args.cipher == "rot" or args.cipher == "3":
             check_password_not_needed(args.password)
             encrypt_rot13(args.text)
 
@@ -265,7 +265,7 @@ def main():
             check_text_password(args.text, args.password)
             decrypt_vigenere(args.text, args.password)
 
-        elif args.cipher == "rot13" or args.cipher == "3":
+        elif args.cipher == "rot13" or args.cipher == "rot" or args.cipher == "3":
             check_password_not_needed(args.password)
             decrypt_rot13(args.text)
 
