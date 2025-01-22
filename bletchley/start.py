@@ -17,8 +17,9 @@ TODO:
     
 """
 
-import ciphers
-import bruteforce
+#from .ciphers import *
+from . import ciphers
+from .bruteforce import *
 
 def test_failed(test, verbose):
     # The logging utility for a failed test

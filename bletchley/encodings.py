@@ -227,7 +227,7 @@ def encode(text, encoding):
     # TODO: The functions take strings and return bytes, they need to be able to take bytes and return encoded bytes
 
     
-
+"""
 encode("hello", "utf16 utf32")
 encode("hello", "utf16, utf32")
 
@@ -237,10 +237,6 @@ def decode(text, encoding):
 def bruteforce(text):
     print("Brute fore decoding")
 
-
-
-
-exit()
 string="hello"
 
 print("Base64:", encode_base64(string))
@@ -297,3 +293,4 @@ print("Hexadecimal (Raw) Decoded:", decode_hex(encoded_hex))
 print("BZIP2 Decoded:", decode_bzip2(encoded_bzip2))
 print("Gzip Decoded:", decode_gzip(encoded_gzip))
 print("Brotli Decoded:", decode_brotli(encoded_brotli))
+"""

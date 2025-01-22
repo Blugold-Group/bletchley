@@ -10,13 +10,12 @@ from itertools import cycle
 from threading import Thread
 import itertools
 
-#from bletchley import __version__
 import argparse
-import start
-import recognizeHash
-import frequency
-import encodings
-import ciphers
+from .start import run
+from .recognizeHash import *
+from .frequency import *
+from .encodings import *
+from . import ciphers
 import warnings
 
 def frequencyAnalysis(text, style="vbcol"):

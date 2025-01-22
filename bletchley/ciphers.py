@@ -41,23 +41,23 @@ class realEngine:
     def __init__(self, corpus="small_specialized"):
 
         if corpus=="large":
-            f = open("wordlists/words_dictionary.json", "r")
+            f = open("bletchley/wordlists/words_dictionary.json", "r")
             self.data = json.load(f)
             f.close()
         elif corpus=="small":
-            with open("wordlists/words.txt") as f:
+            with open("bletchley/wordlists/words.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="small_specialized":
-            with open("wordlists/words_specialized.txt") as f:
+            with open("bletchley/wordlists/words_specialized.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="large_specialized":
-            with open("wordlists/words_dictionary_specialized.txt") as f:
+            with open("bletchley/wordlists/words_dictionary_specialized.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="dictionary":
-            with open("wordlists/dictionary.txt") as f:
+            with open("bletchley/wordlists/dictionary.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
 

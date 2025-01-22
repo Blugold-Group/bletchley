@@ -3,3 +3,8 @@ env/
 
 *.cpython*
 __pycache__
+
+bletchley.egg-info
+.pytest_cache
+
+build
