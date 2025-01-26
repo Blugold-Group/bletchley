@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="bletchley",
-    version="0.4.0",
+    version="0.4.5",
     url='https://github.com/ThisIsNotANamepng/bletchley',
     long_description=open('README.md').read(),
     description="A cryptography suite",
