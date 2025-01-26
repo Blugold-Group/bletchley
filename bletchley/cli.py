@@ -1,4 +1,3 @@
-#!/usr/bin/venv python
 """
 Client facing file to interface with Bletchley tools
 
@@ -9,12 +8,12 @@ from time import sleep
 from itertools import cycle
 from threading import Thread
 import itertools
-
 import argparse
-from .start import run
-from .recognizeHash import *
-from .frequency import *
-from .encodings import *
+
+from . import start
+from . import recognizeHash
+from . import frequency
+from . import encodings
 from . import ciphers
 import warnings
 

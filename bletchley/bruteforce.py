@@ -3,13 +3,15 @@ This file provides functions to brute force weak ciphers
 
 All brute force methods need to be able to work with spaces and no spaces
 
+All brute force methods return False if the ciphertext isn't encrypted with that cipher, or a ciphertext if automatic solving worked
+
 TODO:
-    - Add threading on Vigenere brute force
+    - Add more ciphers
 
 """
 import time
 from . import ciphers
-from english_dictionary.scripts.read_pickle import get_dict
+#from english_dictionary.scripts.read_pickle import get_dict
 import itertools
 import threading
 import sys
@@ -85,6 +87,8 @@ def vigenere(text, keycode="w", length=None):
 
     keys=[]
 
+    exit()
+
     if "w" in keycode:
         for i in get_dict():
             if len(i)>0:
@@ -120,6 +124,8 @@ def substitution(text):
     return(False)
 
 def railfence(text):
+
+    return False  # Remove this when the rail fence decryption works
     global tolerance
 
     realTest = ciphers.realEngine("small_specialized")

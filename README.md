@@ -6,9 +6,9 @@ It can be used on the cli or in python code
 
 Bletchley has a number of tools to aid in cryptanalysis, including
 
-1. Frequency analysis
-    - [ ] Frequency analysis displayed in graphs
-    - [ ] Automatic decryption using frequency analysis
+1. Statistics
+    - [x] Frequency analysis
+    - [ ] Other things defined in lightbulb
     
 2. Attempted automated decryption of the following ciphers
     - [x] Caesar
@@ -48,10 +48,9 @@ And the crown jewel
 4. A dynamic tool using machine learning to guess what cipher was used to encrypt a ciphertext, codenamed lightbulb 
 
 Works with the following ciphers
-   
-     - [ ] Vigenere
-     - [ ] Atbash
-     - [ ] Baconian
+    - [ ] Vigenere
+    - [ ] Atbash
+    - [ ] Baconian
 
 
 The power given by this repo is the ability to string various "huts" (tools) together, creating a dynamic solution finding tool. 

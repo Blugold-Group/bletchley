@@ -6,6 +6,10 @@
 
 - Add more ciphers
 
-- Clean up ciphers.py
-
 - Organize and define wordlists better
+
+- Add colorama to cli, make it look nicer
+
+- Test and adapt stats.py
+
+- Add support for piping in data from the cli
