@@ -13,3 +13,5 @@
 - Test and adapt stats.py
 
 - Add support for piping in data from the cli
+
+- Once the tool is stable, 

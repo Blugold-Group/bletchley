@@ -9,15 +9,18 @@ The first things ran against a ciphertext
 
 2. Machine Learning guess
 
-3. Brute force the best guess
+3. Return suggestions or next steps for breaking guessed cipher
 
 TODO:
     - Don't make finding one option end the script, try them all and return all results
     - Each brute forcing function creates a new realTest, make start.run() pass a shared engine, and have them only create their own if its not passed (a user might want to use the functions without start.run() or the cli)
     - Right now it just tries each cipher, but I want to get to the point of layering ciphers (ie caesar->vigenere->caesar)
     - When returning the solved plaintext, right now it just returns the planetext but I want to also return the key
+    - Allow passing the plaintext detection tolerance (also from cli)
 
 Rich Colors - https://rich.readthedocs.io/en/stable/appendix/colors.html
+
+The tests work by passing the ciphertext to bruteforce.py for solving (including plaintext detection), unless the cipher doesn't take keys and is more of an encoding (IE Atbash). Then, the plaintext detection is handled in this file
 
 """
 
@@ -61,23 +64,41 @@ def run(ciphertext, wordlist="small_specialized", verbose=True):
         return
     test_failed("Caesar Cipher", verbose)
 
+    unavailable("vigenere")
+
+    unavailable("railfence") # Automatic solving of the railfence cipher isn't supported yet
+    """
     test=bruteforce.railfence(ciphertext)
     if (test):
         print("Railfence :", test[0], "key :", test[1])
         return
     test_failed("Rail Fence", verbose)
+    """
 
+    unavailable("substitution") # Automatic solving of the substitution cipher isn't supported yet
+    """
     test=bruteforce.substitution(ciphertext)
     if (test):
         print("Substitution :", test)
         return
     test_failed("Substitution Cipher", verbose)
+    """
 
-    test=ciphers.atbash(ciphertext)
-    if (realTest.plaintext_or_ciphertext(test, 0.8)):
+    test=bruteforce.atbash(ciphertext)
+    if (test):
         print("Atbash :", test)
         return
     test_failed("Atbash Cipher", verbose)
+
+    unavailable("baconian")
+
+    unavailable("affine")
+
+    unavailable("beaufort")
+
+    unavailable("autokey")
+
+    unavailable("bifid")
 
     console.print(f"[bold red1]Automatic solving failed[/bold red1]")
 
@@ -93,7 +114,15 @@ def run(ciphertext, wordlist="small_specialized", verbose=True):
         if predicted == "vigenere":
             bruteforce.vigenere(ciphertext)
         if predicted == "baconian":
-            print("Enter decyrption here")
+            print("Enter decryption here")
             #print(ciphers.baconian(ciphertext))
 
     """
+
+ciphertexts=["Aol xbpjr iyvdu mve qbtwz vcly aol shgf kvn.", "Zrc kewsg npaov hat beqfu ajcp zrc lidy xam.", "Twt byirz mvolc qsx yjxts dkpv twt wezn szk.", "baaba aabbb aabaa abbbb baabb abaaa aaaba abaab aaaab baaaa abbab babaa abbaa aabab abbab babab abaaa baabb ababb abbba baaab abbab baabb aabaa baaaa baaba aabbb aabaa ababa aaaaa babbb babba aaabb abbab aabba", "Gur dhvpx oebja sbk whzcf bire gur ynml qbt.", "arIhtad  tete ?t  ahoehyjc fsorekr iuod edwgtiava hs teret w  th aoduhtn uao  otluwypstodon lu,n y eao  t hvgiiselaetl"]
+
+for i in ciphertexts:
+    run(i)
+
+run("Aol xbpjr iyvdu mve qbtwz vcly aol shgf kvn.")
+run("sdfkhvbhebfvihbev.")

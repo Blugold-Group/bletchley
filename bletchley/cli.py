@@ -46,7 +46,7 @@ def classify(text):
     print("Using ML classification to find cipher")
 
 def run(text, wordlist="small_specialized", verbose=False):
-    print(start.run(text, wordlist, verbose))
+    start.run(text, wordlist, verbose)
 
 def encrypt_caesar(text, key):
     print(ciphers.caesar.encrypt(text, key))

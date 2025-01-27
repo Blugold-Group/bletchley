@@ -3,12 +3,17 @@ This file provides functions to brute force weak ciphers
 
 All brute force methods need to be able to work with spaces and no spaces
 
-All brute force methods return False if the ciphertext isn't encrypted with that cipher, or a ciphertext if automatic solving worked
+All brute force methods return False if the ciphertext isn't encrypted with that cipher, the ciphertext if automatic solving worked, and None if the brute forcing isn't implemented yet
 
 TODO:
     - Add more ciphers
+    - Return the key used to encrypt the text [caesar, vigenere, *]
+    - Allow passing of wordlist
+
+For more information how the functions work, look at the Caesar function, it has comments explaining what's going on
 
 """
+
 import time
 from . import ciphers
 #from english_dictionary.scripts.read_pickle import get_dict
@@ -136,3 +141,41 @@ def railfence(text):
             return(test, i)
         
     return(False)
+
+def playfair(text):
+    return False  # Remove this when the rail fence decryption works
+
+def atbash(text):
+
+    realTest = ciphers.realEngine("small_specialized")
+
+    test = ciphers.atbash(text)
+
+    if realTest.plaintext_or_ciphertext(test, 0.8):
+        return test
+
+    return False
+
+def playfair(text):
+    return False
+
+def baconian(text):
+    return False
+
+def affine(text):
+    return False
+
+def rail_fence(text):
+    return False
+
+def substitution(text):
+    return False
+
+def beaufort(text):
+    return False
+
+def autokey(text):
+    return False
+
+def bifid(text):
+    return False
