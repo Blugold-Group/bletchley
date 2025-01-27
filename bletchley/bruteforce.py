@@ -3,7 +3,7 @@ This file provides functions to brute force weak ciphers
 
 All brute force methods need to be able to work with spaces and no spaces
 
-All brute force methods return False if the ciphertext isn't encrypted with that cipher, the ciphertext if automatic solving worked, and None if the brute forcing isn't implemented yet
+All brute force methods return False if the ciphertext isn't encrypted with that cipher, the [ciphertext, key, percentage_words] if automatic solving worked, and None if the brute forcing isn't implemented yet
 
 TODO:
     - Add more ciphers
@@ -57,6 +57,8 @@ def caesar(text, return_type="bg"):
     # These two variables (best_guess) get replaced with the current tested string if the string had more real words in it that the current best_guess_count, counts is used to track how many real words are in each permutation of ciphertext
     best_guess_string=""
     best_guess_count=-1
+    best_guess_key=""
+    confidence=-1
     counts=[]
 
     for i in test_texts:
@@ -71,8 +73,11 @@ def caesar(text, return_type="bg"):
             best_guess_count=count
         counts.append(count)
 
+    key = test_texts.index(best_guess_string)
+    confidence = counts[test_texts.index(best_guess_string)] / (len(best_guess_string.split()))
+
     if realTest.plaintext_or_ciphertext(best_guess_string, tolerance):
-        return(best_guess_string)
+        return(best_guess_string, key, confidence)
     return(False)
     
 def vigenere(text, keycode="w", length=None):

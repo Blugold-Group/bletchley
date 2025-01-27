@@ -39,10 +39,10 @@ def test_failed(test, verbose):
     if verbose:
         console.print(f"[bold red]Test failed:  [/bold red][bold dodger_blue2]{test}[/bold dodger_blue2]")
 
-def test_success(test, verbose):
+def test_success(test, cipher, key, confidence):
     # The logging utility for a succeeded test
-    if verbose:
-        console.print(f"[spring_green3]Text decrypted successfully! :[/spring_green3] {test}")
+    console.print(f"[spring_green3]Text decrypted successfully! With a confidence of {"{:.3f}".format(confidence)}, the plaintext is :[/spring_green3] {test}")
+    console.print(f"The ciphertext was encrypted with the [bold]{cipher}[/bold] cipher and used the key: [bold]{key}[/bold]")
 
 def info(text):
     console.print(f"[deep_sky_blue1]Info:[/deep_sky_blue1]  {text}")
@@ -60,7 +60,7 @@ def run(ciphertext, wordlist="small_specialized", verbose=True):
 
     test=bruteforce.caesar(ciphertext)
     if (test):
-        test_success(test, verbose)
+        test_success(test[0], "caesar", test[1], test[2])
         return
     test_failed("Caesar Cipher", verbose)
 
@@ -118,11 +118,3 @@ def run(ciphertext, wordlist="small_specialized", verbose=True):
             #print(ciphers.baconian(ciphertext))
 
     """
-
-ciphertexts=["Aol xbpjr iyvdu mve qbtwz vcly aol shgf kvn.", "Zrc kewsg npaov hat beqfu ajcp zrc lidy xam.", "Twt byirz mvolc qsx yjxts dkpv twt wezn szk.", "baaba aabbb aabaa abbbb baabb abaaa aaaba abaab aaaab baaaa abbab babaa abbaa aabab abbab babab abaaa baabb ababb abbba baaab abbab baabb aabaa baaaa baaba aabbb aabaa ababa aaaaa babbb babba aaabb abbab aabba", "Gur dhvpx oebja sbk whzcf bire gur ynml qbt.", "arIhtad  tete ?t  ahoehyjc fsorekr iuod edwgtiava hs teret w  th aoduhtn uao  otluwypstodon lu,n y eao  t hvgiiselaetl"]
-
-for i in ciphertexts:
-    run(i)
-
-run("Aol xbpjr iyvdu mve qbtwz vcly aol shgf kvn.")
-run("sdfkhvbhebfvihbev.")
