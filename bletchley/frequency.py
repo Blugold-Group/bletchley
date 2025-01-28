@@ -3,6 +3,9 @@ Provides functions to perform frequency analysis on a given text
 
 Can return the analysis programatically or in graphical charts
 
+TODO:
+    - Add an option to ignore special characters
+
 """
 
 import plotext as plt
@@ -206,7 +209,3 @@ def frequencyAnalysis(text, mode="c"):
         plt.show()
         return
     raise ValueError("No recognized mode given")
-
-
-
-#frequencyAnalysis("jkwbefjwbefjwetrytuyiuoplkamhbgcfyxtuvwbkxuiywqtrcfhvjuy546756uyfvtyrew243546okulwef", "vsbcar")

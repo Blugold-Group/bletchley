@@ -41,8 +41,8 @@ def test_failed(test, verbose):
 
 def test_success(test, cipher, key, confidence):
     # The logging utility for a succeeded test
-    console.print(f"[spring_green3]Text decrypted successfully! With a confidence of {"{:.3f}".format(confidence)}, the plaintext is :[/spring_green3] {test}")
-    console.print(f"The ciphertext was encrypted with the [bold]{cipher}[/bold] cipher and used the key: [bold]{key}[/bold]")
+    console.print(f"[spring_green3]Text decrypted successfully! With a confidence of {"{:.3f}".format(confidence*100)}%, the plaintext is :[/spring_green3] {test}")
+    console.print(f"[spring_green3]The ciphertext was encrypted with the [/spring_green3][bold]{cipher}[/bold] [spring_green3]cipher and used the key: [/spring_green3][bold dodger_blue3]{key}[/bold dodger_blue3]")
 
 def info(text):
     console.print(f"[deep_sky_blue1]Info:[/deep_sky_blue1]  {text}")
@@ -64,9 +64,9 @@ def run(ciphertext, wordlist="small_specialized", verbose=True):
         return
     test_failed("Caesar Cipher", verbose)
 
-    unavailable("vigenere")
+    if verbose: unavailable("vigenere")
 
-    unavailable("railfence") # Automatic solving of the railfence cipher isn't supported yet
+    if verbose: unavailable("railfence") # Automatic solving of the railfence cipher isn't supported yet
     """
     test=bruteforce.railfence(ciphertext)
     if (test):
@@ -75,7 +75,7 @@ def run(ciphertext, wordlist="small_specialized", verbose=True):
     test_failed("Rail Fence", verbose)
     """
 
-    unavailable("substitution") # Automatic solving of the substitution cipher isn't supported yet
+    if verbose: unavailable("substitution") # Automatic solving of the substitution cipher isn't supported yet
     """
     test=bruteforce.substitution(ciphertext)
     if (test):
@@ -90,15 +90,15 @@ def run(ciphertext, wordlist="small_specialized", verbose=True):
         return
     test_failed("Atbash Cipher", verbose)
 
-    unavailable("baconian")
+    if verbose: unavailable("baconian")
 
-    unavailable("affine")
+    if verbose: unavailable("affine")
 
-    unavailable("beaufort")
+    if verbose: unavailable("beaufort")
 
-    unavailable("autokey")
+    if verbose: unavailable("autokey")
 
-    unavailable("bifid")
+    if verbose: unavailable("bifid")
 
     console.print(f"[bold red1]Automatic solving failed[/bold red1]")
 
@@ -118,3 +118,13 @@ def run(ciphertext, wordlist="small_specialized", verbose=True):
             #print(ciphers.baconian(ciphertext))
 
     """
+"""
+ciphertexts=["Aol xbpjr iyvdu mve qbtwz vcly aol shgf kvn.", "Zrc kewsg npaov hat beqfu ajcp zrc lidy xam.", "Twt byirz mvolc qsx yjxts dkpv twt wezn szk.", "baaba aabbb aabaa abbbb baabb abaaa aaaba abaab aaaab baaaa abbab babaa abbaa aabab abbab babab abaaa baabb ababb abbba baaab abbab baabb aabaa baaaa baaba aabbb aabaa ababa aaaaa babbb babba aaabb abbab aabba", "Gur dhvpx oebja sbk whzcf bire gur ynml qbt.", "arIhtad  tete ?t  ahoehyjc fsorekr iuod edwgtiava hs teret w  th aoduhtn uao  otluwypstodon lu,n y eao  t hvgiiselaetl"]
+
+for i in ciphertexts:
+    run(i)
+
+run("Aol xbpjr iyvdu mve qbtwz vcly aol shgf kvn.")
+run("sdfkhvbhebfvihbev.")
+
+"""

@@ -1,6 +1,7 @@
 """
 Client facing file to interface with Bletchley tools
 
+TODO:
 """
 
 from sys import stdout as terminal
@@ -160,7 +161,7 @@ def main():
     run_parser = subparsers.add_parser("run", help="Try to automatically decrypt the ciphertext.")
     run_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
     run_parser.add_argument("-v", "--verbose", action="store_true", help="Print the results of all tests")
-    run_parser.add_argument("-w", "--wordlist", type=str, required=False, help="The word list to use when detecting whether a tested ciphertext is decrypted or not")
+    run_parser.add_argument("-w", "--wordlist", choices=["large", "small", "small_specialized", "large_specialized", "dictionary"], type=str, required=False, help="The word list to use when detecting whether a tested ciphertext is decrypted or not")
 
     encryption_parser = subparsers.add_parser("encrypt", help="Encrypt a text.")
     encryption_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
