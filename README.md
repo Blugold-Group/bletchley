@@ -63,9 +63,8 @@ python3 cli.py
 OPTIONS
 
 freq (frequency analysis)
-    - Defaults to vbcol if -c is not passed
 
--c,  --chart
+-c,  --chart (Defaults to vbcol if not passed)
     c - count
     p - percentage
     vsbc - Verbose simple bar - count

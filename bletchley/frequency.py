@@ -4,7 +4,9 @@ Provides functions to perform frequency analysis on a given text
 Can return the analysis programatically or in graphical charts
 
 TODO:
-    - Add an option to ignore special characters
+    - Add an option to ignore special characters (specifically spaces)
+    - Add an option to ignore capitalization
+    - Add options to get bar charts of percentages
 
 """
 
