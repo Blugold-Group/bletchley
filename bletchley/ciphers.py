@@ -146,7 +146,7 @@ def verify_input(text):
 def verify_int_key(key):
     if not isinstance(key, int):
         raise TypeError("key must be an integer")
-    if not key:
+    if not key and key=="0":
         raise ValueError("key is empty")
 
 class template:

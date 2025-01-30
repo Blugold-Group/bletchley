@@ -48,7 +48,7 @@ def caesar(text, return_type="bg"):
 
     # A list of the text encrypted which each possible key for caesar cipher
     test_texts=[]
-    for i in range(1,27):
+    for i in range(0,26):
         test_texts.append(ciphers.caesar.decrypt(text.replace(".", "").replace(",", "").replace("'", ""), i))
     
     # Creates an object for testing if a text is a word or is ciphertext
@@ -73,7 +73,7 @@ def caesar(text, return_type="bg"):
             best_guess_count=count
         counts.append(count)
 
-    key = test_texts.index(best_guess_string)+1
+    key = test_texts.index(best_guess_string)
     confidence = counts[test_texts.index(best_guess_string)] / (len(best_guess_string.split()))
 
     if realTest.plaintext_or_ciphertext(best_guess_string, tolerance):
