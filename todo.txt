@@ -11,7 +11,7 @@ Backlog
 
     - Test and adapt stats.py[xx]
 
-    - Organize and define wordlists better[xxx]
+    - Organize (standardize naming and format) and define wordlists better (in the readme)[xxx]
         ~ Requires a knowledge of how the wordlists are used, and what format would be most efficient
 
     - Add support for piping in data from the cli[?]

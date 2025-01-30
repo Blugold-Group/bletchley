@@ -22,7 +22,7 @@ import re
 import json
 from random import randrange
 from itertools import chain, cycle
-
+import importlib.resources
 
 global lower_alphabet
 global upper_alphabet
@@ -42,23 +42,23 @@ class realEngine:
     def __init__(self, corpus="small_specialized"):
 
         if corpus=="large":
-            f = open("bletchley/wordlists/words_dictionary.json", "r")
-            self.data = json.load(f)
+            with importlib.resources.open_text("bletchley", "wordlists/words_dictionary.json") as f:
+                self.data = json.load(f)
             f.close()
         elif corpus=="small":
-            with open("bletchley/wordlists/words.txt") as f:
+            with importlib.resources.open_text("bletchley", "wordlists/words.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="small_specialized":
-            with open("bletchley/wordlists/words_specialized.txt") as f:
+            with importlib.resources.open_text("bletchley", "wordlists/words_specialized.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="large_specialized":
-            with open("bletchley/wordlists/words_dictionary_specialized.txt") as f:
+            with importlib.resources.open_text("bletchley", "wordlists/words_dictionary_specialized.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="dictionary":
-            with open("bletchley/wordlists/dictionary.txt") as f:
+            with importlib.resources.open_text("bletchley", "wordlists/dictionary.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
 
