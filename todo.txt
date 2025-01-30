@@ -1,6 +1,6 @@
 - Do encodings.py
 
-- Build model
+- Do ML analysis
 
 - Build start.py
 
@@ -8,10 +8,10 @@
 
 - Organize and define wordlists better
 
-- Add colorama to cli, make it look nicer
+- Make cli modern and fancy
 
 - Test and adapt stats.py
 
 - Add support for piping in data from the cli
 
-- Once the tool is stable, 
+- Once the tool is stable, build documentation

@@ -1,8 +1,10 @@
 # Bletchley
 
-Bletchley is a cryptography suite which provides cryptographic tools
+Bletchley is a cryptography suite which provides tools for encryption, decryption, and cryptanalysis. It is aimed at classical ciphers
 
 It can be used on the cli or in python code
+
+**It is not stable, don't expect everything to work right just yet**
 
 Bletchley has a number of tools to aid in cryptanalysis, including
 
