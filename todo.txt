@@ -27,7 +27,7 @@ Backlog
     - In bruteforce.py, write standard function for comparing a list of possible ciphertexts
 
     - Add or handle keys not coprime with 26 (invalid) for multiplication cipher
-     
+
 
 In Progress
     - Build start.py[xxxx]
