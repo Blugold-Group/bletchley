@@ -48,8 +48,8 @@ def caesar(text, return_type="bg"):
 
     # A list of the text encrypted which each possible key for caesar cipher
     test_texts=[]
-    for i in range(1,26):
-        test_texts.append(ciphers.caesar.encrypt(text.replace(".", "").replace(",", "").replace("'", ""), i))
+    for i in range(0,26):
+        test_texts.append(ciphers.caesar.decrypt(text.replace(".", "").replace(",", "").replace("'", ""), i))
     
     # Creates an object for testing if a text is a word or is ciphertext
     realTest = ciphers.realEngine("small_specialized")

@@ -1,17 +1,30 @@
-- Do encodings.py
+# Todo
+# Provides a simple tracker for the progress of tasks for the codebase. []s provide the size/difficulty of the task on a scale of 1[x] (easiest) through 5 [xxxxx] (hardest)
 
-- Build model
+# The ~options underneath tasks are requirements to finish the tasks (optional)
 
-- Build start.py
 
-- Add more ciphers
+Backlog
+    - Build lightbulb ML analysis system [xxxxx]
 
-- Organize and define wordlists better
+    - Add more ciphers to ciphers.py[xx]
 
-- Add colorama to cli, make it look nicer
+    - Test and adapt stats.py[xx]
 
-- Test and adapt stats.py
+    - Organize (standardize naming and format) and define wordlists better (in the readme)[xxx]
+        ~ Requires a knowledge of how the wordlists are used, and what format would be most efficient
 
-- Add support for piping in data from the cli
+    - Add support for piping in data from the cli[?]
 
-- Once the tool is stable, 
+    - Build usage documentation[xx]
+
+    - Make the realTest in ciphers.py able to separate by other characters, for example separating the words of this_is_a_text [xx]
+
+    - Make the realTest in ciphers.py able to separate by no characters, for example separating the words of thisisatext [xxxx]
+
+
+In Progress
+    - Build start.py[xxxx]
+        ~ Build cryptographically efficient method
+    
+    - Make cli modern and fancy[xx]

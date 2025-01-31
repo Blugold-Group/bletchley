@@ -10,13 +10,14 @@ from itertools import cycle
 from threading import Thread
 import itertools
 import argparse
+import warnings
 
 from . import start
 from . import recognizeHash
 from . import frequency
 from . import encodings
 from . import ciphers
-import warnings
+from bletchley import __version__
 
 def frequencyAnalysis(text, style="vbcol"):
     if style=="p" or style=="c":
@@ -134,8 +135,8 @@ def main():
     parser = argparse.ArgumentParser(description="CLI for Bletchley, a cryptanalysis suite.")    
     subparsers = parser.add_subparsers(dest="command", required=True)
     
-    #parser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')
-    
+    parser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')   
+
     frequency_parser = subparsers.add_parser("freq", help="Do frequency analysis.")
     frequency_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
     frequency_parser.add_argument("-c", "--chart", choices=["c", "p", "vsbc", "vbc", "vsbca", "vbca", "vsbcar", "vbcar", "vcbcos", "vbcos", "vsbcol", "vbcol"], type=str, required=False, help="The style for the bar chart")

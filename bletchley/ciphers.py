@@ -22,7 +22,7 @@ import re
 import json
 from random import randrange
 from itertools import chain, cycle
-
+import importlib.resources
 
 global lower_alphabet
 global upper_alphabet
@@ -42,23 +42,23 @@ class realEngine:
     def __init__(self, corpus="small_specialized"):
 
         if corpus=="large":
-            f = open("bletchley/wordlists/words_dictionary.json", "r")
-            self.data = json.load(f)
+            with importlib.resources.open_text("bletchley", "wordlists/words_dictionary.json") as f:
+                self.data = json.load(f)
             f.close()
         elif corpus=="small":
-            with open("bletchley/wordlists/words.txt") as f:
+            with importlib.resources.open_text("bletchley", "wordlists/words.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="small_specialized":
-            with open("bletchley/wordlists/words_specialized.txt") as f:
+            with importlib.resources.open_text("bletchley", "wordlists/words_specialized.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="large_specialized":
-            with open("bletchley/wordlists/words_dictionary_specialized.txt") as f:
+            with importlib.resources.open_text("bletchley", "wordlists/words_dictionary_specialized.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
         elif corpus=="dictionary":
-            with open("bletchley/wordlists/dictionary.txt") as f:
+            with importlib.resources.open_text("bletchley", "wordlists/dictionary.txt") as f:
                 self.data = f.read().splitlines() 
             f.close()
 
@@ -131,6 +131,8 @@ def reinflate(ciphertext: str, punctuation_map: list, capitalization_map: list):
     for i, is_upper in enumerate(capitalization_map):
         if is_upper:
             cipher_chars[i] = cipher_chars[i].upper()
+        else:
+            cipher_chars[i] = cipher_chars[i].lower()
 
     for index, char in punctuation_map:
         cipher_chars.insert(index, char)
@@ -146,7 +148,7 @@ def verify_input(text):
 def verify_int_key(key):
     if not isinstance(key, int):
         raise TypeError("key must be an integer")
-    if not key:
+    if not key and key=="0":
         raise ValueError("key is empty")
 
 class template:
@@ -198,6 +200,65 @@ class caesar:
     @staticmethod
     def decrypt(text, increment=randrange(1,26)):
         return caesar.encrypt(text, -increment)
+
+class multiplication:
+    @staticmethod
+    def about():
+        return "The Caesar cipher but multiplication instead of addition. The decryption is different because just dividing letters will give you the same output for some inputs, so you have to use modular inverses. (https://www.dcode.fr/multiplicative-cipher)"
+
+    @staticmethod
+    def encrypt(text, key=randrange(1,26)):
+        global lower_alphabet
+        global upper_alphabet
+        global alphabet
+
+        verify_int_key(key)
+
+        plaintext, punctuation_map, capitalization_map = process_text(text)
+
+        ciphertext = ""
+
+        for char in plaintext:
+            char = char.upper()
+            encrypted_char = chr(((ord(char) - ord('A')) * key) % 26 + ord('A'))
+            ciphertext += encrypted_char
+
+        return reinflate(ciphertext, punctuation_map, capitalization_map)
+
+    @staticmethod
+    def decrypt(text, key=randrange(1,26)):
+        global lower_alphabet
+        global upper_alphabet
+        global alphabet
+
+        verify_int_key(key)
+
+        text, punctuation_map, capitalization_map = process_text(text)
+
+        plaintext = ""
+
+        # Modular multiplicative inverse of the key
+        key_inverse = pow(key, -1, 26)
+
+        for char in text:
+            char = char.upper()
+            decrypted_char = chr(((ord(char) - ord('A')) * key_inverse) % 26 + ord('A'))
+            plaintext += decrypted_char
+
+        return reinflate(plaintext, punctuation_map, capitalization_map)
+
+class multiplicative:
+    @staticmethod
+    def about():
+        return multiplication.about()
+
+    @staticmethod
+    def encrypt(text, key=randrange(1,26)):
+        return multiplication.encrypt(text)
+
+    @staticmethod
+    def decrypt(text, key=randrange(1,26)):
+        return multiplication.decrypt(text)
 
 class vigenere:
     @staticmethod
