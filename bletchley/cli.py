@@ -56,6 +56,12 @@ def encrypt_caesar(text, key):
 def decrypt_caesar(text, key):
     print(ciphers.caesar.decrypt(text, key))
 
+def encrypt_multiplication(text, key):
+    print(ciphers.multiplication.encrypt(text, key))
+
+def decrypt_multiplication(text, key):
+    print(ciphers.multiplication.decrypt(text, key))
+
 def encrypt_rot13(text):
     print(ciphers.caesar.encrypt(text, 13))
 
@@ -214,6 +220,10 @@ def main():
             check_text_password(args.text, args.password)
             encrypt_caesar(args.text, int(args.password))
 
+        if args.cipher == "multiplicative" or args.cipher == "14" or args.cipher == "multiplication":
+            check_text_password(args.text, args.password)
+            encrypt_multiplication(args.text, int(args.password))
+
         elif args.cipher == "vigenere" or args.cipher == "2":
             check_text_password(args.text, args.password)
             encrypt_vigenere(args.text, args.password)
@@ -260,6 +270,10 @@ def main():
         if args.cipher == "caesar" or args.cipher == "1":
             check_text_password(args.text, args.password)
             decrypt_caesar(args.text, int(args.password))
+
+        if args.cipher == "multiplicative" or args.cipher == "14" or args.cipher == "multiplication":
+            check_text_password(args.text, args.password)
+            decrypt_multiplication(args.text, int(args.password))
 
         elif args.cipher == "vigenere" or args.cipher == "2":
             check_text_password(args.text, args.password)

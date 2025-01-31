@@ -14,6 +14,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     
 2. Encryption and Decryption of the following ciphers
     - [x] Caesar
+    - [x] Multiplication
     - [x] Vigenere
     - [x] Rot13
     - [x] Enigma (through [pyenigma](https://pypi.org/project/pyenigma/))
@@ -46,6 +47,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
 3. Attempted automated decryption of the following ciphers
 
     - [x] Caesar
+    - [x] Multiplication
     - [ ] Vigenere
     - [x] Rot13
     - [ ] Enigma (through [pyenigma](https://pypi.org/project/pyenigma/))
@@ -134,6 +136,7 @@ encrypt (encrypt a text)
 11 - Autokey
 12 - Bifid
 13 - Trifid
+14 - Multiplicative/Multiplication
 
 decrypt (decrypt a text)
 
