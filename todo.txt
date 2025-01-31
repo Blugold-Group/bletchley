@@ -18,6 +18,10 @@ Backlog
 
     - Build usage documentation[xx]
 
+    - Make the realTest in ciphers.py able to separate by other characters, for example separating the words of this_is_a_text [xx]
+
+    - Make the realTest in ciphers.py able to separate by no characters, for example separating the words of thisisatext [xxxx]
+
 
 In Progress
     - Build start.py[xxxx]

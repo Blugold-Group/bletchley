@@ -12,7 +12,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [x] Frequency analysis
     - [ ] Other things defined in lightbulb
     
-2. Attempted automated decryption of the following ciphers
+2. Encryption and Decryption of the following ciphers
     - [x] Caesar
     - [x] Vigenere
     - [x] Rot13
@@ -43,11 +43,38 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [ ] Base64
     - [ ] ASCII85
 
-3. A tool to determine which algorithm was used to make a hash, and a tool to search that hash in various online databases
+3. Attempted automated decryption of the following ciphers
+
+    - [x] Caesar
+    - [ ] Vigenere
+    - [x] Rot13
+    - [ ] Enigma (through [pyenigma](https://pypi.org/project/pyenigma/))
+    - [x] Atbash
+    - [ ] Playfair
+    - [ ] Affine
+    - [ ] Baconian
+    - [ ] Rail-Fence
+    - [ ] Substitution
+    - [ ] Columnar Transposition
+    - [ ] Autokey
+    - [ ] Beaufort
+    - [ ] Porta
+    - [ ] Running Key
+    - [ ] Homophonic Substitution
+    - [ ] Four Square
+    - [ ] Hill
+    - [ ] ADFGVX
+    - [ ] ADFGX
+    - [ ] Bifid
+    - [ ] Trifid
+    - [ ] Straddle Checkerboard 
+    - [ ] Chaocipher
+
+4. A tool to determine which algorithm was used to make a hash, and a tool to search that hash in various online databases
 
 And the crown jewel 
 
-4. A dynamic tool using machine learning to guess what cipher was used to encrypt a ciphertext, codenamed lightbulb 
+5. A dynamic tool using machine learning to guess what cipher was used to encrypt a ciphertext, codenamed lightbulb 
 
 Works with the following ciphers
     - [ ] Vigenere
