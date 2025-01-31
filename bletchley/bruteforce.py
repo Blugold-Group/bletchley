@@ -9,6 +9,9 @@ TODO:
     - Add more ciphers
     - Return the key used to encrypt the text [caesar, vigenere, *]
     - Allow passing of wordlist
+    - Make standard function for cleaning text
+    - Make tolerance not a global variable, passed in better
+    - Write standard function for comparing a list of possible ciphertexts
 
 For more information how the functions work, look at the Caesar function, it has comments explaining what's going on
 
@@ -125,6 +128,47 @@ def vigenere(text, keycode="w", length=None):
 
     for thread in threads:
         thread.join()
+
+def multiplication(text):
+    global tolerance
+
+    keys = [ 1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25]  # Only numbers less than 26 and relatively prime to 26 are possible keys, see https://www.nku.edu/~christensen/section%206%20multiplicative%20ciphers.pdf for more information)
+
+    test_texts = []
+    for i in keys:
+        test_texts.append(ciphers.multiplication.decrypt(text.replace(".", "").replace(",", "").replace("'", ""), i))
+
+    realTest = ciphers.realEngine("small_specialized")
+    
+    best_guess_string=""
+    best_guess_count=-1
+    best_guess_key=""
+    confidence=-1
+    counts=[]
+
+    for i in test_texts:
+        count=0
+        test=i.split()
+
+        for j in test:
+            if realTest.plaintext_or_ciphertext(j):
+                count+=1
+        if count>best_guess_count:
+            best_guess_string=i
+            best_guess_count=count
+        counts.append(count)
+
+    key = keys[test_texts.index(best_guess_string)]
+
+    
+    confidence = counts[test_texts.index(best_guess_string)] / (len(best_guess_string.split()))
+
+    if realTest.plaintext_or_ciphertext(best_guess_string, tolerance):
+        return(best_guess_string, key, confidence)
+    return(False)
+
+def multiplicative(text):
+    return multiplication(text)
 
 def substitution(text):
     #print("substitution")
