@@ -56,11 +56,26 @@ def encrypt_caesar(text, key):
 def decrypt_caesar(text, key):
     print(ciphers.caesar.decrypt(text, key))
 
+def about_caesar():
+    print(ciphers.caesar.about(False)) # Using the standard/default Caesar cipher about section
+
+def encrypt_playfair(text, key):
+    print(ciphers.playfair.encrypt(text, ciphers.playfair.generate_key_matrix(key)))
+
+def decrypt_playfair(text, key):
+    print(ciphers.playfair.decrypt(text, ciphers.playfair.generate_key_matrix(key)))
+
+def about_playfair():
+    print(ciphers.playfair.about())
+
 def encrypt_rot13(text):
     print(ciphers.caesar.encrypt(text, 13))
 
 def decrypt_rot13(text):
     print(ciphers.caesar.decrypt(text, 13))
+
+def about_rot13():
+    print(ciphers.caesar.about(True)) # Using an alternative Caesar cipher about section (for ROT13)
 
 def encrypt_vigenere(text, password):
     print(ciphers.vigenere.encrypt(text, password))
@@ -68,9 +83,15 @@ def encrypt_vigenere(text, password):
 def decrypt_vigenere(text, password):
     print(ciphers.vigenere.decrypt(text, password))
 
+def about_vigenere():
+    print(ciphers.vigenere.about())
+
 def atbash(text):
     print(ciphers.atbash(text))
 
+# TODO: about_atbash()
+
+# SKIPPING BACONIAN FOR NOW TO AVOID CONFLICT
 def encrypt_baconian(text, style, letter1="a", letter2="b"):
     print(ciphers.baconian(text, "e", letter1, letter2, style))
 
@@ -83,11 +104,17 @@ def encrypt_affine(text, p1, p2):
 def decrypt_affine(text, p1, p2):
     print(ciphers.affine(text, p1, p2, "d"))
 
+def about_affine():
+    print(ciphers.affine.about())
+
 def encrypt_rail_fence(text, key):
     print(ciphers.rail_fence(text, key, "e"))
 
 def decrypt_rail_fence(text, key):
     print(ciphers.rail_fence(text, key, "d"))
+
+def about_rail_fence():
+    print(ciphers.rail_fence.about())
 
 def encrypt_substitution(text, key):
     print(ciphers.substitution_encrypt(text, key))
@@ -95,11 +122,17 @@ def encrypt_substitution(text, key):
 def decrypt_substitution(text, key):
     print(ciphers.substitution_decrypt(text, key))
 
+def about_substitution():
+    print(ciphers.substitution.about())
+
 def encrypt_beaufort(text, key):
     print(ciphers.beaufort(text, key))
 
 def decrypt_beaufort(text, key):
     print(ciphers.beaufort(text, key))
+
+def about_beaufort():
+    print(ciphers.beaufort.about())
 
 def encrypt_autokey(text, key):
     print(ciphers.autokey_encrypt(text, key))
@@ -107,11 +140,17 @@ def encrypt_autokey(text, key):
 def decrypt_autokey(text, key):
     print(ciphers.autokey_decrypt(text, key))
 
+def about_autokey():
+    print(ciphers.autokey.about())
+
 def encrypt_bifid(text, key):
     print(ciphers.encrypt_bifid(text, key))
 
 def decrypt_bifid(text, key):
     print(ciphers.decrypt_bifid(text, key))
+
+def about_bifid():
+    print(ciphers.bifid.about())
 
 
 def check_text_password(text, password):
@@ -174,6 +213,9 @@ def main():
     decryption_parser.add_argument("-c", "--cipher", type=str, required=True, help="The cipher to decrypt the text with")
     decryption_parser.add_argument("-p", "--password", type=str, required=False, help="The password to decrypt the text with")
 
+    about_parser = subparsers.add_parser("about", help="Get more information about a cipher.")
+    about_parser.add_argument("-c", "--cipher", type=str, required=True, help="The cipher to get information about")
+
     # Parse the arguments
     args = parser.parse_args()
 
@@ -228,8 +270,7 @@ def main():
 
         elif args.cipher == "playfair" or args.cipher == "5":
             check_text_password(args.text, args.password)
-
-            print("The Playfair cipher has not been added yet")
+            encrypt_playfair(args.text, args.password)
 
         elif args.cipher == "baconian" or args.cipher == "6":
             print("I need to get the optional letter 1 and 2, and style (old or new), I could probably do this with the -p, just have them passed with commas in that")
@@ -256,6 +297,9 @@ def main():
         elif args.cipher == "bifid" or args.cipher == "12":
             encrypt_bifid(args.text, args.password)
 
+        else: # MUST BE LAST IN CHAIN
+            print("Please select a valid cipher (e.g. '-c caesar').")
+
     elif args.command == "decrypt" or args.command == "de" or args.command == "d":
         if args.cipher == "caesar" or args.cipher == "1":
             check_text_password(args.text, args.password)
@@ -275,8 +319,7 @@ def main():
 
         elif args.cipher == "playfair" or args.cipher == "5":
             check_text_password(args.text, args.password)
-
-            print("The Playfair cipher has not been added yet")
+            decrypt_playfair(args.text, args.password)
 
         elif args.cipher == "baconian" or args.cipher == "6":
             print("I need to get the optional letter 1 and 2, and style (old or new), I could probably do this with the -p, just have them passed with commas in that")
@@ -302,6 +345,49 @@ def main():
 
         elif args.cipher == "bifid" or args.cipher == "12":
             decrypt_bifid(args.text, args.password)
+
+        else: # MUST BE LAST IN CHAIN
+            print("Please select a valid cipher (e.g. '-c caesar').")
+
+    elif args.command == "about" or args.command == "info":
+        if args.cipher == "caesar" or args.cipher == "1":
+            about_caesar()
+
+        elif args.cipher == "vigenere" or args.cipher == "2":
+            about_vigenere()
+        
+        elif args.cipher == "rot13" or args.cipher == "rot" or args.cipher == "3":
+            about_rot13()
+
+        # elif args.cipher == "atbash" or args.cipher == "4":
+        #     about_atbash()
+
+        elif args.cipher == "playfair" or args.cipher == "5":
+            about_playfair()
+
+        # elif args.cipher == "baconian" or args.cipher == "6":
+        #     about_baconian
+
+        elif args.cipher == "affine" or args.cipher == "7":
+            about_affine()
+
+        elif args.cipher == "rail" or args.cipher == "rail_fence" or args.cipher == "8":
+            about_rail_fence()
+
+        elif args.cipher == "substitution" or args.cipher == "9":
+            about_substitution()
+
+        elif args.cipher == "beaufort" or args.cipher == "10":
+            about_beaufort()
+
+        elif args.cipher == "autokey" or args.cipher == "11":
+            about_autokey()
+
+        elif args.cipher == "bifid" or args.cipher == "12":
+            about_bifid()
+
+        else: # MUST BE LAST IN CHAIN
+            print("Please select a valid cipher (e.g. '-c caesar').")
 
     elif args.command == "measure" or args.command == "m":
         print("Measure things like ioc, bigrams and trigrams")
