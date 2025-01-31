@@ -64,6 +64,12 @@ def run(ciphertext, wordlist="small_specialized", verbose=True):
         return
     test_failed("Caesar Cipher", verbose)
 
+    test=bruteforce.multiplication(ciphertext)
+    if (test):
+        test_success(test[0], "multiplicative", test[1], test[2])
+        return
+    test_failed("Multiplicative", verbose)
+
     if verbose: unavailable("vigenere")
 
     if verbose: unavailable("railfence") # Automatic solving of the railfence cipher isn't supported yet

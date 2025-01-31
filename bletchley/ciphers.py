@@ -131,6 +131,8 @@ def reinflate(ciphertext: str, punctuation_map: list, capitalization_map: list):
     for i, is_upper in enumerate(capitalization_map):
         if is_upper:
             cipher_chars[i] = cipher_chars[i].upper()
+        else:
+            cipher_chars[i] = cipher_chars[i].lower()
 
     for index, char in punctuation_map:
         cipher_chars.insert(index, char)
@@ -168,8 +170,16 @@ class template:
 
 class caesar:
     @staticmethod
-    def about():
-        return "Caesar cipher https://en.wikipedia.org/wiki/Caesar_cipher"
+    def about(useRot13=False):
+        if(useRot13):
+            return ("ROT13 cipher https://en.wikipedia.org/wiki/ROT13 \n"
+                    "This is a simple subsitution cipher, replacing the input letter with "
+                    "an output letter offset by 13 places (e.g. 'A' becomes 'N', 'B' becomes 'O', etc.)"
+                    "The ROT13 cipher is simply the Caesar cipher with a key-value of 13. ")
+        else:
+            return ("Caesar cipher https://en.wikipedia.org/wiki/Caesar_cipher \n"
+                    "This is a simple substitution cipher, replacing the input letter with "
+                    "an output letter offset by a set number of places.")
 
     @staticmethod
     def encrypt(text, increment=randrange(1,26)):
@@ -198,6 +208,161 @@ class caesar:
     @staticmethod
     def decrypt(text, increment=randrange(1,26)):
         return caesar.encrypt(text, -increment)
+
+class playfair:
+    @staticmethod
+    def about():
+        return ("Playfair cipher: https://en.wikipedia.org/wiki/Playfair_cipher\n"
+                "This cipher encrypts text in letter pairs using a 5x5 key matrix, "
+                "replacing 'J' with 'I' and inserting 'X' between duplicate letters or "
+                "at the end of the message to maintain an even number of characters. "
+                "Decryption preserves these alterations, which may lead to unexpected output.")
+
+    @staticmethod
+    def prepare_text(text):
+        text = text.upper().replace("J", "I").replace(" ", "")
+        prepared_text = ""
+
+        i = 0
+        while i < len(text):
+            a = text[i]
+            if i + 1 < len(text):
+                b = text[i + 1]
+                if a == b:
+                    prepared_text += a + 'X'
+                    i += 1
+                else:
+                    prepared_text += a + b
+                    i += 2
+            else:
+                prepared_text += a + 'X'
+                i += 1
+
+        return prepared_text
+
+    @staticmethod
+    def generate_key_matrix(key):
+        key = key.upper().replace("J", "I").replace(" ", "")
+        key_set = set()
+        matrix = []
+        alphabet = string.ascii_uppercase.replace("J", "")  # No 'J' in Playfair
+
+        for char in key + alphabet:
+            if char not in key_set:
+                key_set.add(char)
+                matrix.append(char)
+
+        return [matrix[i:i + 5] for i in range(0, 25, 5)]  # Converting to th e5x5 format
+
+    @staticmethod
+    def find_position(matrix, char):
+        for row in range(5):
+            for col in range(5):
+                if matrix[row][col] == char:
+                    return row, col
+        return None
+
+    @staticmethod
+    def encrypt(text, key_matrix):
+        text = playfair.prepare_text(text)
+        encrypted_text = ""
+
+        for i in range(0, len(text), 2):
+            a, b = text[i], text[i + 1]
+            row_a, col_a = playfair.find_position(key_matrix, a)
+            row_b, col_b = playfair.find_position(key_matrix, b)
+
+            if row_a == row_b:  # Same row: shift right
+                encrypted_text += key_matrix[row_a][(col_a + 1) % 5]
+                encrypted_text += key_matrix[row_b][(col_b + 1) % 5]
+            elif col_a == col_b:  # Same column: shift down
+                encrypted_text += key_matrix[(row_a + 1) % 5][col_a]
+                encrypted_text += key_matrix[(row_b + 1) % 5][col_b]
+            else:  # Rectangle swap
+                encrypted_text += key_matrix[row_a][col_b]
+                encrypted_text += key_matrix[row_b][col_a]
+
+        return encrypted_text
+
+    @staticmethod
+    def decrypt(text, key_matrix):
+        decrypted_text = ""
+
+        for i in range(0, len(text), 2):
+            a, b = text[i], text[i + 1]
+            row_a, col_a = playfair.find_position(key_matrix, a)
+            row_b, col_b = playfair.find_position(key_matrix, b)
+
+            if row_a == row_b:
+                decrypted_text += key_matrix[row_a][(col_a - 1) % 5]
+                decrypted_text += key_matrix[row_b][(col_b - 1) % 5]
+            elif col_a == col_b:
+                decrypted_text += key_matrix[(row_a - 1) % 5][col_a]
+                decrypted_text += key_matrix[(row_b - 1) % 5][col_b]
+            else:
+                decrypted_text += key_matrix[row_a][col_b]
+                decrypted_text += key_matrix[row_b][col_a]
+
+        return decrypted_text
+
+class multiplication:
+    @staticmethod
+    def about():
+        return "The Caesar cipher but multiplication instead of addition. The decryption is different because just dividing letters will give you the same output for some inputs, so you have to use modular inverses. (https://www.dcode.fr/multiplicative-cipher)"
+
+    @staticmethod
+    def encrypt(text, key=randrange(1,26)):
+        global lower_alphabet
+        global upper_alphabet
+        global alphabet
+
+        verify_int_key(key)
+
+        plaintext, punctuation_map, capitalization_map = process_text(text)
+
+        ciphertext = ""
+
+        for char in plaintext:
+            char = char.upper()
+            encrypted_char = chr(((ord(char) - ord('A')) * key) % 26 + ord('A'))
+            ciphertext += encrypted_char
+
+        return reinflate(ciphertext, punctuation_map, capitalization_map)
+
+    @staticmethod
+    def decrypt(text, key=randrange(1,26)):
+        global lower_alphabet
+        global upper_alphabet
+        global alphabet
+
+        verify_int_key(key)
+
+        text, punctuation_map, capitalization_map = process_text(text)
+
+        plaintext = ""
+
+        # Modular multiplicative inverse of the key
+        key_inverse = pow(key, -1, 26)
+
+        for char in text:
+            char = char.upper()
+            decrypted_char = chr(((ord(char) - ord('A')) * key_inverse) % 26 + ord('A'))
+            plaintext += decrypted_char
+
+        return reinflate(plaintext, punctuation_map, capitalization_map)
+
+class multiplicative:
+    @staticmethod
+    def about():
+        return multiplication.about()
+
+    @staticmethod
+    def encrypt(text, key=randrange(1,26)):
+        return multiplication.encrypt(text)
+
+    @staticmethod
+    def decrypt(text, key=randrange(1,26)):
+        return multiplication.decrypt(text)
 
 class vigenere:
     @staticmethod
@@ -274,78 +439,6 @@ class vigenere:
                 passIndex+=1
 
         return(encrypted)
-
-def playfairFormat(text):
-    text = text.lower()
-    temp = ""
-    for i in text:
-        if i == " ":
-            continue
-        else:
-            temp+=i
-    text = temp
-    temp = ""
-    for index, i in enumerate(text):
-        if index == 0:
-            continue
-        if index % 2 == 0:
-            temp+= " "
-        else:
-            temp+=text[index-1]
-            temp+=i
-    text = temp
-
-    if len(text) % 2 == 1:
-        text+="z"
-    
-    return text
-
-def playfairDiagraph(key):
-    diagraphText = lower_alphabet.replace('j','-')
-    key = key.lower()
-    print(list(diagraphText))
-    diagraph=['' for i in range(5)]
-
-    i=0;j=0
-
-    for char in key:
-        if char in diagraphText:
-            diagraph[i]+=char
-            diagraphText=diagraphText.replace(char,'-')
-
-            j+=1
-
-            if j>4:
-                i+=1
-                j=0
-
-    for char in diagraphText:
-        if char != '-':
-            diagraph[i]+=char
-
-            j+=1
-
-            if j>4:
-                i+=1
-                j=0
-        
-    return(diagraph)
-
-def playfairDecryption(text,keyMatrix):
-
-    textPairs = []
-    
-    for i in range(len(text)):
-        if i == " ":
-            a=text[i-2]
-            b=text[i-1]
-            textPairs.append(a+b)
-
-            i+=2
-        
-def playfair(text, key='monarchy'):
-    text = playfairFormat(text)
-    keyMatrix = playfairDiagraph(key)
 
 def atbash(text):
     global lower_alphabet

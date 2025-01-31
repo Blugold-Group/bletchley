@@ -18,6 +18,16 @@ Backlog
 
     - Build usage documentation[xx]
 
+    - Make the realTest in ciphers.py able to separate by other characters, for example separating the words of this_is_a_text [xx]
+
+    - Make the realTest in ciphers.py able to separate by no characters, for example separating the words of thisisatext [xxxx]
+
+    - In bruteforce.py, make tolerance not a global variable, passed in better
+
+    - In bruteforce.py, write standard function for comparing a list of possible ciphertexts
+
+    - Add or handle keys not coprime with 26 (invalid) for multiplication cipher
+
 
 In Progress
     - Build start.py[xxxx]
