@@ -19,14 +19,23 @@ from . import encodings
 from . import ciphers
 from bletchley import __version__
 
+
+# ---- Frequency analysis
+
 def frequencyAnalysis(text, style="vbcol"):
     if style=="p" or style=="c":
         print(frequency.frequencyAnalysis(text, style))
     else:
         frequency.frequencyAnalysis(text, style)
 
+
+# ---- Hashes
+
 def hash(text):
     recognizeHash.guess(text)
+
+
+# ---- Automatic solving
 
 def bruteForce(text, cipher):
     print("Brute force", text, cipher)
@@ -35,125 +44,137 @@ def auto_decode(text):
     # Decode without knowing the encoding
     encoding.bruteforce(text)
 
+def run(text, wordlist="small_specialized", verbose=False):
+    start.run(text, wordlist, verbose)
+
+
+# ---- Encodings
 def encode(text, encoding):
-    # Encode the text
-    encoding.encode(text, encoding)
+    encodings.encode(text, encoding)
 
 def decode(text, encoding):
-    # Decode the text according to a given encoding
-    print("Decode")
-    encoding.decode(text, encoding)
+    encodings.decode(text, encoding)
+
+
+# ---- ML classification
 
 def classify(text):
     print("Using ML classification to find cipher")
 
-def run(text, wordlist="small_specialized", verbose=False):
-    start.run(text, wordlist, verbose)
+# ---- Encryption
 
 def encrypt_caesar(text, key):
     print(ciphers.caesar.encrypt(text, key))
 
-def decrypt_caesar(text, key):
-    print(ciphers.caesar.decrypt(text, key))
-
-def about_caesar():
-    print(ciphers.caesar.about(False)) # Using the standard/default Caesar cipher about section
-
 def encrypt_playfair(text, key):
     print(ciphers.playfair.encrypt(text, ciphers.playfair.generate_key_matrix(key)))
-
-def decrypt_playfair(text, key):
-    print(ciphers.playfair.decrypt(text, ciphers.playfair.generate_key_matrix(key)))
-
-def about_playfair():
-    print(ciphers.playfair.about())
 
 def encrypt_multiplication(text, key):
     print(ciphers.multiplication.encrypt(text, key))
 
-def decrypt_multiplication(text, key):
-    print(ciphers.multiplication.decrypt(text, key))
-
 def encrypt_rot13(text):
     print(ciphers.caesar.encrypt(text, 13))
 
-def decrypt_rot13(text):
-    print(ciphers.caesar.decrypt(text, 13))
-
-def about_rot13():
-    print(ciphers.caesar.about(True)) # Using an alternative Caesar cipher about section (for ROT13)
-
 def encrypt_vigenere(text, password):
     print(ciphers.vigenere.encrypt(text, password))
-
-def decrypt_vigenere(text, password):
-    print(ciphers.vigenere.decrypt(text, password))
-
-def about_vigenere():
-    print(ciphers.vigenere.about())
 
 def atbash(text):
     print(ciphers.atbash.atbash(text))
 
 # TODO: about_atbash()
 
-# SKIPPING BACONIAN FOR NOW TO AVOID CONFLICT
 def encrypt_baconian(text, style, letter1="a", letter2="b"):
     print(ciphers.baconian(text, "e", letter1, letter2, style))
-
-def decrypt_baconian(text, style, letter1="a", letter2="b"):
-    print(ciphers.baconian(text, "d", letter1, letter2, style))
 
 def encrypt_affine(text, p1, p2):
     print(ciphers.affine(text, p1, p2, "e"))
 
-def decrypt_affine(text, p1, p2):
-    print(ciphers.affine(text, p1, p2, "d"))
-
-def about_affine():
-    print(ciphers.affine.about())
-
 def encrypt_rail_fence(text, key):
     print(ciphers.rail_fence(text, key, "e"))
-
-def decrypt_rail_fence(text, key):
-    print(ciphers.rail_fence(text, key, "d"))
-
-def about_rail_fence():
-    print(ciphers.rail_fence.about())
 
 def encrypt_substitution(text, key):
     print(ciphers.substitution.encrypt(text, key))
 
-def decrypt_substitution(text, key):
-    print(ciphers.substitution.decrypt(text, key))
-
-def about_substitution():
-    print(ciphers.substitution.about())
-
 def encrypt_beaufort(text, key):
     print(ciphers.beaufort.beaufort(text, key))
-
-def decrypt_beaufort(text, key):
-    print(ciphers.beaufort.beaufort(text, key))
-
-def about_beaufort():
-    print(ciphers.beaufort.about())
 
 def encrypt_autokey(text, key):
     print(ciphers.autokey.encrypt(text, key))
 
-def decrypt_autokey(text, key):
-    print(ciphers.autokey.decrypt(text, key))
-
-def about_autokey():
-    print(ciphers.autokey.about())
-
 def encrypt_bifid(text, key):
     print(ciphers.encrypt_bifid(text, key))
 
+def nonsense(length):
+    print(ciphers.nonsense.nonsense(length))
+
+
+# ---- Decryption
+
+def decrypt_caesar(text, key):
+    print(ciphers.caesar.decrypt(text, key))
+
+def decrypt_playfair(text, key):
+    print(ciphers.playfair.decrypt(text, ciphers.playfair.generate_key_matrix(key)))
+
+def decrypt_multiplication(text, key):
+    print(ciphers.multiplication.decrypt(text, key))
+
+def decrypt_rot13(text):
+    print(ciphers.caesar.decrypt(text, 13))
+
+def decrypt_vigenere(text, password):
+    print(ciphers.vigenere.decrypt(text, password))
+
+def decrypt_baconian(text, style, letter1="a", letter2="b"):
+    print(ciphers.baconian(text, "d", letter1, letter2, style))
+
+def decrypt_affine(text, p1, p2):
+    print(ciphers.affine(text, p1, p2, "d"))
+
+def decrypt_rail_fence(text, key):
+    print(ciphers.rail_fence(text, key, "d"))
+
+def decrypt_substitution(text, key):
+    print(ciphers.substitution.decrypt(text, key))
+
+def decrypt_beaufort(text, key):
+    print(ciphers.beaufort.beaufort(text, key))
+
+def decrypt_autokey(text, key):
+    print(ciphers.autokey.decrypt(text, key))
+
 def decrypt_bifid(text, key):
     print(ciphers.decrypt_bifid(text, key))
+
+
+# ---- About ciphers
+
+def about_caesar():
+    print(ciphers.caesar.about(False)) # Using the standard/default Caesar cipher about section
+
+def about_playfair():
+    print(ciphers.playfair.about())
+
+def about_rot13():
+    print(ciphers.caesar.about(True)) # Using an alternative Caesar cipher about section (for ROT13)
+
+def about_vigenere():
+    print(ciphers.vigenere.about())
+
+def about_affine():
+    print(ciphers.affine.about())
+
+def about_rail_fence():
+    print(ciphers.rail_fence.about())
+
+def about_substitution():
+    print(ciphers.substitution.about())
+
+def about_beaufort():
+    print(ciphers.beaufort.about())
+
+def about_autokey():
+    print(ciphers.autokey.about())
 
 def about_bifid():
     print(ciphers.bifid.about())
@@ -161,9 +182,8 @@ def about_bifid():
 def about_nonsense():
     print(ciphers.nonsense.about())
 
-def nonsense(length):
-    print(ciphers.nonsense.nonsense(length))
 
+# ---- Utils
 
 def check_text_password(text, password):
     if text is None:
@@ -180,6 +200,9 @@ def convert_num_password(password):
         return(int(password))
     except:
         raise Exception("Key for this cipher must be an integer")
+
+
+# ---- Main function to handle cli input
 
 def main():
     # Create the argument parser

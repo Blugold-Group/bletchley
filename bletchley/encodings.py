@@ -24,7 +24,9 @@ Each encoding has a standardized representation:
     gzip - GZip
     brotli, brot - Brotli
 
-
+ TODO: 
+    - The function which runs a list of encodings formats the data into a string before passing to other encodings because it usually causes issues, someone has to research whether that would change things
+    - 
 """
 
 import base64
@@ -156,7 +158,6 @@ def decode_gzip(string):
 def decode_brotli(string):
     return brotli.decompress(string).decode('utf-8')
 
-
 encode_function_map = {
     'base64': encode_base64,
     'b64': encode_base64,
@@ -188,22 +189,32 @@ encode_function_map = {
 
 decode_function_map = {
     'base64': decode_base64,
-    'func2': decode_base32,
-    'func2': decode_base58,
-    'func2': decode_base16,
-    'func2': decode_utf8,
-    'func2': decode_url,
-    'func2': decode_html_entity,
-    'func2': decode_utf16,
-    'func2': decode_utf32,
-    'func2': decode_shift_jis,
-    'func2': decode_rot13,
-    'func2': decode_hex,
-    'func2': decode_bzip2,
-    'func2': decode_gzip,
-    'func2': decode_brotli
+    'b64': decode_base64,
+    'base32': decode_base32,
+    'b32': decode_base32,
+    'base58': decode_base58,
+    'b58': decode_base58,
+    'base16': decode_base16,
+    'b16': decode_base16,
+    'utf8': decode_utf8,
+    'utf16': decode_utf16,
+    'utf32': decode_utf32,
+    'utf-8': decode_utf8,
+    'utf-16': decode_utf16,
+    'utf-32': decode_utf32,
+    'url': decode_url,
+    'html': decode_html_entity,
+    'shiftjs': decode_shift_jis,
+    'sjs': decode_shift_jis,
+    'rot13': decode_rot13,
+    'hex': decode_hex,
+    'hexadecimal': decode_hex,
+    'bzip': decode_bzip2,
+    'bzip2': decode_bzip2,
+    'gzip': decode_gzip,
+    'brotli': decode_brotli,
+    'brot': decode_brotli
 }
-
 
 def encode(text, encoding):
     # Encoding can have multiple encodings, in the form of ('base64, base32, base64, ascii')
@@ -213,84 +224,32 @@ def encode(text, encoding):
     else:
         encoding = encoding.split()
 
-    
     for code in encoding:
         code = code.strip()
         if code in encode_function_map:
-            text = encode_function_map[code](text)
+            text = encode_function_map[code](str(text))
 
         else:
             print("Failed encoding:", code)
             raise Exception(f"Encoding not found.")
 
-    print("encoded text:", text)
-    # TODO: The functions take strings and return bytes, they need to be able to take bytes and return encoded bytes
-
+    print(text)
     
-"""
-encode("hello", "utf16 utf32")
-encode("hello", "utf16, utf32")
-
 def decode(text, encoding):
-    print("Decode")
+    # Decodings can have multiple encodings, in the form of ('base64, base32, base64, ascii')
 
-def bruteforce(text):
-    print("Brute fore decoding")
+    if "," in encoding:
+        encoding = encoding.split(",")
+    else:
+        encoding = encoding.split()
+    
+    for code in encoding:
+        code = code.strip()
+        if code in decode_function_map:
+            text = decode_function_map[code](str(text))
 
-string="hello"
+        else:
+            print("Failed decoding:", code)
+            raise Exception(f"Encoding not found.")
 
-print("Base64:", encode_base64(string))
-print("Base32:", encode_base32(string))
-print("Base58:", encode_base58(string))
-print("Base16 (Hexadecimal):", encode_base16(string))
-print("UTF-8:", encode_utf8(string))
-print("URL Encoding:", encode_url(string))
-print("HTML Entity Encoding:", encode_html_entity(string))
-print("UTF-16:", encode_utf16(string))
-print("UTF-32:", encode_utf32(string))
-print("Shift_JIS:", encode_shift_jis(string))
-print("ROT13:", encode_rot13(string))
-print("Hexadecimal (Raw):", encode_hex(string))
-
-# Compression encodings
-print("BZIP2:", encode_bzip2(string))
-print("Gzip:", encode_gzip(string))
-print("Brotli:", encode_brotli(string))
-
-
-
-
-
-encoded_base64 = base64.b64encode(string.encode('utf-8')).decode('utf-8')
-encoded_base32 = base64.b32encode(string.encode('utf-8')).decode('utf-8')
-encoded_base58 = base58.b58encode(string.encode('utf-8')).decode('utf-8')
-encoded_base16 = string.encode('utf-8').hex()
-encoded_utf8 = string.encode('utf-8')
-encoded_url = urllib.parse.quote(string)
-encoded_html_entity = html.escape(string)
-encoded_utf16 = string.encode('utf-16')
-encoded_utf32 = string.encode('utf-32')
-encoded_shift_jis = string.encode('shift_jis')
-encoded_rot13 = codecs.encode(string, 'rot_13')
-encoded_hex = string.encode('utf-8').hex()
-encoded_bzip2 = bz2.compress(string.encode('utf-8'))
-encoded_gzip = gzip.compress(string.encode('utf-8'))
-encoded_brotli = brotli.compress(string.encode('utf-8'))
-
-# Decoding examples
-print("Base64 Decoded:", decode_base64(encoded_base64))
-print("Base32 Decoded:", decode_base32(encoded_base32))
-print("Base58 Decoded:", decode_base58(encoded_base58))
-print("Base16 (Hexadecimal) Decoded:", decode_base16(encoded_base16))
-print("UTF-8 Decoded:", decode_utf8(encoded_utf8))
-print("URL Decoded:", decode_url(encoded_url))
-print("HTML Entity Decoded:", decode_html_entity(encoded_html_entity))
-print("UTF-16 Decoded:", decode_utf16(encoded_utf16))
-print("UTF-32 Decoded:", decode_utf32(encoded_utf32))
-print("Shift_JIS Decoded:", decode_shift_jis(encoded_shift_jis))
-print("ROT13 Decoded:", decode_rot13(encoded_rot13))
-print("Hexadecimal (Raw) Decoded:", decode_hex(encoded_hex))
-print("BZIP2 Decoded:", decode_bzip2(encoded_bzip2))
-print("Gzip Decoded:", decode_gzip(encoded_gzip))
-print("Brotli Decoded:", decode_brotli(encoded_brotli))
-"""
+    print(text)
