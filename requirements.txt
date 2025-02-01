@@ -41,6 +41,7 @@ platformdirs==4.3.6
 plotext==5.3.2
 pluggy==1.5.0
 poetry-core==2.0.1
+py-enigma==0.1
 pycparser==2.22
 pyenigma==0.4.2
 Pygments==2.18.0
@@ -59,6 +60,7 @@ six==1.17.0
 soupsieve==2.6
 toml==0.10.2
 tomlkit==0.13.2
+tqdm==4.67.1
 trove-classifiers==2025.1.10.15
 typing-extensions==3.10.0.2
 urllib3==2.3.0

@@ -28,6 +28,8 @@ Backlog
 
     - Add or handle keys not coprime with 26 (invalid) for multiplication cipher
 
+    - Add nonsense cipher (https://github.com/berzerk0/NonsenseCipher) [xxx]
+
 
 In Progress
     - Build start.py[xxxx]

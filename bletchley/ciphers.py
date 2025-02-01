@@ -12,6 +12,7 @@ TODO:
     - Remove global variable, use a better standardized method across ciphers
     - Rework the wordlists for realEngine, make sure they're high quality, make them a better/faster/standardized format, and get better measurements on them (size/efficacy)
     - Add more ciphers
+    - I passed an uppercase to vigenere encryption and it errored, fox that
 
 """
 
