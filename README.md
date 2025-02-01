@@ -152,42 +152,42 @@ bletchley freq -t "hello world"
 
 We have word lists for brute forcing keys, measuring language statistics, and machine learning
 
-* small_quotes.txt
+* `small_quotes.txt`
     * 10.3M
     * 75,966 lines
     * A list of english quotes
 
-* large_quotes.txt
+* `large_quotes.txt`
     * 95.6M
     * 499,714 lines
     * A list of english quotes, some repeats of quotes with changed semantics but same origin
 
-* dictionary.txt
+* `dictionary.txt`
     * 1.1M
     * 116,500 lines
     * A dictionary of english words. Some entries aren't words
 
-* words_dictionary.txt
+* `words_dictionary.txt`
     * 3.7M
     * 370,101 lines
     * A dictionary larger than dictionary.txt, more relaxed on what counts as a word
 
-* words.txt 
+* `words.txt` 
     * 151.8K
     * 19,999 lines
     * A file of the top 20000 most commonly used english words (I removed one entry that I don't think is a word)
 
-* words_dictionary_specialized.txt
+* `words_dictionary_specialized.txt`
     * 1.0M
     * 103,669
     * words_dictionary.txt except all words with less than 4 characters and which aren't in dictionary.txt are removed
 
-* words_specialized.txt
+* `words_specialized.txt`
     * 146.5K
     * 18,547 lines
     * words.txt except all words with less than 4 characters and which aren't in dictionary.txt are removed
 
-* rockyou.txt
+* `rockyou.txt`
     * 133.4M
     * 14,344,391
     * A standard file used in industry of the most commonly used password gathered from leaked databases
