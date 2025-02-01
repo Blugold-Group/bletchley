@@ -8,3 +8,5 @@ bletchley.egg-info
 .pytest_cache
 
 build
+
+bletchley/wordlists/rockyou.txt

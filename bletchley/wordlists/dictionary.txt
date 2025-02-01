@@ -12720,6 +12720,7 @@ cryptesthesia
 cryptesthetic
 cryptic
 cryptically
+crypto
 cryptobatholithic
 cryptobranchia
 cryptobranchiata
