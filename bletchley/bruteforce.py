@@ -175,7 +175,7 @@ def atbash(text):
 
     realTest = ciphers.realEngine("small_specialized")
 
-    test = ciphers.atbash(text)
+    test = ciphers.atbash.atbash(text)
 
     if realTest.plaintext_or_ciphertext(test, 0.8):
         return test

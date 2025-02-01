@@ -5,6 +5,7 @@ TODO:
 """
 
 from sys import stdout as terminal
+import sys
 from time import sleep
 from itertools import cycle
 from threading import Thread
@@ -17,6 +18,7 @@ from . import recognizeHash
 from . import frequency
 from . import encodings
 from . import ciphers
+from . import bruteforce
 from bletchley import __version__
 
 
@@ -37,15 +39,36 @@ def hash(text):
 
 # ---- Automatic solving
 
-def bruteForce(text, cipher):
-    print("Brute force", text, cipher)
-
 def auto_decode(text):
     # Decode without knowing the encoding
     encoding.bruteforce(text)
 
 def run(text, wordlist="small_specialized", verbose=False):
     start.run(text, wordlist, verbose)
+
+
+# ---- Brute forcing
+
+def force_caesar(text):
+    test = bruteforce.caesar(text)
+    if (test):
+        start.test_success(test[0], "caesar", test[1], test[2])
+        return
+    start.test_failed("Caesar Cipher", True)
+
+def force_vigenere(text):
+    test = bruteforce.vigenere(text)
+    if (test):
+        start.test_success(test[0], "vigenere", test[1], test[2])
+        return
+    start.test_failed("Vigenere Cipher", True)
+
+def force_atbash(text):
+    test = bruteforce.atbash(text)
+    if (test):
+        start.test_success(test[0], "atbash", test[1], test[2])
+        return
+    start.test_failed("Atbash Cipher", True)
 
 
 # ---- Encodings
@@ -212,39 +235,39 @@ def main():
     parser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')   
 
     frequency_parser = subparsers.add_parser("freq", help="Do frequency analysis.")
-    frequency_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    frequency_parser.add_argument("-t", "--text", type=str, required=False, help="The text to process")
     frequency_parser.add_argument("-c", "--chart", choices=["c", "p", "vsbc", "vbc", "vsbca", "vbca", "vsbcar", "vbcar", "vcbcos", "vbcos", "vsbcol", "vbcol"], type=str, required=False, help="The style for the bar chart")
     
     brute_parser = subparsers.add_parser("force", help="Brute force the ciphertext knowing the cipher.")
-    brute_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    brute_parser.add_argument("-t", "--text", type=str, required=False, help="The text to process")
     brute_parser.add_argument("-c", "--cipher", type=str, required=True, help="The cipher to brute force")
 
     hash_parser = subparsers.add_parser("hash", help="Identify and reverse lookup a hash.")
-    hash_parser.add_argument("-t", "--text", type=str, required=True, help="The hash to process")
+    hash_parser.add_argument("-t", "--text", type=str, required=False, help="The hash to process")
     
     encoding_parser = subparsers.add_parser("decode", help="Decode a text, with or without the encoding.")
-    encoding_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    encoding_parser.add_argument("-t", "--text", type=str, required=False, help="The text to process")
     encoding_parser.add_argument("-e", "--encoding", type=str, required=False, help="The encoding the text is in") # This is optional, if its not passed that means the encoding is unknown and should be found
 
     encoding_parser = subparsers.add_parser("encode", help="Find the encoding the text is in and/or encode the text.")
-    encoding_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    encoding_parser.add_argument("-t", "--text", type=str, required=False, help="The text to process")
     encoding_parser.add_argument("-e", "--encoding", type=str, required=True, help="The encoding to encode the text with")
 
     learning_parser = subparsers.add_parser("classify", help="Use the machine learning model to detect which cipher was used to encrypt the text.")
-    learning_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    learning_parser.add_argument("-t", "--text", type=str, required=False, help="The text to process")
     
     run_parser = subparsers.add_parser("run", help="Try to automatically decrypt the ciphertext.")
-    run_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    run_parser.add_argument("-t", "--text", type=str, required=False, help="The text to process")
     run_parser.add_argument("-v", "--verbose", action="store_true", help="Print the results of all tests")
     run_parser.add_argument("-w", "--wordlist", choices=["large", "small", "small_specialized", "large_specialized", "dictionary"], type=str, required=False, help="The word list to use when detecting whether a tested ciphertext is decrypted or not")
 
     encryption_parser = subparsers.add_parser("encrypt", help="Encrypt a text.")
-    encryption_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    encryption_parser.add_argument("-t", "--text", type=str, required=False, help="The text to process")
     encryption_parser.add_argument("-c", "--cipher", type=str, required=True, help="The cipher to encrypt the text with")
     encryption_parser.add_argument("-p", "--password", type=str, required=False, help="The password to encrypt the text with")
 
     decryption_parser = subparsers.add_parser("decrypt", help="Decrypt a text.")
-    decryption_parser.add_argument("-t", "--text", type=str, required=True, help="The text to process")
+    decryption_parser.add_argument("-t", "--text", type=str, required=False, help="The text to process")
     decryption_parser.add_argument("-c", "--cipher", type=str, required=True, help="The cipher to decrypt the text with")
     decryption_parser.add_argument("-p", "--password", type=str, required=False, help="The password to decrypt the text with")
 
@@ -256,141 +279,193 @@ def main():
 
     # Handle the commands
     if args.command == "freq":
+        if args.text is None:
+            text = sys.stdin.read()
+        else:
+            text = args.text
+        
         if args.chart is not None:
-            frequencyAnalysis(args.text, args.chart)
+            frequencyAnalysis(text, args.chart)
         else:
-            frequencyAnalysis(args.text)
+            frequencyAnalysis(text)
     
-    elif args.command == "force":
-        bruteForce(args.text, args.cipher) # This will run for a while depending on how long, it should run a loading icon while working
-    
-    elif args.command == "hash":
-        hash(args.text)
-
-    elif args.command == "decode":
-        if args.encoding is not None:
-            decode(args.text, args.encoding)
+    elif args.command == "force" or args.command == "brute":
+        if args.text is None:
+            text = sys.stdin.read()
         else:
-            auto_decode(args.text)
+            text = args.text
 
-    elif args.command == "encode":
-        encode(args.text, args.encoding)
-
-    elif args.command == "run":
-        if args.verbose and args.wordlist is not None:
-            run(args.text, args.wordlist, True)
-        elif args.verbose:
-            run(args.text, "small_specialized", True)
-        elif args.wordlist is not None:
-            run(args.text, args.wordlist)
-        else:
-            run(args.text)
-
-    elif args.command == "encrypt" or args.command == "en" or args.command == "e":
         if args.cipher == "caesar" or args.cipher == "1":
-            check_text_password(args.text, args.password)
-            encrypt_caesar(args.text, int(args.password))
-
-        if args.cipher == "multiplicative" or args.cipher == "14" or args.cipher == "multiplication":
-            check_text_password(args.text, args.password)
-            encrypt_multiplication(args.text, int(args.password))
+            force_caesar(text)
 
         elif args.cipher == "vigenere" or args.cipher == "2":
-            check_text_password(args.text, args.password)
-            encrypt_vigenere(args.text, args.password)
+            force_vigenere(text)
+
+        elif args.cipher == "atbash" or args.cipher == "4":
+            force_atbash(text)
+
+
+    elif args.command == "hash":
+        if args.text is None:
+            hash(sys.stdin.read())
+        else:
+            hash(args.text)
+
+
+    elif args.command == "decode":
+        if args.text is None:
+            text = sys.stdin.read()
+        else:
+            text = args.text
+
+        if args.encoding is not None:
+            decode(text, args.encoding)
+        else:
+            auto_decode(text)
+
+
+    elif args.command == "encode":
+        if args.text is None:
+            text = sys.stdin.read()
+        else:
+            text = args.text
+
+        encode(text, args.encoding)
+
+
+    elif args.command == "run":
+        if args.text is None:
+            text = sys.stdin.read()
+        else:
+            text = args.text
+
+        if args.verbose and args.wordlist is not None:
+            run(text, args.wordlist, True)
+        elif args.verbose:
+            run(text, "small_specialized", True)
+        elif args.wordlist is not None:
+            run(text, args.wordlist)
+        elif text is None:
+            run(sys.stdin.read(), args.wordlist)
+        else:
+            run(text)
+
+
+    elif args.command == "encrypt" or args.command == "en" or args.command == "e":
+        if args.text is None:
+            text = sys.stdin.read()
+        else:
+            text = args.text
+
+        if args.cipher == "caesar" or args.cipher == "1":
+            check_text_password(text, args.password)
+            encrypt_caesar(text, int(args.password))
+
+        if args.cipher == "multiplicative" or args.cipher == "14" or args.cipher == "multiplication":
+            check_text_password(text, args.password)
+            encrypt_multiplication(text, int(args.password))
+
+        elif args.cipher == "vigenere" or args.cipher == "2":
+            check_text_password(text, args.password)
+            encrypt_vigenere(text, args.password)
 
         elif args.cipher == "rot13" or args.cipher == "rot" or args.cipher == "3":
             check_password_not_needed(args.password)
-            encrypt_rot13(args.text)
+            encrypt_rot13(text)
 
         elif args.cipher == "atbash" or args.cipher == "4":
             check_password_not_needed(args.password)
-            atbash(args.text)
+            atbash(text)
 
         elif args.cipher == "playfair" or args.cipher == "5":
-            check_text_password(args.text, args.password)
-            encrypt_playfair(args.text, args.password)
+            check_text_password(text, args.password)
+            encrypt_playfair(text, args.password)
 
         elif args.cipher == "baconian" or args.cipher == "6":
             print("I need to get the optional letter 1 and 2, and style (old or new), I could probably do this with the -p, just have them passed with commas in that")
 
         elif args.cipher == "affine" or args.cipher == "7":
-            check_text_password(args.text, args.password)
+            check_text_password(text, args.password)
             print("Decryption apparently doesn't work for this")
 
             if args.password.count(',') < 1:
                 raise Exception("The affine cipher needs two number keys, pass them with `-p num1,num2` (with a comma)")
 
         elif args.cipher == "rail" or args.cipher == "rail_fence" or args.cipher == "8":
-            encrypt_rail_fence(args.text, convert_num_password(args.password))
+            encrypt_rail_fence(text, convert_num_password(args.password))
 
         elif args.cipher == "substitution" or args.cipher == "9":
-            encrypt_substitution(args.text, args.password)
+            encrypt_substitution(text, args.password)
 
         elif args.cipher == "beaufort" or args.cipher == "10":
-            encrypt_beaufort(args.text, args.password)
+            encrypt_beaufort(text, args.password)
 
         elif args.cipher == "autokey" or args.cipher == "11":
-            encrypt_autokey(args.text, args.password)
+            encrypt_autokey(text, args.password)
 
         elif args.cipher == "bifid" or args.cipher == "12":
-            encrypt_bifid(args.text, args.password)
+            encrypt_bifid(text, args.password)
 
         elif args.cipher == "nonsense" or args.cipher == "15":
-            nonsense(args.text)
+            nonsense(text)
 
         else: # MUST BE LAST IN CHAIN
             print("Please select a valid cipher (e.g. '-c caesar').")
 
     elif args.command == "decrypt" or args.command == "de" or args.command == "d":
+        if args.text is None:
+            text = sys.stdin.read()
+        else:
+            text = args.text
+
         if args.cipher == "caesar" or args.cipher == "1":
-            check_text_password(args.text, args.password)
-            decrypt_caesar(args.text, int(args.password))
+            check_text_password(text, args.password)
+            decrypt_caesar(text, int(args.password))
 
         if args.cipher == "multiplicative" or args.cipher == "14" or args.cipher == "multiplication":
-            check_text_password(args.text, args.password)
-            decrypt_multiplication(args.text, int(args.password))
+            check_text_password(text, args.password)
+            decrypt_multiplication(text, int(args.password))
 
         elif args.cipher == "vigenere" or args.cipher == "2":
-            check_text_password(args.text, args.password)
-            decrypt_vigenere(args.text, args.password)
+            check_text_password(text, args.password)
+            decrypt_vigenere(text, args.password)
 
         elif args.cipher == "rot13" or args.cipher == "rot" or args.cipher == "3":
             check_password_not_needed(args.password)
-            decrypt_rot13(args.text)
+            decrypt_rot13(text)
 
         elif args.cipher == "atbash" or args.cipher == "4":
             check_password_not_needed(args.password)
-            atbash(args.text)
+            atbash(text)
 
         elif args.cipher == "playfair" or args.cipher == "5":
-            check_text_password(args.text, args.password)
-            decrypt_playfair(args.text, args.password)
+            check_text_password(text, args.password)
+            decrypt_playfair(text, args.password)
 
         elif args.cipher == "baconian" or args.cipher == "6":
             print("I need to get the optional letter 1 and 2, and style (old or new), I could probably do this with the -p, just have them passed with commas in that")
 
         elif args.cipher == "affine" or args.cipher == "7":
-            check_text_password(args.text, args.password)
+            check_text_password(text, args.password)
             print("Decryption apparently doesn't work for this")
 
             if args.password.count(',') < 1:
                 raise Exception("The affine cipher needs two number keys, pass them with `-p num1,num2` (with a comma)")
 
         elif args.cipher == "rail" or args.cipher == "rail_fence" or args.cipher == "8":
-            decrypt_rail_fence(args.text, convert_num_password(args.password))
+            decrypt_rail_fence(text, convert_num_password(args.password))
 
         elif args.cipher == "substitution" or args.cipher == "9":
-            decrypt_substitution(args.text, args.password)
+            decrypt_substitution(text, args.password)
 
         elif args.cipher == "beaufort" or args.cipher == "10":
-            decrypt_beaufort(args.text, args.password)
+            decrypt_beaufort(text, args.password)
 
         elif args.cipher == "autokey" or args.cipher == "11":
-            decrypt_autokey(args.text, args.password)
+            decrypt_autokey(text, args.password)
 
         elif args.cipher == "bifid" or args.cipher == "12":
-            decrypt_bifid(args.text, args.password)
+            decrypt_bifid(text, args.password)
 
         else:
             print("Please select a valid cipher (e.g. '-c caesar').")

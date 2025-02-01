@@ -7,6 +7,3 @@ import subprocess
 
 def guess(hash):
     subprocess.run(["nth", "-t", hash])
-
-    if input("Do you want to search this hash in online databases? [y/n] ")=="y":
-        subprocess.run(["sth", "-t", hash])
