@@ -72,6 +72,7 @@ def force_atbash(text):
 
 
 # ---- Encodings
+
 def encode(text, encoding):
     encodings.encode(text, encoding)
 
@@ -125,7 +126,7 @@ def encrypt_autokey(text, key):
     print(ciphers.autokey.encrypt(text, key))
 
 def encrypt_bifid(text, key):
-    print(ciphers.encrypt_bifid(text, key))
+    print(ciphers.bifid.encrypt(text, key))
 
 def nonsense(length):
     print(ciphers.nonsense.nonsense(length))
@@ -167,7 +168,7 @@ def decrypt_autokey(text, key):
     print(ciphers.autokey.decrypt(text, key))
 
 def decrypt_bifid(text, key):
-    print(ciphers.decrypt_bifid(text, key))
+    print(ciphers.bifid.decrypt(text, key))
 
 
 # ---- About ciphers
