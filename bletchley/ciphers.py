@@ -4,14 +4,12 @@ Provides encryption and decryption functions for ciphers
 TODO:
     - Add options to frequency analysis to display analysis from most to least frequent, vice versa, or alphabetical order 
     - Allow realEngine to work with sentences not separated by spaces
-    - Standardize ciphers to always use text cleaning and reinflate() when applicable
     - Standardize ciphers to use the input text plaintext or ciphertext (not text or message)
     - Add baconian cipher decryption
     - Add stuff for python linters, input and outputs params for functions and file
     - Remove global variable, use a better standardized method across ciphers
     - Rework the wordlists for realEngine, make sure they're high quality, make them a better/faster/standardized format, and get better measurements on them (size/efficacy)
     - Add more ciphers
-    - I passed an uppercase to vigenere encryption and it errored, fox that
     - Make all ciphers use plaintext and ciphertext for encrypt() and decrypt() functions
 
 """

@@ -15,7 +15,6 @@ TODO:
     - Don't make finding one option end the script, try them all and return all results
     - Each brute forcing function creates a new realTest, make start.run() pass a shared engine, and have them only create their own if its not passed (a user might want to use the functions without start.run() or the cli)
     - Right now it just tries each cipher, but I want to get to the point of layering ciphers (ie caesar->vigenere->caesar)
-    - When returning the solved plaintext, right now it just returns the planetext but I want to also return the key
     - Allow passing the plaintext detection tolerance (also from cli)
 
 Rich Colors - https://rich.readthedocs.io/en/stable/appendix/colors.html

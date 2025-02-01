@@ -7,9 +7,7 @@ All brute force methods return False if the ciphertext isn't encrypted with that
 
 TODO:
     - Add more ciphers
-    - Return the key used to encrypt the text [caesar, vigenere, *]
     - Allow passing of wordlist
-    - Make standard function for cleaning text
     - Make tolerance not a global variable, passed in better
     - Write standard function for comparing a list of possible ciphertexts
 

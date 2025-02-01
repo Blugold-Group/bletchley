@@ -7,7 +7,7 @@
 Backlog
     - Build lightbulb ML analysis system [xxxxx]
 
-    - Add more ciphers to ciphers.py[xx]
+    - Add all planned ciphers to ciphers.py[xx]
 
     - Test and adapt stats.py[xx]
 
