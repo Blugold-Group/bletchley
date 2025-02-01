@@ -158,6 +158,12 @@ def decrypt_bifid(text, key):
 def about_bifid():
     print(ciphers.bifid.about())
 
+def about_nonsense():
+    print(ciphers.nonsense.about())
+
+def nonsense(length):
+    print(ciphers.nonsense.nonsense(length))
+
 
 def check_text_password(text, password):
     if text is None:
@@ -306,6 +312,9 @@ def main():
 
         elif args.cipher == "bifid" or args.cipher == "12":
             encrypt_bifid(args.text, args.password)
+
+        elif args.cipher == "nonsense" or args.cipher == "15":
+            nonsense(args.text)
 
         else: # MUST BE LAST IN CHAIN
             print("Please select a valid cipher (e.g. '-c caesar').")

@@ -22,6 +22,7 @@ import json
 from random import randrange
 from itertools import chain, cycle
 import importlib.resources
+from numpy.random import choice
 
 global lower_alphabet
 global upper_alphabet
@@ -839,3 +840,39 @@ class bifid:
             ciphertext += numbers_to_letter(row, col, square)
 
         return reinflate(ciphertext, punctuation_map, capitalization_map)
+
+class nonsense:
+
+    @staticmethod
+    def about():
+        return "A cipher which is just random letters in lengths according to statistical word lengths of the english language (https://github.com/berzerk0/NonsenseCipher/)"
+
+    @staticmethod
+    def encrypt(length):
+        return nonsense(length)
+
+    @staticmethod
+    def decrypt(length):
+        return nonsense(length)
+
+    @staticmethod
+    def wordLengthNonsense():
+        lengths = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+        weights = [0.037264254570273500,0.175318842199986000,0.236406451194256000,0.189381282342557000,0.111243932166923000,0.078605655153973800,0.063440861055711100,0.040783187304009700,0.029444577786707800,0.017499282688117500,0.009119047190912850,0.006025419813131460,0.002855956737689010,0.001300152218663240,0.000620758184978121,0.000373705809092622,0.000136816980316337,0.000092253735299016,0.000057072226074815,0.000030490641327641]
+
+        return (choice(lengths, p=weights))
+
+    @staticmethod
+    def nonsense(length=random.randrange(1,30)):
+        result = ""
+
+        length=int(length)
+
+        for i in range(1,length+1):
+            addition = ''.join(random.SystemRandom().choice(string.ascii_uppercase) for _ in range(nonsense.wordLengthNonsense()))
+            if i == 1:
+                result = addition
+            else:
+                result = result+" "+addition
+        return result
+
