@@ -6,13 +6,13 @@ TODO:
     - Allow realEngine to work with sentences not separated by spaces
     - Standardize ciphers to always use text cleaning and reinflate() when applicable
     - Standardize ciphers to use the input text plaintext or ciphertext (not text or message)
-    - Clean up playfair
     - Add baconian cipher decryption
     - Add stuff for python linters, input and outputs params for functions and file
     - Remove global variable, use a better standardized method across ciphers
     - Rework the wordlists for realEngine, make sure they're high quality, make them a better/faster/standardized format, and get better measurements on them (size/efficacy)
     - Add more ciphers
     - I passed an uppercase to vigenere encryption and it errored, fox that
+    - Make all ciphers use plaintext and ciphertext for encrypt() and decrypt() functions
 
 """
 
@@ -146,6 +146,12 @@ def verify_input(text):
     if not text:
         raise ValueError("text is empty")
 
+def verify_key_exists(text):
+    if not isinstance(text, str):
+        raise TypeError("Key must be a string")
+    if not text:
+        raise ValueError("You have to pass a key")
+
 def verify_int_key(key):
     if not isinstance(key, int):
         raise TypeError("key must be an integer")
@@ -158,11 +164,11 @@ class template:
         return "A little blurb about the cipher and how it works"
 
     @staticmethod
-    def encrypt(text, key):
+    def encrypt(plaintext, key):
         return "Encrypt a text"
 
     @staticmethod
-    def decrypt(text, key):
+    def decrypt(ciphertext, key):
         return "Decrypt a text"
 
     @staticmethod
@@ -442,20 +448,37 @@ class vigenere:
 
         return reinflate(plaintext, punctuation_map, capitalization_map)
 
-def atbash(text):
-    global lower_alphabet
-    global upper_alphabet
-    encrypted=""
+class atbash:
 
-    for i in text:
-        if i in lower_alphabet:
-            encrypted+=lower_alphabet[25-lower_alphabet.index(i)]
-        elif i in upper_alphabet:
-            encrypted+=upper_alphabet[25-upper_alphabet.index(i)]
-        else:
-            encrypted+=i
-    
-    return(encrypted)
+    @staticmethod
+    def about():
+        return "Atbash cipher, reverses text within the bounds of the alphabet (https://en.wikipedia.org/wiki/Atbash)"
+
+    @staticmethod
+    def atbash(text):
+        global lower_alphabet
+        global upper_alphabet
+        ciphertext=""
+
+        text, punctuation_map, capitalization_map = process_text(text)
+
+        for i in text:
+            if i in lower_alphabet:
+                ciphertext+=lower_alphabet[25-lower_alphabet.index(i)]
+            elif i in upper_alphabet:
+                ciphertext+=upper_alphabet[25-upper_alphabet.index(i)]
+            else:
+                ciphertext+=i
+        
+        return reinflate(ciphertext, punctuation_map, capitalization_map)
+
+    @staticmethod
+    def encrypt(text):
+        return atbash(text)
+
+    @staticmethod
+    def decrypt(text):
+        return encrypt(text)
 
 def baconian(text, mode="e", l1="a", l2="b", style="old"):
     """
@@ -598,196 +621,223 @@ def rail_fence(text, n=randrange(2,7), mode="e"):
 
     return toReturn
 
-def substitution_encrypt(plaintext, custom_alphabet):
-    # Substitution cipher encryption
+class substitution:
+    @staticmethod
+    def about():
+        return "Switch letters with other letters (https://en.wikipedia.org/wiki/Substitution_cipher)"
 
-    plaintext, punctuation_map, capitalization_map = process_text(plaintext)
+    @staticmethod
+    def encrypt(plaintext, custom_alphabet):
+        plaintext, punctuation_map, capitalization_map = process_text(plaintext)
 
-    if len(custom_alphabet) != 26: raise Exception("Alphabet needs to be 26 characters long")
+        if len(custom_alphabet) != 26: raise Exception("Alphabet needs to be 26 characters long")
 
-    key = dict(zip(string.ascii_lowercase, custom_alphabet.lower()))
-    
-    plaintext = plaintext.lower()
-    ciphertext = []
-    
-    for char in plaintext:
-        ciphertext.append(key[char])
-            
-    ciphertext = ''.join(ciphertext)
-    return reinflate(ciphertext, punctuation_map, capitalization_map)
-
-def substitution_decrypt(ciphertext, custom_alphabet):
-    # Substitution cipher decryption
-
-    ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
-
-    if len(custom_alphabet) != 26: raise Exception("Alphabet needs to be 26 characters long")
-
-    key = dict(zip(string.ascii_lowercase, custom_alphabet.lower()))
-    reversed_key = {v: k for k, v in key.items()}
-    
-    plaintext = []
-    
-    for char in ciphertext:
-        plaintext.append(reversed_key[char])
+        key = dict(zip(string.ascii_lowercase, custom_alphabet.lower()))
         
-    plaintext = ''.join(plaintext)
-    return reinflate(plaintext, punctuation_map, capitalization_map)
+        plaintext = plaintext.lower()
+        ciphertext = []
+        
+        for char in plaintext:
+            ciphertext.append(key[char])
+                
+        ciphertext = ''.join(ciphertext)
+        return reinflate(ciphertext, punctuation_map, capitalization_map)
 
-def beaufort(plaintext, key):
-    # Beaufort Cipher
+    @staticmethod
+    def decrypt(ciphertext, custom_alphabet):
+        ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
 
-    plaintext, punctuation_map, capitalization_map = process_text(plaintext)
+        if len(custom_alphabet) != 26: raise Exception("Alphabet needs to be 26 characters long")
 
-    global lower_alphabet
-    key = key.lower()
+        key = dict(zip(string.ascii_lowercase, custom_alphabet.lower()))
+        reversed_key = {v: k for k, v in key.items()}
+        
+        plaintext = []
+        
+        for char in ciphertext:
+            plaintext.append(reversed_key[char])
+            
+        plaintext = ''.join(plaintext)
+        return reinflate(plaintext, punctuation_map, capitalization_map)
 
-    ciphertext = ""
-    key_length = len(key)
+class beaufort:
+    @staticmethod
+    def about():
+        return "Built off of the Vigenere cipher (https://en.wikipedia.org/wiki/Beaufort_cipher)"
 
-    for i, char in enumerate(plaintext):
-        if char in lower_alphabet:
-            key_char = key[i % key_length]
-            char_index = lower_alphabet.index(char)
-            key_index = lower_alphabet.index(key_char)
-            encrypted_index = (key_index - char_index) % len(lower_alphabet)
-            ciphertext += lower_alphabet[encrypted_index]
+    @staticmethod
+    def beaufort(text, key):
+        verify_key_exists(key)
 
-    return reinflate(ciphertext, punctuation_map, capitalization_map)
+        text, punctuation_map, capitalization_map = process_text(text)
 
-def autokey_encrypt(plaintext: str, key: str) -> str:
-    # Adapted from https://github.com/TheAlgorithms/Python/blob/master/ciphers/autokey.py
-    # Autokey cipher
+        global lower_alphabet
+        key = key.lower()
 
-    verify_input(plaintext), verify_input(key)
-    plaintext, punctuation_map, capitalization_map = process_text(plaintext)
+        ciphertext = ""
+        key_length = len(key)
+
+        for i, char in enumerate(text):
+            if char in lower_alphabet:
+                key_char = key[i % key_length]
+                char_index = lower_alphabet.index(char)
+                key_index = lower_alphabet.index(key_char)
+                encrypted_index = (key_index - char_index) % len(lower_alphabet)
+                ciphertext += lower_alphabet[encrypted_index]
+
+        return reinflate(ciphertext, punctuation_map, capitalization_map)
+
+    @staticmethod
+    def encrypt(plaintext, key):
+        return beaufort(plaintext, key)
+
+    @staticmethod
+    def decrypt(ciphertext, key):
+        return beaufort(ciphertext, key)
+
+class autokey:
+    @staticmethod
+    def about():
+        return "Autokey cipher (https://en.wikipedia.org/wiki/Autokey_cipher)"
+
+    @staticmethod
+    def encrypt(plaintext, key):
+        # Adapted from https://github.com/TheAlgorithms/Python/blob/master/ciphers/autokey.py
+        # Autokey cipher
+
+        verify_input(plaintext), verify_input(key)
+        plaintext, punctuation_map, capitalization_map = process_text(plaintext)
 
 
-    key += plaintext
-    plaintext = plaintext.lower()
-    key = key.lower()
-    plaintext_iterator = 0
-    key_iterator = 0
-    ciphertext = ""
-    while plaintext_iterator < len(plaintext):
-        if (
-            ord(plaintext[plaintext_iterator]) < 97
-            or ord(plaintext[plaintext_iterator]) > 122
-        ):
-            ciphertext += plaintext[plaintext_iterator]
-            plaintext_iterator += 1
-        elif ord(key[key_iterator]) < 97 or ord(key[key_iterator]) > 122:
-            key_iterator += 1
-        else:
-            ciphertext += chr(
-                (
-                    (ord(plaintext[plaintext_iterator]) - 97 + ord(key[key_iterator]))
-                    - 97
+        key += plaintext
+        plaintext = plaintext.lower()
+        key = key.lower()
+        plaintext_iterator = 0
+        key_iterator = 0
+        ciphertext = ""
+        while plaintext_iterator < len(plaintext):
+            if (
+                ord(plaintext[plaintext_iterator]) < 97
+                or ord(plaintext[plaintext_iterator]) > 122
+            ):
+                ciphertext += plaintext[plaintext_iterator]
+                plaintext_iterator += 1
+            elif ord(key[key_iterator]) < 97 or ord(key[key_iterator]) > 122:
+                key_iterator += 1
+            else:
+                ciphertext += chr(
+                    (
+                        (ord(plaintext[plaintext_iterator]) - 97 + ord(key[key_iterator]))
+                        - 97
+                    )
+                    % 26
+                    + 97
                 )
-                % 26
-                + 97
-            )
-            key_iterator += 1
-            plaintext_iterator += 1
+                key_iterator += 1
+                plaintext_iterator += 1
 
-    return reinflate(ciphertext, punctuation_map, capitalization_map)
+        return reinflate(ciphertext, punctuation_map, capitalization_map)
 
-def autokey_decrypt(ciphertext: str, key: str) -> str:
-    # Adapted from https://github.com/TheAlgorithms/Python/blob/master/ciphers/autokey.py
-    # Autokey cipher
+    @staticmethod
+    def decrypt(ciphertext, key):
+        # Adapted from https://github.com/TheAlgorithms/Python/blob/master/ciphers/autokey.py
+        # Autokey cipher
 
-    verify_input(ciphertext), verify_input(key)
-    ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
+        verify_input(ciphertext), verify_input(key)
+        ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
 
-    key = key.lower()
-    ciphertext_iterator = 0
-    key_iterator = 0
-    plaintext = ""
-    while ciphertext_iterator < len(ciphertext):
-        if (
-            ord(ciphertext[ciphertext_iterator]) < 97
-            or ord(ciphertext[ciphertext_iterator]) > 122
-        ):
-            plaintext += ciphertext[ciphertext_iterator]
-        else:
-            plaintext += chr(
-                (ord(ciphertext[ciphertext_iterator]) - ord(key[key_iterator])) % 26
-                + 97
-            )
-            key += chr(
-                (ord(ciphertext[ciphertext_iterator]) - ord(key[key_iterator])) % 26
-                + 97
-            )
-            key_iterator += 1
-        ciphertext_iterator += 1
+        key = key.lower()
+        ciphertext_iterator = 0
+        key_iterator = 0
+        plaintext = ""
+        while ciphertext_iterator < len(ciphertext):
+            if (
+                ord(ciphertext[ciphertext_iterator]) < 97
+                or ord(ciphertext[ciphertext_iterator]) > 122
+            ):
+                plaintext += ciphertext[ciphertext_iterator]
+            else:
+                plaintext += chr(
+                    (ord(ciphertext[ciphertext_iterator]) - ord(key[key_iterator])) % 26
+                    + 97
+                )
+                key += chr(
+                    (ord(ciphertext[ciphertext_iterator]) - ord(key[key_iterator])) % 26
+                    + 97
+                )
+                key_iterator += 1
+            ciphertext_iterator += 1
 
-    return reinflate(plaintext, punctuation_map, capitalization_map)
+        return reinflate(plaintext, punctuation_map, capitalization_map)
 
-def encrypt_bifid(plaintext, square):
-    # Encryption of Bifid cipher
+class bifid:
+    @staticmethod
+    def about():
+        return "Bifid cipher (https://en.wikipedia.org/wiki/Bifid_cipher)"
 
-    plaintext, punctuation_map, capitalization_map = process_text(plaintext)
+    @staticmethod
+    def encrypt(plaintext, square):
+        plaintext, punctuation_map, capitalization_map = process_text(plaintext)
 
-    square = square.replace('j', 'i')
-    square = [list(square[i:i+5]) for i in range(0, 25, 5)]
+        square = square.replace('j', 'i')
+        square = [list(square[i:i+5]) for i in range(0, 25, 5)]
 
-    def letter_to_numbers(letter, square):
-        # Return the pair of numbers that represents the given letter in the polybius square.
-        for row_idx, row in enumerate(square):
-            if letter in row:
-                return row_idx + 1, row.index(letter) + 1
-        raise ValueError(f"Letter {letter} not found in the square")
+        def letter_to_numbers(letter, square):
+            # Return the pair of numbers that represents the given letter in the polybius square.
+            for row_idx, row in enumerate(square):
+                if letter in row:
+                    return row_idx + 1, row.index(letter) + 1
+            raise ValueError(f"Letter {letter} not found in the square")
 
-    def numbers_to_letter(row, col, square):
-        # Return the letter corresponding to the position [row, col] in the polybius square.
-        return square[row - 1][col - 1]
+        def numbers_to_letter(row, col, square):
+            # Return the letter corresponding to the position [row, col] in the polybius square.
+            return square[row - 1][col - 1]
 
-    rows, cols = [], []
-    for letter in plaintext:
-        row, col = letter_to_numbers(letter, square)
-        rows.append(row)
-        cols.append(col)
+        rows, cols = [], []
+        for letter in plaintext:
+            row, col = letter_to_numbers(letter, square)
+            rows.append(row)
+            cols.append(col)
 
-    merged = rows + cols
-    ciphertext = ""
+        merged = rows + cols
+        ciphertext = ""
 
-    for i in range(len(plaintext)):
-        ciphertext += numbers_to_letter(merged[2 * i], merged[2 * i + 1], square)
+        for i in range(len(plaintext)):
+            ciphertext += numbers_to_letter(merged[2 * i], merged[2 * i + 1], square)
 
-    return reinflate(ciphertext, punctuation_map, capitalization_map)
+        return reinflate(ciphertext, punctuation_map, capitalization_map)
 
-def decrypt_bifid(ciphertext, square):
-    # Decryption of Bifid cipher
+    @staticmethod
+    def decrypt(ciphertext, square):
+        ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
 
-    ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
-
-    square = square.replace('j', 'i')
-    square = [list(square[i:i+5]) for i in range(0, 25, 5)]
+        square = square.replace('j', 'i')
+        square = [list(square[i:i+5]) for i in range(0, 25, 5)]
 
 
-    def letter_to_numbers(letter, square):
-        # Return the pair of numbers that represents the given letter in the polybius square.
-        for row_idx, row in enumerate(square):
-            if letter in row:
-                return row_idx + 1, row.index(letter) + 1
-        raise ValueError(f"Letter {letter} not found in the square")
+        def letter_to_numbers(letter, square):
+            # Return the pair of numbers that represents the given letter in the polybius square.
+            for row_idx, row in enumerate(square):
+                if letter in row:
+                    return row_idx + 1, row.index(letter) + 1
+            raise ValueError(f"Letter {letter} not found in the square")
 
-    def numbers_to_letter(row, col, square):
-        # Return the letter corresponding to the position [row, col] in the polybius square.
-        return square[row - 1][col - 1]
+        def numbers_to_letter(row, col, square):
+            # Return the letter corresponding to the position [row, col] in the polybius square.
+            return square[row - 1][col - 1]
 
-    length = len(ciphertext)
-    numbers = []
-    for letter in ciphertext:
-        row, col = letter_to_numbers(letter, square)
-        numbers.extend([row, col])
+        length = len(ciphertext)
+        numbers = []
+        for letter in ciphertext:
+            row, col = letter_to_numbers(letter, square)
+            numbers.extend([row, col])
 
-    half_length = length
-    rows = numbers[:half_length]
-    cols = numbers[half_length:]
+        half_length = length
+        rows = numbers[:half_length]
+        cols = numbers[half_length:]
 
-    ciphertext = ""
-    for row, col in zip(rows, cols):
-        ciphertext += numbers_to_letter(row, col, square)
+        ciphertext = ""
+        for row, col in zip(rows, cols):
+            ciphertext += numbers_to_letter(row, col, square)
 
-    return reinflate(ciphertext, punctuation_map, capitalization_map)
+        return reinflate(ciphertext, punctuation_map, capitalization_map)

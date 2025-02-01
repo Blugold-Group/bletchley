@@ -37,6 +37,10 @@ Backlog
 
     - Make realtest able to receive and store tolerance when creating the object at instantiation [xx]
 
+    - Add stuff for python linters, input and outputs params for functions and file descriptions [x]
+        ~ You just need to understand the linter definitions (easy to learn) and basics of how the functions work
+        ~ Focus on ciphers classes in ciphers.py
+
 In Progress
     - Build start.py[xxxx]
         ~ Build cryptographically efficient methods

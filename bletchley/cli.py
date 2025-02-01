@@ -93,7 +93,7 @@ def about_vigenere():
     print(ciphers.vigenere.about())
 
 def atbash(text):
-    print(ciphers.atbash(text))
+    print(ciphers.atbash.atbash(text))
 
 # TODO: about_atbash()
 
@@ -123,28 +123,28 @@ def about_rail_fence():
     print(ciphers.rail_fence.about())
 
 def encrypt_substitution(text, key):
-    print(ciphers.substitution_encrypt(text, key))
+    print(ciphers.substitution.encrypt(text, key))
 
 def decrypt_substitution(text, key):
-    print(ciphers.substitution_decrypt(text, key))
+    print(ciphers.substitution.decrypt(text, key))
 
 def about_substitution():
     print(ciphers.substitution.about())
 
 def encrypt_beaufort(text, key):
-    print(ciphers.beaufort(text, key))
+    print(ciphers.beaufort.beaufort(text, key))
 
 def decrypt_beaufort(text, key):
-    print(ciphers.beaufort(text, key))
+    print(ciphers.beaufort.beaufort(text, key))
 
 def about_beaufort():
     print(ciphers.beaufort.about())
 
 def encrypt_autokey(text, key):
-    print(ciphers.autokey_encrypt(text, key))
+    print(ciphers.autokey.encrypt(text, key))
 
 def decrypt_autokey(text, key):
-    print(ciphers.autokey_decrypt(text, key))
+    print(ciphers.autokey.decrypt(text, key))
 
 def about_autokey():
     print(ciphers.autokey.about())
