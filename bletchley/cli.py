@@ -360,7 +360,7 @@ def main():
         elif args.cipher == "bifid" or args.cipher == "12":
             decrypt_bifid(args.text, args.password)
 
-        else: # MUST BE LAST IN CHAIN
+        else:
             print("Please select a valid cipher (e.g. '-c caesar').")
 
     elif args.command == "about" or args.command == "info":
@@ -400,7 +400,7 @@ def main():
         elif args.cipher == "bifid" or args.cipher == "12":
             about_bifid()
 
-        else: # MUST BE LAST IN CHAIN
+        else:
             print("Please select a valid cipher (e.g. '-c caesar').")
 
     elif args.command == "measure" or args.command == "m":

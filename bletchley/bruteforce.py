@@ -19,12 +19,11 @@ For more information how the functions work, look at the Caesar function, it has
 
 import time
 from . import ciphers
-#from english_dictionary.scripts.read_pickle import get_dict
 import itertools
 import threading
 import sys
 import os
-#import alert
+from tqdm import tqdm
 
 global tolerance
 tolerance=0.8
@@ -83,51 +82,31 @@ def caesar(text, return_type="bg"):
         return(best_guess_string, key, confidence)
     return(False)
     
-def vigenere(text, keycode="w", length=None):
+def vigenere(text, verbose, tolerance=0.8):
     """
-    Based on flags, encrypts with all versions of a keyspace or english words
-
-    Runs through db to find most likely match
-
-    flags:
-        - w : english words
-        - l : english letters
+    Brute forces the vigenere cipher, using a wordlist as the list of keys
     """
-
-    global tolerance
     
     realTest = ciphers.realEngine("small_specialized")
 
-    keys=[]
+    with open("wordlists/words.txt", 'r') as file:
+        keys = [line.strip() for line in file]
 
-    exit()
+    #keys = sorted(keys, key=len)
 
-    if "w" in keycode:
-        for i in get_dict():
-            if len(i)>0:
-                keys.append(i)
-    if "l" in keycode:
-        lower="abcdefghijklmnopqrstuvwxyz"
-        combinations = itertools.product(lower, repeat=length)
-        for combo in combinations:
-            keys.append(''.join(combo))
+    if verbose:
+        for key in tqdm(keys, desc="Brute forcing Vigenere cipher", unit="keys"):
+            plaintext = ciphers.vigenere.decrypt(text, key)
 
-    def calculate_square(text, key):
-        tr=ciphers.vigenere(text, key, "d")
+            if realTest.plaintext_or_ciphertext(plaintext, tolerance):
+                return(plaintext, key)
 
-        if realTest.plaintext_or_ciphertext(tr, tolerance):
+    else:
+        for key in keys:
+            plaintext = ciphers.vigenere.decrypt(text, key)
 
-            ciphers.writeToDatabase("vigenere", (key, ciphers.vigenere(text, key, "d")))
-
-    threads = []
-
-    for i in keys:
-        thread = threading.Thread(target=calculate_square, args=(text, i,))
-        threads.append(thread)
-        thread.start()
-
-    for thread in threads:
-        thread.join()
+            if realTest.plaintext_or_ciphertext(plaintext, tolerance):
+                return(plaintext, key)
 
 def multiplication(text):
     global tolerance

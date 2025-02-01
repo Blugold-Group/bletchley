@@ -30,9 +30,15 @@ Backlog
 
     - Add nonsense cipher (https://github.com/berzerk0/NonsenseCipher) [xxx]
 
+    - Add tolerance to brute forcing methods [xxx]
+
+    - Add better methods for vigenere automatic solving [xxxxx]
+        ~ Right now it's brute forcing, but longer texts could use things like the Kasiski examination for elegance points
+
+    - Make realtest able to receive and store tolerance when creating the object at instantiation [xx]
 
 In Progress
     - Build start.py[xxxx]
-        ~ Build cryptographically efficient method
+        ~ Build cryptographically efficient methods
     
     - Make cli modern and fancy[xx]

@@ -372,17 +372,18 @@ class vigenere:
     
     @staticmethod
     def encrypt(text, key):
-        #Todo: Add standard formatting
 
         global lower_alphabet
         global upper_alphabet
 
-        encrypted=""
+        ciphertext=""
         passIndex=0
+
+        text, punctuation_map, capitalization_map = process_text(text)
 
         for i in text:
             if i not in lower_alphabet and i not in upper_alphabet:
-                encrypted+=i
+                ciphertext+=i
                 continue
 
             value = lower_alphabet.index(i.lower())
@@ -390,32 +391,32 @@ class vigenere:
             value = (value+lower_alphabet.index(key[passIndex].lower()))%26
 
             if i in lower_alphabet:
-                encrypted+=lower_alphabet[value]
+                ciphertext+=lower_alphabet[value]
             else:
-                encrypted+=upper_alphabet[value]
+                ciphertext+=upper_alphabet[value]
 
             if passIndex==len(key)-1:
                 passIndex=0
             else:
                 passIndex+=1
 
-        return(encrypted)
-
+        return reinflate(ciphertext, punctuation_map, capitalization_map)
 
     @staticmethod
     def decrypt(text, key):
-        #Todo: Add standard formatting
  
         global lower_alphabet
         global upper_alphabet
 
-        encrypted=""
+        plaintext=""
         passIndex=0
+
+        text, punctuation_map, capitalization_map = process_text(text)
 
 
         for i in text:
             if i not in lower_alphabet and i not in upper_alphabet:
-                encrypted+=i
+                plaintext+=i
                 continue
 
             value = lower_alphabet.index(i.lower())
@@ -430,16 +431,16 @@ class vigenere:
                     value+=26
 
             if i in lower_alphabet:
-                encrypted+=lower_alphabet[value]
+                plaintext+=lower_alphabet[value]
             else:
-                encrypted+=upper_alphabet[value]
+                plaintext+=upper_alphabet[value]
 
             if passIndex==len(key)-1:
                 passIndex=0
             else:
                 passIndex+=1
 
-        return(encrypted)
+        return reinflate(plaintext, punctuation_map, capitalization_map)
 
 def atbash(text):
     global lower_alphabet
