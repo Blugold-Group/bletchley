@@ -1,4 +1,22 @@
 from setuptools import setup, find_packages
+import os
+import urllib.request
+
+def download_rockyou():
+    # rockyou.txt is helpful, it's too large to be kept in the github repo so we download it to wordlists/ post install
+
+    target_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bletchley', 'wordlists')
+
+    file_url = "https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt"
+    file_path = os.path.join(target_dir, "rockyou.txt")
+
+    # If the file does not exist, download it
+    if not os.path.exists(file_path):
+        print(f"Downloading rockyou.txt to {file_path}...")
+        urllib.request.urlretrieve(file_url, file_path)
+        print(f"File downloaded to {file_path}")
+    else:
+        print("rockyou.txt already downloaded")
 
 setup(
     name="bletchley",
@@ -17,3 +35,6 @@ setup(
         ],
     },
 )
+
+if __name__ == "__main__":
+    download_rockyou()
