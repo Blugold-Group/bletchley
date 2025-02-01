@@ -1,6 +1,7 @@
 appdirs==1.4.4
 base58==2.1.1
 beautifulsoup4==4.12.3
+-e git+ssh://git@github.com/Blugold-Group/bletchley.git@c53b8c33d0da173896e6328ab0c6660a7822f3bb#egg=bletchley
 Brotli==1.1.0
 bs4==0.0.2
 build==1.2.2.post1
@@ -35,6 +36,7 @@ loguru==0.5.3
 more-itertools==10.6.0
 msgpack==1.1.0
 name-that-hash==1.10.0
+numpy==2.2.2
 packaging==24.2
 pkginfo==1.12.0
 platformdirs==4.3.6

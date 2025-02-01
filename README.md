@@ -129,6 +129,7 @@ encrypt (encrypt a text)
 12 - Bifid
 13 - Trifid
 14 - Multiplicative/Multiplication
+15 - Nonsense (github.com/berzerk0/NonsenseCipher)
 
 decrypt (decrypt a text)
 
