@@ -20,7 +20,7 @@ def download_rockyou():
 
 setup(
     name="bletchley",
-    version="0.5.0",
+    version="0.5.5",
     url='https://github.com/ThisIsNotANamepng/bletchley',
     long_description=open('README.md').read(),
     description="A cryptography suite",
