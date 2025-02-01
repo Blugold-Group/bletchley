@@ -41,8 +41,6 @@ Backlog
         ~ You just need to understand the linter definitions (easy to learn) and basics of how the functions work
         ~ Focus on ciphers classes in ciphers.py
 
-In Progress
-    - Build start.py[xxxx]
-        ~ Build cryptographically efficient methods
-    
-    - Make cli modern and fancy[xx]
+    - Add Engima to ciphers, uses pyengima [xx]
+
+    - Add to readme documentation [x]

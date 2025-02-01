@@ -17,7 +17,7 @@ Bletchley has a number of tools to aid in cryptanalysis, including
     - [x] Multiplication
     - [x] Vigenere
     - [x] Rot13
-    - [x] Enigma (through [pyenigma](https://pypi.org/project/pyenigma/))
+    - [ ] Enigma (through [pyenigma](https://pypi.org/project/pyenigma/))
     - [x] Atbash
     - [x] Playfair
     - [x] Affine
@@ -74,17 +74,9 @@ Bletchley has a number of tools to aid in cryptanalysis, including
 
 4. A tool to determine which algorithm was used to make a hash, and a tool to search that hash in various online databases
 
-And the crown jewel 
+5. A machine learning tool to guess what cipher was used to encrypt a ciphertext, codenamed lightbulb (still in infancy stages)
 
-5. A dynamic tool using machine learning to guess what cipher was used to encrypt a ciphertext, codenamed lightbulb 
-
-Works with the following ciphers
-    - [ ] Vigenere
-    - [ ] Atbash
-    - [ ] Baconian
-
-
-The power given by this repo is the ability to string various "huts" (tools) together, creating a dynamic solution finding tool. 
+The power given by this program is the ability to string various "huts" (tools) together, creating a dynamic solution finding tool. 
 
 ## Usage
 
@@ -156,19 +148,54 @@ bletchley freq -t "hello world"
     - Return a bar chart of letter frequency of letter counts largest to smallest
 ```
 
-### Description of word lists
+## Word lists
 
-The specialized word lists have been modified to perform better in this context
+We have word lists for brute forcing keys, measuring language statistics, and machine learning
 
-* small_quotes.txt - A file given by DOI:10.13140/RG.2.1.4386.4561 (10.8MB)
-* large_quotes.txt - A file adapted from kaggle.com/datasets/manann/quotes-500k
-* words_dictionary.json - A json-izes version of quotes.csv (6.8 MB)
-* words.txt - A file of the top 20000 most commonly used english words (155.4 kB)
-* dictionary.txt - The lowercase version of https://pypi.org/project/english-dictionary/ (1.2 MB)
-* words_dictionary_specialized.txt - words_dictionary.json except all words with less than 4 characters and which aren't in dictionary.txt are removed (1.0 MB)
+* small_quotes.txt
+    * 10.3M
+    * 75,966 lines
+    * A list of english quotes
+
+* large_quotes.txt
+    * 95.6M
+    * 499,714 lines
+    * A list of english quotes, some repeats of quotes with changed semantics but same origin
+
+* dictionary.txt
+    * 1.1M
+    * 116,500 lines
+    * A dictionary of english words. Some entries aren't words
+
+* words_dictionary.txt
+    * 3.7M
+    * 370,101 lines
+    * A dictionary larger than dictionary.txt, more relaxed on what counts as a word
+
+* words.txt 
+    * 151.8K
+    * 19,999 lines
+    * A file of the top 20000 most commonly used english words (I removed one entry that I don't think is a word)
+
+* words_dictionary_specialized.txt
+    * 1.0M
+    * 103,669
+    * words_dictionary.txt except all words with less than 4 characters and which aren't in dictionary.txt are removed
+
+* words_specialized.txt
+    * 146.5K
+    * 18,547 lines
+    * words.txt except all words with less than 4 characters and which aren't in dictionary.txt are removed
+
+* rockyou.txt
+    * 133.4M
+    * 14,344,391
+    * A standard file used in industry of the most commonly used password gathered from leaked databases
 
 ### Sources
 
-Madadipouya, Kasra. (2016). CSV dataset of 76,000 quotes, suitable for quotes recommender systems or other analysis.. 10.13140/RG.2.1.4386.4561. 
+    small_quotes.txt - Madadipouya, Kasra. (2016). CSV dataset of 76,000 quotes, suitable for quotes recommender systems or other analysis.. 10.13140/RG.2.1.4386.4561. 
 
-english_dictionary (used for dictionary.txt) : https://pypi.org/project/english-dictionary/ Created by Daniel Delluomo 
+    dictionary.txt - https://pypi.org/project/english-dictionary/ Created by Daniel Delluomo 
+
+    large_quotes.txt - kaggle.com/datasets/manann/quotes-500k

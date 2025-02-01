@@ -43,8 +43,8 @@ class realEngine:
     def __init__(self, corpus="small_specialized"):
 
         if corpus=="large":
-            with importlib.resources.open_text("bletchley", "wordlists/words_dictionary.json") as f:
-                self.data = json.load(f)
+            with importlib.resources.open_text("bletchley", "wordlists/words_dictionary.txt") as f:
+                self.data = f.read().splitlines() 
             f.close()
         elif corpus=="small":
             with importlib.resources.open_text("bletchley", "wordlists/words.txt") as f:
