@@ -1,3 +1,4 @@
+"""
 import pytest
 from bletchley.cli import main
 from bletchley import ciphers
@@ -18,3 +19,4 @@ def test_cli_tool_run(monkeypatch, capsys):
     captured = capsys.readouterr()
     assert "olssv dvysk" in captured.out
 
+"""

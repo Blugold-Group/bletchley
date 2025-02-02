@@ -362,7 +362,7 @@ def main():
             check_text_password(text, args.password)
             encrypt_caesar(text, int(args.password))
 
-        if args.cipher == "multiplicative" or args.cipher == "14" or args.cipher == "multiplication":
+        elif args.cipher == "multiplicative" or args.cipher == "14" or args.cipher == "multiplication":
             check_text_password(text, args.password)
             encrypt_multiplication(text, int(args.password))
 
