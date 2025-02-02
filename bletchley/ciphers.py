@@ -561,7 +561,7 @@ class atbash:
         Decrypted a string, text, using the Atbash cipher. Encryption and decryption are identical processes.
         text (str): The text to be decrypted
         """
-        return encrypt(text)
+        return atbash(text)
 
 def baconian(text, mode="e", l1="a", l2="b", style="old"):
     """
