@@ -83,6 +83,8 @@ def caesar(text, return_type="bg"):
 def vigenere(text, verbose, tolerance=0.8):
     """
     Brute forces the vigenere cipher, using a wordlist as the list of keys
+    Takes a string text input, a bool for verbose output, and an optional tolerance parameter.
+    The tolerance parameter is the percentage/100 in confidence for the solution to be considered valid.
     """
     
     realTest = ciphers.realEngine("small_specialized")
@@ -107,6 +109,12 @@ def vigenere(text, verbose, tolerance=0.8):
                 return(plaintext, key)
 
 def multiplication(text):
+    """
+    Bruteforces the multiplication/multiplicative cipher.
+    Takes a string text input.
+    If a valid "best guess" is determined, this outputs the best guess, the key for the best guess, and the level of confidence.
+    Otherwise, it returns False.
+    """
     global tolerance
 
     keys = [ 1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25]  # Only numbers less than 26 and relatively prime to 26 are possible keys, see https://www.nku.edu/~christensen/section%206%20multiplicative%20ciphers.pdf for more information)
@@ -145,9 +153,20 @@ def multiplication(text):
     return(False)
 
 def multiplicative(text):
+    """
+    multiplicative() is an alias for multiplication().
+    Bruteforces the multiplication/multiplicative cipher.
+    Takes a string text input.
+    If a valid "best guess" is determined, this outputs the best guess, the key for the best guess, and the level of confidence.
+    Otherwise, it returns False.
+    """
     return multiplication(text)
 
 def substitution(text):
+    """
+    Bruteforces the substitution cipher.
+    Takes a string text input.
+    """
     #print("substitution")
 
     global tolerance
@@ -155,6 +174,10 @@ def substitution(text):
     return(False)
 
 def railfence(text):
+    """
+    Bruteforces the Rail Fence cipher.
+    Takes a string text input.
+    """
 
     return False  # Remove this when the rail fence decryption works
     global tolerance
@@ -169,13 +192,20 @@ def railfence(text):
     return(False)
 
 def playfair(text):
+    """
+    Bruteforces the Playfair cipher.
+    Takes a string text input.
+    """
     return False  # Remove this when the rail fence decryption works
 
 def atbash(text):
-
+    """
+    Bruteforces the Atbash cipher.
+    Takes a string text input.
+    """
     realTest = ciphers.realEngine("small_specialized")
 
-    test = ciphers.atbash(text)
+    test = ciphers.atbash.atbash(text)
 
     if realTest.plaintext_or_ciphertext(test, 0.8):
         return test
@@ -183,25 +213,57 @@ def atbash(text):
     return False
 
 def playfair(text):
+    """
+    Bruteforces the Playfair cipher.
+    Takes a string text input.
+    """
     return False
 
 def baconian(text):
+    """
+    Bruteforces Bacon's/the Baconian cipher.
+    Takes a string text input.
+    """
     return False
 
 def affine(text):
+    """
+    Bruteforces the Affine cipher.
+    Takes a string text input.
+    """
     return False
 
 def rail_fence(text):
+    """
+    Bruteforces the Rail Fence cipher.
+    Takes a string text input.
+    """
     return False
 
 def substitution(text):
+    """
+    Bruteforces the substitution cipher.
+    Takes a string text input.
+    """
     return False
 
 def beaufort(text):
+    """
+    Bruteforces the Beaufort cipher.
+    Takes a string text input.
+    """
     return False
 
 def autokey(text):
+    """
+    Bruteforces the Autokey cipher.
+    Takes a string text input.
+    """
     return False
 
 def bifid(text):
+    """
+    Brutefoces the Bifid cipher.
+    Takes a string text input.
+    """
     return False
