@@ -22,6 +22,7 @@ import threading
 import sys
 import os
 from tqdm import tqdm
+import importlib.resources
 
 global tolerance
 tolerance=0.8
@@ -49,7 +50,7 @@ def caesar(text, return_type="bg"):
     # A list of the text encrypted which each possible key for caesar cipher
     test_texts=[]
     for i in range(0,26):
-        test_texts.append(ciphers.caesar.decrypt(text.replace(".", "").replace(",", "").replace("'", ""), i))
+        test_texts.append(ciphers.caesar.decrypt(text.replace(".", "").replace(",", "").replace("'", "").lower(), i))
     
     # Creates an object for testing if a text is a word or is ciphertext
     realTest = ciphers.realEngine("small_specialized")
@@ -89,8 +90,8 @@ def vigenere(text, verbose, tolerance=0.8):
     
     realTest = ciphers.realEngine("small_specialized")
 
-    with open("wordlists/words.txt", 'r') as file:
-        keys = [line.strip() for line in file]
+    with importlib.resources.open_text("bletchley", "wordlists/words.txt") as f:
+        keys = [line.strip() for line in f]
 
     #keys = sorted(keys, key=len)
 
