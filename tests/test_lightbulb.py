@@ -1,3 +1,4 @@
+"""
 import joblib
 from sklearn.feature_extraction.text import CountVectorizer
 import ciphers
@@ -76,3 +77,4 @@ print("Baconian detection rate:  "+str(ccorrect/total*100)+"%")
 print("Affine detection rate:  "+str(ecorrect/total*100)+"%")
 
 print("Overall accuracy rate:  "+str(correct/total*100/5)+"%")
+"""
