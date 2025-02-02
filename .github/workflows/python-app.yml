@@ -5,9 +5,9 @@ name: Python application
 
 on:
   push:
-    branches: [ "pytest-ci" ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ "pytest-ci" ]
+    branches: [ "*" ]
 
 permissions:
   contents: read
