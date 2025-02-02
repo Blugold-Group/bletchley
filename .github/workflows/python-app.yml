@@ -18,13 +18,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # or your preferred Python version
+          python-version: '3.12'  # or your preferred Python version
 
       # Upgrade pip and install dependencies including your package
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # if you have a requirements file
+          pip install -r requirements.txt --retries 5 --timeout 30  # added retries and timeout
           pip install -e .
           pip install pytest
 
