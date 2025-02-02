@@ -8,7 +8,7 @@ def runner():
 def test_cli_help():
     """Test the help message of the CLI"""
 
-    result = subprocess.run(["bletchley", "-h"], capture_output=True, text=True)
+    result = subprocess.run(["bletchley/cli.py", "-h"], capture_output=True, text=True)
 
     assert result.returncode == 0
     assert 'usage' in result.stdout
