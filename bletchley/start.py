@@ -40,7 +40,10 @@ def test_failed(test, verbose):
 
 def test_success(test, cipher, key, confidence):
     # The logging utility for a succeeded test
-    console.print(f"[spring_green3]Text decrypted successfully! With a confidence of {"{:.3f}".format(confidence*100)}%, the plaintext is :[/spring_green3] {test}")
+    #console.print(f"[spring_green3]Text decrypted successfully! With a confidence of {"{:.3f}".format(confidence*100)}%, the plaintext is :[/spring_green3] {test}") # This breaks on certain system for some stupid reason
+
+    print("DEBUG")
+    console.print(f"[spring_green3]Text decrypted successfully! With a confidence of {confidence*100}%, the plaintext is :[/spring_green3] {test}")
     console.print(f"[spring_green3]The ciphertext was encrypted with the [/spring_green3][bold]{cipher}[/bold] [spring_green3]cipher and used the key: [/spring_green3][bold dodger_blue3]{key}[/bold dodger_blue3]")
 
 def test_success_no_confidence(test, cipher, key):

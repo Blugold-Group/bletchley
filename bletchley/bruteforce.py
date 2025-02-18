@@ -25,7 +25,7 @@ from tqdm import tqdm
 import importlib.resources
 
 global tolerance
-tolerance=0.8
+tolerance=0.65
 
 def caesar(text, return_type="bg"):
     """
