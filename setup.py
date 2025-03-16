@@ -28,6 +28,8 @@ setup(
     author='The Blugold Group',
     license="MPL-2.0",
     packages=find_packages(),
+    include_package_data=True,
+    package_data={'bletchley': ['wordlists/*']},
     install_requires=['bs4', 'search-that-hash', 'Faker', 'Brotli', 'colorama', 'name-that-hash', 'plotext', 'pyenigma', 'base58'],
     entry_points={
         "console_scripts": [
