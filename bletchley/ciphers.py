@@ -16,13 +16,13 @@ TODO:
 
 import random
 import string
-from faker import Faker
+#from faker import Faker
 import re 
 import json
 from random import randrange
 from itertools import chain, cycle
 import importlib.resources
-from numpy.random import choice
+#from numpy.random import choice
 
 global lower_alphabet
 global upper_alphabet
@@ -36,7 +36,7 @@ alphabet=lower_alphabet+upper_alphabet
 punctuation=".,></;:'[]!@#$%^&*()—-_=+`~|\"\\"
 numbers="1234567890"
 
-faker = Faker()
+
 
 class realEngine:
     """
@@ -1007,23 +1007,23 @@ class nonsense:
         lengths = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
         weights = [0.037264254570273500,0.175318842199986000,0.236406451194256000,0.189381282342557000,0.111243932166923000,0.078605655153973800,0.063440861055711100,0.040783187304009700,0.029444577786707800,0.017499282688117500,0.009119047190912850,0.006025419813131460,0.002855956737689010,0.001300152218663240,0.000620758184978121,0.000373705809092622,0.000136816980316337,0.000092253735299016,0.000057072226074815,0.000030490641327641]
 
-        return (choice(lengths, p=weights))
+        return random.choices(lengths, weights=weights, k=1)[0]
 
     @staticmethod
-    def nonsense(length=random.randrange(1,30)):
+    def nonsense(length=random.randrange(1, 30)):
         """
         Generate a Nonsense cipher output of a given length
         length (int): The length of the output
         """
         result = ""
 
-        length=int(length)
+        length = int(length)
 
-        for i in range(1,length+1):
+        for i in range(1, length + 1):
+            # Use random.SystemRandom().choice to ensure randomness from the system
             addition = ''.join(random.SystemRandom().choice(string.ascii_uppercase) for _ in range(nonsense.wordLengthNonsense()))
             if i == 1:
                 result = addition
             else:
-                result = result+" "+addition
+                result = result + " " + addition
         return result
-
