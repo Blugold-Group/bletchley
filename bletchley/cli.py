@@ -1,7 +1,29 @@
 """
-Client facing file to interface with Bletchley tools
+Client-facing CLI file for interfacing with Bletchley cryptanalysis tools.
 
-TODO:
+This script provides command-line access to encryption, decryption,
+hash recognition, frequency analysis, brute force decryption, and more.
+
+Usage:
+    bletchley <command> [options]
+
+Commands:
+    - freq: Perform frequency analysis on text.
+    - hash: Identify and reverse lookup a hash.
+    - encode: Encode text using various encoding formats.
+    - decode: Decode text using various encdoing formats.
+    - encrypt: Encrypt text using a specified cipher.
+    - decrypt: Decrypt text using a specified cipher.
+    - force: Attempt bruteforce decryption on a ciphertext.
+    - classify: Use our machine learning model to classify a cipher.
+    - about: Display information about a cipher.
+    - run: Automatically attempt to decrypt a ciphertext.
+
+Authors:
+    The Blugold Group
+        - Jack Hagen
+        - Jacob Stoltenburg
+        - Silas Eacret
 """
 
 from sys import stdout as terminal
@@ -25,6 +47,17 @@ from bletchley import __version__
 # ---- Frequency analysis
 
 def frequencyAnalysis(text, style="vbcol"):
+    """
+    Performs frequency analysis on a given text.
+
+    Args:
+        text (str): The text to analyze.
+        style (str, optional): The display stile for the frequency chart.
+            Default is "vbcol" (vertical bar colored).
+
+    Output:
+        Prints a frequency analysis output or chart.
+    """
     if style=="p" or style=="c":
         print(frequency.frequencyAnalysis(text, style))
     else:
@@ -34,22 +67,59 @@ def frequencyAnalysis(text, style="vbcol"):
 # ---- Hashes
 
 def hash(text):
+    """
+    Identifies a hash type and attempts reverse lookup.
+
+    Args:
+        text (str): The hash string to analyze.
+
+    Output:
+        The identified hash type and possible plaintext values.
+    """
     recognizeHash.guess(text)
 
 
 # ---- Automatic solving
 
 def auto_decode(text):
-    # Decode without knowing the encoding
+    """
+    Attempts to decode text by detecting the encoding automatically.
+
+    Args:
+        text (str): The encoded text.
+
+    Output:
+        Prints the decoded plaintext if successful.
+    """
     encoding.bruteforce(text)
 
 def run(text, wordlist="small_specialized", verbose=False):
+    """
+    Runs automatic cryptanalysis on the input text.
+
+    Args:
+        text (str): The text to analyze.
+        wordlist (str, optional): The wordlist to use for decryption. Defaults to "small_specialized".
+        verbose (bool, optional): Whether to print detailed output. Defaults to False.
+
+    Output:
+        Prints possible plaintext matches based on analysis.
+    """
     start.run(text, wordlist, verbose)
 
 
 # ---- Brute forcing
 
 def force_caesar(text):
+    """
+    Attempts brute-force decryption on a Caesar cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+
+    Output:
+        Prints possible plaintext values with shift keys.
+    """
     test = bruteforce.caesar(text)
     if (test):
         start.test_success(test[0], "caesar", test[1], test[2])
@@ -57,6 +127,15 @@ def force_caesar(text):
     start.test_failed("Caesar Cipher", True)
 
 def force_vigenere(text):
+    """
+    Attempts bruteforce decryption on a Vigenère cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+
+    Output:
+        Prints possible plaintext and key.
+    """
     test = bruteforce.vigenere(text)
     if (test):
         start.test_success(test[0], "vigenere", test[1], test[2])
@@ -64,6 +143,15 @@ def force_vigenere(text):
     start.test_failed("Vigenere Cipher", True)
 
 def force_atbash(text):
+    """
+    Attempts decryption of text using the Atbash cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+
+    Output:
+        Prints decrypted plaintext.
+    """
     test = bruteforce.atbash(text)
     if (test):
         start.test_success(test[0], "atbash", test[1], test[2])
@@ -74,152 +162,519 @@ def force_atbash(text):
 # ---- Encodings
 
 def encode(text, encoding):
+    """
+    Encodes a given text using a specified encoding.
+
+    Args:
+        text (str): The plaintext to encode.
+        encoding (str): The encoding type (e.g. Base64, Hex).
+
+    Output:
+        Prints the encoded text.
+    """
     encodings.encode(text, encoding)
 
 def decode(text, encoding):
+    """
+    Decodes a given text using a specified encoding scheme.
+
+    Args:
+        text (str): The encoded text.
+        encoding (str): The encoding type to use.
+
+    Output:
+        Decoded plaintext.
+    """
     encodings.decode(text, encoding)
 
 
 # ---- ML classification
 
 def classify(text):
+    """
+    Attempts to use our machine learning model to classify the cipher.
+
+    Args:
+        text (str): The input ciphertext to classify.
+
+    Output:
+        Prints the possible cipher used to encrypt the ciphertext.
+    """
     print("Using ML classification to find cipher")
 
 # ---- Encryption
 
 def encrypt_caesar(text, key):
+    """
+    Encrypts text using the Caesar cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        key (int): The key/offset to use in encryption.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
     print(ciphers.caesar.encrypt(text, key))
 
 def encrypt_playfair(text, key):
+    """
+    Encrypts text using the Playfair cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        key (str): The keyword to encrypt the plaintext with.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
     print(ciphers.playfair.encrypt(text, ciphers.playfair.generate_key_matrix(key)))
 
 def encrypt_multiplication(text, key):
+    """
+    Encrypts text using the Multiplication cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        key (int): The key to encrypt the plaintext with.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
     print(ciphers.multiplication.encrypt(text, key))
 
 def encrypt_rot13(text):
+    """
+    Encrypts text using the ROT13 cipher.
+    This is the same as encrypting the plaintext using Caesar with key of 13.
+
+    Args:
+        text (str): The plaintext to encrypt.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
     print(ciphers.caesar.encrypt(text, 13))
 
 def encrypt_vigenere(text, password):
+    """
+    Encrypts text using the Vigenère cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        password (str): The keyword to encrypt the plaintext with.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
     print(ciphers.vigenere.encrypt(text, password))
 
 def atbash(text):
+    """
+    Encrypts text using the Atbash cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
     print(ciphers.atbash.atbash(text))
 
 # TODO: about_atbash()
 
-def encrypt_baconian(text, style, letter1="a", letter2="b"):
-    print(ciphers.baconian(text, "e", letter1, letter2, style))
+def encrypt_baconian(text, letter1="a", letter2="b", style="old"):
+    """
+    Encrypts text using the Baconian cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        letter1 (str, char, optional): The first letter to use in Baconian cipher's output.
+        letter2 (str, char, optional): The second letter to use in Baconian cipher's output.
+        style (str, optional): The style of Baconian cipher to use ('old' or 'new'. Defaults to old).
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
+    print(ciphers.baconian.encrypt(text, letter1, letter2, style))
 
 def encrypt_affine(text, p1, p2):
-    print(ciphers.affine(text, p1, p2, "e"))
+    """
+    Encrypts text using the Affine cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        p1 (int): The first key to be used with multiplication (coprime to 26).
+        p2 (int): The second key to be used with addition.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
+    print(ciphers.affine.encrypt(text, p1, p2))
 
 def encrypt_rail_fence(text, key):
-    print(ciphers.rail_fence(text, key, "e"))
+    """
+    Encrypts text using the Rail Fence cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        key (int): The number of rails to be used in encryption.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
+    print(ciphers.rail_fence.encrypt(text, key))
 
 def encrypt_substitution(text, key):
+    """
+    Encrypts text using a Substitution cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        key (str, 26 chars): The custom alphabet to substitute with.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
     print(ciphers.substitution.encrypt(text, key))
 
 def encrypt_beaufort(text, key):
+    """
+    Encrypts text using the Beaufort cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        key (str): The keyword to encrypt the plaintext with.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
     print(ciphers.beaufort.beaufort(text, key))
 
 def encrypt_autokey(text, key):
+    """
+    Encrypts text using the Autokey cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        key (int): The initial key to encrypt the plaintext with.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
     print(ciphers.autokey.encrypt(text, key))
 
 def encrypt_bifid(text, key):
+    """
+    Encrypts text using the Bifid cipher.
+
+    Args:
+        text (str): The plaintext to encrypt.
+        key (str): The Polybius square to encrypt the text with.
+
+    Output:
+        Prints the encrypted ciphertext.
+    """
     print(ciphers.bifid.encrypt(text, key))
 
 def nonsense(length):
+    """
+    Encrypts text using the Nonsense cipher.
+
+    Args:
+        length (int): The length of desired nonsensical output.
+
+    Output:
+        Prints the nonsensical output.
+    """
     print(ciphers.nonsense.nonsense(length))
 
 
 # ---- Decryption
 
 def decrypt_caesar(text, key):
+    """
+    Decrypts text using the Caesar cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+        key (int): The key used to encrypt the plaintext.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
     print(ciphers.caesar.decrypt(text, key))
 
 def decrypt_playfair(text, key):
+    """
+    Decrypts text using the Caesar cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+        key (list): The key matrix used to encrypt the plaintext.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
     print(ciphers.playfair.decrypt(text, ciphers.playfair.generate_key_matrix(key)))
 
 def decrypt_multiplication(text, key):
+    """
+    Decrypts text using the Multiplication cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+        key (int): The key used to encrypt the plaintext.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
     print(ciphers.multiplication.decrypt(text, key))
 
 def decrypt_rot13(text):
+    """
+    Decrypts text using the ROT13 cipher.
+    This is the same as decrypting a Caesar cipher with a shift key of 13.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
     print(ciphers.caesar.decrypt(text, 13))
 
 def decrypt_vigenere(text, password):
+    """
+    Decrypts text using the Vigenère cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+        key (str): The keyword used to encrypt the plaintext.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
     print(ciphers.vigenere.decrypt(text, password))
 
-def decrypt_baconian(text, style, letter1="a", letter2="b"):
-    print(ciphers.baconian(text, "d", letter1, letter2, style))
+def decrypt_baconian(text, letter1="a", letter2="b", style="old"):
+    print(ciphers.baconian.decrypt(text, letter1, letter2, style))
 
 def decrypt_affine(text, p1, p2):
-    print(ciphers.affine(text, p1, p2, "d"))
+    """
+    Decrypts text using the Affine cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+        p1 (int): The first key used with multiplication (must be coprime to 26).
+        p2 (int): The second key used with addition.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
+    print(ciphers.affine.decrypt(text, p1, p2))
 
 def decrypt_rail_fence(text, key):
-    print(ciphers.rail_fence(text, key, "d"))
+    """
+    Decrypts text using the Rail Fence cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+        key (int): The number of rails used to encrypt the plaintext.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
+    print(ciphers.rail_fence.decrypt(text, key))
 
 def decrypt_substitution(text, key):
+    """
+    Decrypts text using a Substitution cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+        key (str, 26 characters): The custom alphabet used to encrypt the plaintext.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
     print(ciphers.substitution.decrypt(text, key))
 
 def decrypt_beaufort(text, key):
+    """
+    Decrypts text using the Beaufort cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+        key (str): The keyword used to encrypt the plaintext.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
     print(ciphers.beaufort.beaufort(text, key))
 
 def decrypt_autokey(text, key):
+    """
+    Decrypts text using the Autokey cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+        key (str): The initial keyword used to encrypt the plaintext.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
     print(ciphers.autokey.decrypt(text, key))
 
 def decrypt_bifid(text, key):
+    """
+    Decrypts text using the Bifid cipher.
+
+    Args:
+        text (str): The ciphertext to decrypt.
+        key (str): The Polybius used to encrypt the plaintext.
+
+    Output:
+        Prints the decrypted plaintext.
+    """
     print(ciphers.bifid.decrypt(text, key))
 
 
 # ---- About ciphers
 
 def about_caesar():
+    """
+    Provides information about the Caesar cipher.
+
+    Output:
+        Prints information about the Caesar cipher.
+    """
     print(ciphers.caesar.about(False)) # Using the standard/default Caesar cipher about section
 
 def about_playfair():
+    """
+    Provides information about the Playfair cipher.
+
+    Output:
+        Prints information about the Playfair cipher.
+    """
     print(ciphers.playfair.about())
 
 def about_rot13():
+    """
+    Provides information about the ROT13 cipher.
+
+    Output:
+        Prints information about the ROT13 cipher.
+    """
     print(ciphers.caesar.about(True)) # Using an alternative Caesar cipher about section (for ROT13)
 
 def about_vigenere():
+    """
+    Provides information about the Vigenère cipher.
+
+    Output:
+        Prints information about the Vigenère cipher.
+    """
     print(ciphers.vigenere.about())
 
 def about_affine():
+    """
+    Provides information about the Affine cipher.
+
+    Output:
+        Prints information about the Affine cipher.
+    """
     print(ciphers.affine.about())
 
 def about_rail_fence():
+    """
+    Provides information about the Rail Fence cipher.
+
+    Output:
+        Prints information about the Rail Fence cipher.
+    """
     print(ciphers.rail_fence.about())
 
 def about_substitution():
+    """
+    Provides information about the Substitution cipher.
+
+    Output:
+        Prints information about the Substitution cipher.
+    """
     print(ciphers.substitution.about())
 
 def about_beaufort():
+    """
+    Provides information about the Beaufort cipher.
+
+    Output:
+        Prints information about the Beaufort cipher.
+    """
     print(ciphers.beaufort.about())
 
 def about_autokey():
+    """
+    Provides information about the Autokey cipher.
+
+    Output:
+        Prints information about the Autokey cipher.
+    """
     print(ciphers.autokey.about())
 
 def about_bifid():
+    """
+    Provides information about the Bifid cipher.
+
+    Output:
+        Prints information about the Bifid cipher.
+    """
     print(ciphers.bifid.about())
 
 def about_nonsense():
+    """
+    Provides information about the Nonsense cipher.
+
+    Output:
+        Prints information about the Nonsense cipher.
+    """
     print(ciphers.nonsense.about())
 
 
 # ---- Utils
 
 def check_text_password(text, password):
+    """
+    Checks whether input text and password/key have been provided.
+
+    Raises:
+        Exception: If input text has not been provided.
+        Exception: If password/key has not been provided.
+    """
     if text is None:
         raise Exception("You need to pass a text to encrypt with `-t <plaintext>`")
     if password is None:
         raise Exception("This cipher requires a password, tell bletchley which password to use with `-p <password>`")
 
 def check_password_not_needed(password):
+    """
+    Runs if a user provides a password/key when attempting to use
+    a cipher that does not require a password/key.
+
+    Output:
+        Prints a warning, notifying the user that the chosen cipher does not require a password.
+    """
     if password is not None:
         warnings.warn("This cipher doesn't require a password", SyntaxWarning)
 
 def convert_num_password(password):
+    """
+    Attempts to convert a given password/key to an integer
+
+    Raises:
+        Exception: If the function cannot cast the provided password/key to type int.
+    """
     try:
         return(int(password))
     except:
@@ -229,6 +684,9 @@ def convert_num_password(password):
 # ---- Main function to handle cli input
 
 def main():
+    """
+    Handles CLI input, including commands, arguments, etc., for Bletchley.
+    """
     # Create the argument parser
     parser = argparse.ArgumentParser(description="CLI for Bletchley, a cryptanalysis suite.")    
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -383,6 +841,7 @@ def main():
             encrypt_playfair(text, args.password)
 
         elif args.cipher == "baconian" or args.cipher == "6":
+            #encrypt_baconian(STUFF HERE)
             print("I need to get the optional letter 1 and 2, and style (old or new), I could probably do this with the -p, just have them passed with commas in that")
 
         elif args.cipher == "affine" or args.cipher == "7":
@@ -444,6 +903,7 @@ def main():
             decrypt_playfair(text, args.password)
 
         elif args.cipher == "baconian" or args.cipher == "6":
+            #decrypt_baconian(STUFF HERE)
             print("I need to get the optional letter 1 and 2, and style (old or new), I could probably do this with the -p, just have them passed with commas in that")
 
         elif args.cipher == "affine" or args.cipher == "7":

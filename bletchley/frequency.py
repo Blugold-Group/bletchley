@@ -1,7 +1,21 @@
 """
 Provides functions to perform frequency analysis on a given text
 
-Can return the analysis programatically or in graphical charts
+This module can return frequency analysis results programmatically or display them as charts.
+
+Modes:
+    - "c" (counts): Returns a list of unique characters and their respective counts.
+    - "p" (percentages): Returns a list of unique characters and their relative frequency (percentage).
+    - "vsbc" (verbose simple bar - count): Displays a simple bar chart of character counts.
+    - "vbc" (verbose bar - count): Displays a detailed bar chart of character counts.
+    - "vsbca" (verbose simple bar - count, alphabetized): Displays a simple bar chart with characters sorted alphabetically.
+    - "vbca" (verbose bar - count, alphabetized): Displays a detailed bar chart with characters sorted alphabetically.
+    - "vsbcar" (verbose simple bar - count, alphabetized reverse): Displays a simple bar chart with characters sorted in reverse alphabetical order.
+    - "vbcar" (verbose bar - count, alphabetized reverse): Displays a detailed bar chart with characters sorted in reverse alphabetical order.
+    - "vsbcos" (verbose simple bar - count ordered smallest to largest): Displays a simple bar chart with counts sorted from smallest to largest.
+    - "vbcos" (verbose bar - count ordered smallest to largest): Displays a detailed bar chart with counts sorted from smallest to largest.
+    - "vsbcol" (verbose simple bar - count ordered largest to smallest): Displays a simple bar chart with counts sorted from largest to smallest.
+    - "vbcol" (verbose bar - count 
 
 TODO:
     - Add an option to ignore special characters (specifically spaces)
@@ -13,6 +27,37 @@ TODO:
 import plotext as plt
 
 def frequencyAnalysis(text, mode="c"):
+    """
+    Performs frequency analysis on the given text.
+
+    Args:
+        text (str): The input text to analyze.
+        mode (str, optional): The mode specifying the output format. Defaults to "c".
+        
+            - "c": Returns a list of unique characters and their counts.
+            - "p": Returns a list of unique characters and their relative frequencies (percentages).
+            - "vsbc": Displays a simple bar chart of character counts.
+            - "vbc": Displays a detailed bar chart of character counts.
+            - "vsbca": Displays a simple bar chart with characters sorted alphabetically.
+            - "vbca": Displays a detailed bar chart with characters sorted alphabetically.
+            - "vsbcar": Displays a simple bar chart with characters sorted in reverse alphabetical order.
+            - "vbcar": Displays a detailed bar chart with characters sorted in reverse alphabetical order.
+            - "vsbcos": Displays a simple bar chart with counts sorted from smallest to largest.
+            - "vbcos": Displays a detailed bar chart with counts sorted from smallest to largest.
+            - "vsbcol": Displays a simple bar chart with counts sorted from largest to smallest.
+            - "vbcol": Displays a detailed bar chart with counts sorted from largest to smallest.
+
+    Returns:
+        tuple: A tuple containing:
+            - List of unique characters in the text.
+            - List of corresponding counts or percentages, depending on mode.
+        
+        OR:
+        Displays a graphical representation if a verbose mode is selected.
+
+    Raises:
+        ValueError: If an unrecognized mode is provided.
+    """
     # Performs frequency analysis on a text and displays it in graphs
 
     foundCharacters=[]

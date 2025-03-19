@@ -24,6 +24,7 @@ from itertools import chain, cycle
 import importlib.resources
 #from numpy.random import choice
 
+# Defining global alphabets/character sets/etc
 global lower_alphabet
 global upper_alphabet
 global alphabet
@@ -41,8 +42,19 @@ numbers="1234567890"
 class realEngine:
     """
     A class containing several methods that use wordlists consisting of samples of English words to determine whether an input contains a valid, English word.
+    
+    Attributes:
+        data (list): A list of words loaded from specified corpus.
+        corpus (str): The corpus type used for word validation.
     """
     def __init__(self, corpus="small_specialized"):
+        """
+        Initialized the realEngine with selceted wordlist corpus.
+
+        Args:
+            corpus (str): The corpus name (large, small, small_specialized, large_specialized, dictionary)
+
+        """
         if corpus=="large":
             with importlib.resources.open_text("bletchley", "wordlists/words_dictionary.txt") as f:
                 self.data = f.read().splitlines() 
@@ -69,6 +81,12 @@ class realEngine:
     def is_this_real(self, word):
         """
         Check whether the given string word exists in "real" words.
+
+        Args:
+            word (str): The word to validate.
+
+        Returns:
+            bool: True if word exists in corpus, otherwise False.
         """
         word=word.lower()
 
@@ -79,11 +97,14 @@ class realEngine:
     
     def plaintext_or_ciphertext(self, sentence, tolerance=0.51):
         """
-        A method to determine if a string is english 
+        Determines if given sentence is likely English plaintext or ciphertext.
 
-        The tolerance is the percentage/100 of the text which has to be english words in order to be labelled as "real"
+        Args:
+            sentence (str): The input text.
+            tolerance (float): Required percentage (as a decimal between 0 and 1) of words that must be "real" words. (Default 0.51)
 
-        Sentences are determined by splitting the sentence by spaces
+        Returns:
+            bool: True if text is more likely plaintext, otherwise False.
         """
         words=sentence.split()
         length=len(words)
@@ -146,8 +167,14 @@ def reinflate(ciphertext: str, punctuation_map: list, capitalization_map: list):
 
 def verify_input(text):
     """
-    Ensure that the passed variable is both of type string and is not empty.
-    Otherwise, raise an error.
+    Validate input text for encryption or decryption.
+
+    Args:
+        text (str): The input string.
+
+    Raises:
+        TypeError: If the input is not a string.
+        ValueError: If the input string is empty.
     """
     if not isinstance(text, str):
         raise TypeError("text must be a string")
@@ -156,7 +183,14 @@ def verify_input(text):
 
 def verify_key_exists(text):
     """
-    Ensure that the passed variable is both of type string and is not empty.
+    Ensure the provided key exists and is a non-empty string.
+
+    Args:
+        key (str): The key to verify.
+
+    Raises:
+        TypeError: If the key is not a string.
+        ValueError: If the kwy is empty.
     """
     if not isinstance(text, str):
         raise TypeError("Key must be a string")
@@ -165,7 +199,14 @@ def verify_key_exists(text):
 
 def verify_int_key(key):
     """
-    Ensure that the passed variable is both of type int and is not empty.
+    Validate that a key is an integer.
+
+    Args:
+        key (int): The key to validate.
+
+    Raises:
+        TypeError: If the key is not an integer.
+        ValueError: If the key is zero/invalid.
     """
     if not isinstance(key, int):
         raise TypeError("key must be an integer")
@@ -176,33 +217,48 @@ class template:
     """
     This is a template that you may base future ciphers off of.
     Please provide a brief docstring (triple quotes) containing information about the given function/method/class, as well as its arguments and/or outputs.
+
+    Methods:
+        about() -> str: Provide information about the cipher.
+        encrypt(plaintext, key) -> str: Encrypt plaintext, output ciphertext.
+        decrypt(ciphertext, key) -> str: Decrypt cipher text, output plaintext.
+        extra(thing, thing2) -> str: Do something else, probably an internal helper function.
     """
     @staticmethod
     def about():
+        """Returns a brief description of the cipher, Wikipedia link, etc."""
         return "A little blurb about the cipher and how it works"
 
     @staticmethod
     def encrypt(plaintext, key):
+        """Encrypts the given plaintext using the cipher."""
         return "Encrypt a text"
 
     @staticmethod
     def decrypt(ciphertext, key):
+        """Decrypts the given ciphertext using the cipehr."""
         return "Decrypt a text"
 
     @staticmethod
     def extra(text, key):
+        """Internal function used by the cipher."""
         return "Internal functions for use by the cipher"
 
 class caesar:
     """
-    A class containing about(), encrypt(), and decrypt(), for the Caesar cipher.
+    A class implementing the Caesar cipher, a basic shift cipher.
     This class is also used for the ROT13 cipher.
     """
     @staticmethod
     def about(useRot13=False):
         """
-        A method that returns helpful information about the Caesar cipher.
-        Note that about() takes a bool useRot13, which, when set True, returns information about specifically the ROT13 cipher, as opposed to all other Caesar variations.
+        Returns information about the Caesar cipher or ROT13 cipher.
+
+        Args:
+            useRot13 (bool): If True, return details about the ROT13 variant.
+
+        Returns:
+            str: A description of the cipher (either ROT13 or Caesar as a whole).
         """
         if(useRot13):
             return ("ROT13 cipher https://en.wikipedia.org/wiki/ROT13 \n"
@@ -217,9 +273,14 @@ class caesar:
     @staticmethod
     def encrypt(text, increment=randrange(1,26)):
         """
-        Encrypt a string, text, using the Caesar cipher.
-        text (str): The text to be encrypted
-        increment (int): The value by witch to shift the alphabet in encryption. If unset, it defaults to a random value between 1 and 26.
+        Encrypts text using the Caesar cipher.
+
+        Args:
+            text (str): Text to be encrypted.
+            increment (int): The number of positions to shift. Defaults to a random value 1-26.
+
+        Returns:
+            str: The encrypted text.
         """
         global lower_alphabet
         global upper_alphabet
@@ -246,17 +307,28 @@ class caesar:
     @staticmethod
     def decrypt(text, increment=randrange(1,26)):
         """
-        Decrypt a string, text, using the Caesar cipher.
-        text (str): The text to be decrypted
-        increment (int): The value by witch to shift the alphabet in decryption. If unset, it defaults to a random value between 1 and 26.
+        Decrypts text using the Caesar cipher.
+
+        Args:
+            text (str): The text to be decrypted.
+            increment (int): Number of positions to shift. Defaults to random number 1-26.
+
+        Returns:
+            str: The decrypted text.
         """
         return caesar.encrypt(text, -increment)
 
 class playfair:
+    """
+    A class implementing the Playfair cipher, a digraph substitution cipher.
+    """
     @staticmethod
     def about():
         """
-        A method that returns helpful information about the Playfair cipher.
+        Provides information about the Playfair cipher.
+
+        Returns:
+            str: A description of the Playfair cipher.
         """
         return ("Playfair cipher: https://en.wikipedia.org/wiki/Playfair_cipher\n"
                 "This cipher encrypts text in letter pairs using a 5x5 key matrix, "
@@ -266,6 +338,15 @@ class playfair:
 
     @staticmethod
     def prepare_text(text):
+        """
+        Prepares text for encryption by making it uppercase, replacing 'J' with 'I', and inserting 'X' where needed.
+
+        Args:
+            text (str): The input text.
+
+        Returns:
+            str: The prepared text formatted for Playfair encryption.
+        """
         text = text.upper().replace("J", "I").replace(" ", "")
         prepared_text = ""
 
@@ -288,6 +369,15 @@ class playfair:
 
     @staticmethod
     def generate_key_matrix(key):
+        """
+        Generated the 5x5 key matrix used for Playfair encryption.
+
+        Args:
+            key (str): The keyword used for the key matrix.
+
+        Returns:
+            list: a 5x5 matrix as a 2 dimensional array list.
+        """
         key = key.upper().replace("J", "I").replace(" ", "")
         key_set = set()
         matrix = []
@@ -302,6 +392,16 @@ class playfair:
 
     @staticmethod
     def find_position(matrix, char):
+        """
+        Finds the row and column position of a letter in the key matrix.
+
+        Args:
+            matrix (list): The 5x5 Playfair matrix.
+            char (str): The letter to locate.
+
+        Returns:
+            tuple: The row and column indices of the character in the matrix.
+        """
         for row in range(5):
             for col in range(5):
                 if matrix[row][col] == char:
@@ -311,9 +411,14 @@ class playfair:
     @staticmethod
     def encrypt(text, key_matrix):
         """
-        Encrypt a string, text, using the Playfair cipher.
-        text (str): The text to be encrypted
-        key_matrix (list): The 5x5 key matrix to be used as an encryption key
+        Encrypts text using the Playfair cipher.
+
+        Args:
+            text (str): The text to be encrypted.
+            key_matrix (list): The 5x5 key matrix.
+
+        Returns:
+            str: The encrypted text.
         """
         text = playfair.prepare_text(text)
         encrypted_text = ""
@@ -337,6 +442,16 @@ class playfair:
 
     @staticmethod
     def decrypt(text, key_matrix):
+        """
+        Decrypts text using the Playfair cipher.
+
+        Args:
+            text (str): The text to be decrypted.
+            key_matrix (list): The 5x5 key matrix.
+
+        Returns:
+            str: The decrypted text.
+        """
         decrypted_text = ""
 
         for i in range(0, len(text), 2):
@@ -357,19 +472,31 @@ class playfair:
         return decrypted_text
 
 class multiplication:
+    """
+    A class implementing the Multiplication cipher, a variation of the Caesar cipher.
+    Instead of shifting letters by addition, it applies multiplication.
+    """
     @staticmethod
     def about():
         """
-        A method that returns helpful information about the Multiplication/Multiplicative cipher.
+        Provides information about the Multiplication cipher.
+
+        Returns:
+            str: A description of the Multiplication cipher.
         """
         return "The Caesar cipher but multiplication instead of addition. The decryption is different because just dividing letters will give you the same output for some inputs, so you have to use modular inverses. (https://www.dcode.fr/multiplicative-cipher)"
 
     @staticmethod
     def encrypt(text, key=randrange(1,26)):
         """
-        Encrypt a string, text, using the Multiplication cipher.
-        text (str): The text to be encrypted
-        key (int): An integer between 1 and 26 to multiply input by
+        Encrypts text using the Multiplication cipher.
+
+        Args:
+            text (str): The text to be encrypted.
+            key (int): An integer between 1 and 26 for mmultiplication.
+
+        Returns:
+            str: The encrypted text.
         """
         global lower_alphabet
         global upper_alphabet
@@ -390,6 +517,16 @@ class multiplication:
 
     @staticmethod
     def decrypt(text, key=randrange(1,26)):
+        """
+        Decrypts text using the Multiplication cipher.
+
+        Args:
+            text (str): The text to be decrypted.
+            key (int): The multiplication key used during encryption.
+
+        Returns:
+            str: The decrypted text.
+        """
         global lower_alphabet
         global upper_alphabet
         global alphabet
@@ -411,41 +548,73 @@ class multiplication:
         return reinflate(plaintext, punctuation_map, capitalization_map)
 
 class multiplicative:
+    """
+    A wrapper class for the Multiplication cipher.
+    The Multiplicative cipher is identical to the Multiplication cipher.
+    """
     @staticmethod
     def about():
         """
-        A method that returns helpful information about the Multiplication/Multiplicative cipher.
-        'Multiplicative' is simply another name for the Multiplication cipher, and vice versa.
+        Provides information about the Multiplicative (Multiplication) cipher.
+
+        Returns:
+            str: A description of the Multiplicative cipher.
         """
         return multiplication.about()
 
     @staticmethod
     def encrypt(text, key=randrange(1,26)):
         """
-        Encrypt a string, text, using the Multiplicative cipher.
-        text (str): The text to be encrypted
-        key (int): An integer between 1 and 26 to multiply input by
+        Encrypts text using the Multiplicative cipher.
+
+        Args:
+            text (str): The text to be encrypted.
+            key (int): A key used for multiplcation.
+
+        Returns:
+            str: The encrypted text.
         """
         return multiplication.encrypt(text)
 
     @staticmethod
     def decrypt(text, key=randrange(1,26)):
+        """
+        Decrypts text using the Multiplicative cipher.
+
+        Args:
+            text (str): The text to be decrypted.
+            key (int): The key used during encryption.
+
+        Returns:
+            str: The decrypted text.
+        """
         return multiplication.decrypt(text)
 
 class vigenere:
+    """
+    A class implementing the Vigenère cipher, a polyalphabetic substitution cipher.
+    """
     @staticmethod
     def about():
         """
-        A method that returns helpful information about the Vigenere cipher.
+        Provides information about the Viegenère cipher.
+
+        Returns:
+            str: A description of the Vigeneère cipher.
         """
-        return "Vigenere cipher https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher"
+        return "Vigenère cipher https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher"
     
     @staticmethod
     def encrypt(text, key):
         """
-        Encrypt a string, text, using the Vigenere cipher.
-        text (str): The text to be encrypted
-        key (int): The key to be used to encrypt the input text
+        Encrypts text using the Vigenère cipher.
+
+        Args:
+            text (str): The text to be encrypted.
+            key (str): The keyword used for encryption.
+
+        Returns:
+            str: The encrypted text.
         """
         global lower_alphabet
         global upper_alphabet
@@ -478,7 +647,16 @@ class vigenere:
 
     @staticmethod
     def decrypt(text, key):
- 
+        """
+        Decrypts text using the Vigenère cipher.
+
+        Args:
+            text (str): The text to be decrypted.
+            key (str): The keyword used during encryption.
+
+        Returns:
+            str: The decrypted text.
+        """
         global lower_alphabet
         global upper_alphabet
 
@@ -517,19 +695,31 @@ class vigenere:
         return reinflate(plaintext, punctuation_map, capitalization_map)
 
 class atbash:
-
+    """
+    A class implementing the Atbash cipher, a simple monoalphabetic substutiion cipher
+    that reverses the order of the alphabet.
+    """
     @staticmethod
     def about():
         """
-        A method that returns helpful information about the Atbash cipher.
+        Provides information about the Atbash cipher.
+
+        Returns:
+            str: A description of the Atbash cipher.
         """
         return "Atbash cipher, reverses text within the bounds of the alphabet (https://en.wikipedia.org/wiki/Atbash)"
 
     @staticmethod
     def atbash(text):
         """
-        Either encrypt or decrypt a string, text, using the Atbash cipher.
-        text (str): The text to be encrypted/decrypted. The processes for Atbash encryption and decryption are identical, so differentiation between the two is unnecessary.
+        Encrypts or decrypts text using the Atbash cipher.
+        Since Atbash is self-inverse cipher, encryption and decryption are identical processes.
+
+        Args:
+            text (str): The text to be encrypted/decrypted.
+
+        Returns:
+            str: The transformed text.
         """
         global lower_alphabet
         global upper_alphabet
@@ -550,18 +740,79 @@ class atbash:
     @staticmethod
     def encrypt(text):
         """
-        Encrypt a string, text, using the Atbash cipher. Encryption and decryption are identical processes.
-        text (str): The text to be encrypted
+        Encrypts text using the Atbash cipher
+
+        Args:
+            text (str): The text to be encrypted.
+
+        Returns:
+            str: The encrypted text.
         """
         return atbash(text)
 
     @staticmethod
     def decrypt(text):
         """
-        Decrypted a string, text, using the Atbash cipher. Encryption and decryption are identical processes.
-        text (str): The text to be decrypted
+        Decrypts text using the Atbash cipher.
+
+        Args:
+            text (str): The text to be decrypted.
+
+        Returns:
+            str: The decrypted text.
         """
         return atbash(text)
+'''
+class baconian:
+    """
+    A class implementing the Baconian cipher, a binary-based encoding scheme.
+    """
+
+    @staticmethod
+    def about():
+        """
+        Provides information about the Baconian cipher.
+
+        Returns:
+            str: A description of the Baconian cipher.
+        """
+        return ("Baconian cipher encodes text into a binary-like form using two distinct characters "
+                "(default 'a' and 'b'). See https://en.wikipedia.org/wiki/Bacon%27s_cipher for details.")
+    
+    @staticmethod
+    def encrypt(text: str, l1="a", l2="b", style="old"):
+        """
+        Encrypts text using the Baconian cipher.
+
+        Args:
+            text (str): The text to be encrypted.
+            l1 (str): The first character representing '0' in binary form.
+            l2 (str): The second character representing '1' in binary form.
+            style (str): Either "old" (where 'I' and 'J' share a code, and 'U' and 'V' share a code)
+                         or "new" (where all letters have unique codes).
+
+        Returns:
+            str: The encrypted Baconian text.
+        """
+        global lower_alphabet
+        encrypted = ""
+        text = text.lower()
+
+        for char in text:
+            if char not in lower_alphabet:
+                continue
+            index = lower_alphabet.index(char)
+            if style == "old":
+                if index > 20:
+                    index -= 2
+                elif index > 8:
+                    index -= 1
+            binary = f"{index:05b}"  # Convert index to a 5-bit binary string
+            bacon_text = "".join(l1 if bit == "0" else l2 for bit in binary)
+            encrypted += bacon_text + " "
+
+        return encrypted.strip()
+'''
 
 def baconian(text, mode="e", l1="a", l2="b", style="old"):
     """
@@ -606,6 +857,7 @@ def baconian(text, mode="e", l1="a", l2="b", style="old"):
         encrypted+=bacon+" "
 
     return(encrypted[:-1])
+
 
 def affine(text, key1=randrange(1,25), key2=randrange(1,25), mode="e"):
     """
@@ -704,24 +956,219 @@ def rail_fence(text, n=randrange(2,7), mode="e"):
 
     return toReturn
 
-class substitution:
+'''
+class affine:
+    """
+    A class implementing the Affine cipher a monoalphabetic cipher
+    using a linear functin to change each letter in the alphabet.
+    """
+    
     @staticmethod
     def about():
         """
-        A method that returns helpful information about the Substitution cipher.
+        Provides information about the Affine cipher.
+
+        Returns:
+            str: A description of the Affine cipher.
         """
-        return "Switch letters with other letters (https://en.wikipedia.org/wiki/Substitution_cipher)"
+        return "The Affine cipher is a type of monoalphabetic substitution cipher that encrypts text using a mathematical function. (https://en.wikipedia.org/wiki/Affine_cipher)"
+    
+    @staticmethod
+    def encrypt(plaintext, key1 = randrange(1, 25), key2 = randrange(1, 25)):
+        """
+        Encrypts text using the Affine cipher.
+
+        Args:
+            plaintext (str): The text to be encrypted.
+            key1 (int): The first key used for multiplication (must be coprime to 26).
+            key2 (int): The second key used for addition.
+
+        Returns:
+            str: The encrypted ciphertext.
+        """
+        global lower_alphabet, upper_alphabet
+        ciphertext = ""
+
+        plaintext, punctuation_map, capitalization_map = process_text(plaintext)
+
+        for char in plaintext:
+            if char.lower() in lower_alphabet:
+                index = (key1 * lower_alphabet.index(char.lower()) + key2) % 26
+                if char in lower_alphabet:
+                    ciphertext += lower_alphabet[index]
+                else:
+                    ciphertext += upper_alphabet[index]
+            else:
+                ciphertext += char
+
+        return reinflate(ciphertext, punctuation_map, capitalization_map)
+    
+    @staticmethod
+    def decrypt(ciphertext, key1, key2):
+        """
+        Decrypts text using the Affine cipher.
+
+        Args:
+            ciphertext (str): The text to be decrypted.
+            key1 (int): The first key used for multiplication (must be coprime to 26).
+            key2 (int): The second key used for subtraction.
+
+        Returns:
+            str: The decrypted plaintext.
+
+        Raises:
+            ValueError: If key1 has no modular inverse under module 26.
+        """
+        global lower_alphabet, upper_alphabet
+        plaintext = ""
+
+        ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
+
+        try:
+            key1_inverse = pow(key1, -1, 26)
+        except ValueError:
+            raise ValueError("Key1 must be coprime to 26 (it needs a modular inverse).")
+        
+        for char in ciphertext:
+            if char.lower() in lower_alphabet:
+                index = (key1_inverse * (lower_alphabet.index(char.lower()) - key2)) % 26
+                if char in lower_alphabet:
+                    plaintext += lower_alphabet[index]
+                else:
+                    plaintext += upper_alphabet[index]
+            else:
+                plaintext += char
+
+        return reinflate(plaintext, punctuation_map, capitalization_map)
+    
+class rail_fence:
+    """
+    A class implementing the Rail Fence cipher, a transposition cipher that rearranges text
+    by writing it in a zigzag pattern across given number of rows.
+    """
+
+    @staticmethod
+    def about():
+        """
+        Provides information about the Rail Fence cipher.
+
+        Returns:
+            str: A description of the Rail Fence cipher.
+        """
+        return "The Rail Fence cipher is a transposition cipher that writes plaintext in a zigzag pattern and reads it row by row. (https://en.wikipedia.org/wiki/Rail_fence_cipher)"
+    
+    @staticmethod
+    def encrypt(plaintext, num_rails = randrange(2, 7)):
+        """
+        Encrypts text using the Rail Fence cipher.
+
+        Args:
+            plaintext (str): The text to be encrypted.
+            num_rails (int): The number of rails (rows) used in the zigzag pattern.
+
+        Returns:
+            str: The encrypted ciphertext.
+
+        Raises:
+            ValueError: If num_rails is less than 2.
+        """
+
+        if num_rails < 2:
+            raise ValueError("Rail Fence requires at least 2 rails.")
+        
+        plaintext, punctuation_map, capitalization_map = process_text(plaintext)
+
+        rails = [[] for _ in range(num_rails)]
+        rail, step = 0, 1
+
+        for char in plaintext:
+            rails[rail].append(char)
+            rail += step
+            if rail == num_rails - 1 or rail == 0:
+                step = -step
+
+        ciphertext = ''.join([''.join(rail) for rail in rails])
+        return reinflate(ciphertext, punctuation_map, capitalization_map)
+    
+    @staticmethod
+    def decrypt(ciphertext, num_rails):
+        """
+        Decrypts text using the Rail Fence cipher.
+
+        Args:
+            ciphertext (str): The text to be decrypted.
+            num_rails (int): The number of rails (rows) used in encryption.
+
+        Returns:
+            str: The decrypted plaintext.
+
+        Raises:
+            ValueError: If num_rails is less than 2.
+        """
+
+        if num_rails < 2:
+            raise ValueError("Rail Fence requires at least 2 rails.")
+        
+        ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
+
+        rail_positions = [[] for _ in range(num_rails)]
+        rail, step = 0, 1
+
+        for _ in ciphertext:
+            rail_positions[rail].append(None)
+            rail += step
+            if rail == num_rails - 1 or rail == 0:
+                step = -step
+
+        index = 0
+        for rail in rail_positions:
+            for i in range(len(rail)):
+                rail[i] = ciphertext[index]
+                index += 1
+                
+        plaintext = []
+        rail, step = 0, 1
+        for _ in ciphertext:
+            plaintext.append(rail_positions[rail].pop(0))
+            rail += step
+            if rail == num_rails - 1 or rail == 0:
+                step = -step
+
+        return reinflate(''.join(plaintext), punctuation_map, capitalization_map)
+'''
+class substitution:
+    """
+    A class implementing a generic substitution cipher, where each letter is replaced
+    in the plaintext with another letter according to a custom alphabet.
+    """
+    @staticmethod
+    def about():
+        """
+        Provides information about the Substitution cipher.
+
+        Returns:
+            str: A description of the Substitution cipher.
+        """
+        return "A substitution is a cipher that replaces letters in the plaintext with different letters in the ciphertext according to a custom alphabet. (https://en.wikipedia.org/wiki/Substitution_cipher)"
 
     @staticmethod
     def encrypt(plaintext, custom_alphabet):
         """
-        Encrypt a string, text, using the Substitution cipher.
-        text (str): The text to be encrypted
-        custom_alphabet (list): A list of 26 characters to substitute for each letter in the English alphabet
+        Encrypts text using a substitution cipher.
+
+        Args:
+            plaintext (str): The text to be encrypted.
+            custom_alphabet (str): A 26-character custom alphabet to be used for substitution.
+
+        Returns:
+            str: The encrypted ciphertext.
+
+        Raises:
+            Exception: If the provided is alphabet is not exactly 26 characters in length.
         """
         plaintext, punctuation_map, capitalization_map = process_text(plaintext)
 
-        if len(custom_alphabet) != 26: raise Exception("Alphabet needs to be 26 characters long")
+        if len(custom_alphabet) != 26: raise Exception("Alphabet must be exactly 26 characters long")
 
         key = dict(zip(string.ascii_lowercase, custom_alphabet.lower()))
         
@@ -737,13 +1184,21 @@ class substitution:
     @staticmethod
     def decrypt(ciphertext, custom_alphabet):
         """
-        Decrypt a string, text, using the Substitution cipher.
-        text (str): The text to be encrypted
-        custom_alphabet (list): A list of 26 characters that was used to substitute each letter in the English alphabet during encryption
+        Decryptes text using a substitution cipher.
+
+        Args:
+            ciphertext (str): The text to be decrypted.
+            custom_alphabet (str): The custom alphabet used during encryption.
+
+        Returns:
+            str: The decrypted plaintext.
+
+        Raises:
+            Exception: If the provided alphabet is not exactly 26 characters in length.
         """
         ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
 
-        if len(custom_alphabet) != 26: raise Exception("Alphabet needs to be 26 characters long")
+        if len(custom_alphabet) != 26: raise Exception("Alphabet must be exactly 26 characters long")
 
         key = dict(zip(string.ascii_lowercase, custom_alphabet.lower()))
         reversed_key = {v: k for k, v in key.items()}
@@ -757,15 +1212,33 @@ class substitution:
         return reinflate(plaintext, punctuation_map, capitalization_map)
 
 class beaufort:
+    """
+    A class implementing the Beaufort cipher, a polyalphabetic cipher
+    similar to the Vigenère cipher but with different encryption formula.
+    """
     @staticmethod
     def about():
         """
-        A method that returns helpful information about the Beaufort cipher.
+        Provides information about the Beaufort cipher.
+
+        Returns:
+            str: A description of the Beaufort cipher.
         """
-        return "Built off of the Vigenere cipher (https://en.wikipedia.org/wiki/Beaufort_cipher)"
+        return "The Beaufort cipher is a variant of the Vigenère cipher (https://en.wikipedia.org/wiki/Beaufort_cipher)"
 
     @staticmethod
     def beaufort(text, key):
+        """
+        Encrypts and decrypts text using the Beaufort cipher.
+        Note that Beaufort encryption and decryption are identical processes.
+
+        Args:
+            text (str): Either the plaintext or ciphertext to be encrypted or decrypted.
+            key (str): The keyword used for encryption/decryption.
+        
+        Returns:
+            str: The encrypted/decrypted plaintext/ciphertext.
+        """
         verify_key_exists(key)
 
         text, punctuation_map, capitalization_map = process_text(text)
@@ -789,35 +1262,59 @@ class beaufort:
     @staticmethod
     def encrypt(plaintext, key):
         """
-        Encrypt a string, text, using the Beaufort cipher.
-        plaintext (str): The text to be encrypted
-        key (str): The key to be used in encryption
+        Encrypts plaintext using the Beaufort cipher.
+        Note that Beaufort encryption and decryption are identical processes.
+
+        Args:
+            plaintext (str): The text to be encrypted.
+            key (str): The keyword used for encryption.
+
+        Returns:
+            str: The encrypted ciphertext.
         """
         return beaufort(plaintext, key)
 
     @staticmethod
     def decrypt(ciphertext, key):
         """
-        Encrypt a string, text, using the Beaufort cipher.
-        ciphertext (str): The text to be decrypted
-        key (str): The key to be used in decryption
+        Decrypts ciphertext using the Beaufort cipher.
+        Note that Beaufort encryption and decryption are identical processes.
+
+        Args:
+            ciphertext (str): The text to be decrypted.
+            key (str): The keyword used during encryption.
+
+        Returns:
+            str: The decrypted plaintext.
         """
         return beaufort(ciphertext, key)
 
 class autokey:
+    """
+    A class implemetning the Autokey cipher, a variation of the Vigenère cipher
+    that appends part of the plaintext to the key (hence "autokey") to increase security.
+    """
     @staticmethod
     def about():
         """
-        A method that returns helpful information about the Autokey cipher.
+        Provides information about the Autokey cipher.
+
+        Returns:
+            str: A description of the Autokey cipher.
         """
-        return "Autokey cipher (https://en.wikipedia.org/wiki/Autokey_cipher)"
+        return "A polyalphabetic cipher based on Vigenère that extends the key using plaintext. (https://en.wikipedia.org/wiki/Autokey_cipher)"
 
     @staticmethod
     def encrypt(plaintext, key):
         """
-        Encrypt a string, text, using the Autokey cipher.
-        plaintext (str): The text to be encrypted
-        key (str): The key to be used to encrypt the plaintext
+        Encrypts text using the Autokey cipher.
+
+        Args:
+            plaintext (str): The text to be encrypted.
+            key (str): The initial key used for encryption.
+
+        Returns:
+            str: The encrypted text.
         """
         # Adapted from https://github.com/TheAlgorithms/Python/blob/master/ciphers/autokey.py
         # Autokey cipher
@@ -858,9 +1355,11 @@ class autokey:
     @staticmethod
     def decrypt(ciphertext, key):
         """
-        Encrypt a string, text, using the Autokey cipher.
-        ciphertext (str): The text to decrypt
-        key (str): The key used to encrypt the plaintext
+        Decrypts text using the Autokey cipher
+
+        Args:
+            ciphertext (str): The text to be decrypted.
+            key (str): The initial key used during encryption.
         """
         # Adapted from https://github.com/TheAlgorithms/Python/blob/master/ciphers/autokey.py
         # Autokey cipher
@@ -893,19 +1392,31 @@ class autokey:
         return reinflate(plaintext, punctuation_map, capitalization_map)
 
 class bifid:
+    """
+    A class implementing the Bifid cipher, a fractionated cipher that combines
+    polybius squre encoding with transposition.
+    """
     @staticmethod
     def about():
         """
-        A method that returns helpful information about the Bifid cipher.
+        Provides information about the Bifid cipher.
+
+        Returns:
+            str: A description of the Bifid cipher.
         """
         return "Bifid cipher (https://en.wikipedia.org/wiki/Bifid_cipher)"
 
     @staticmethod
     def encrypt(plaintext, square):
         """
-        Encrypt a string, text, using the Bifid cipher.
-        plaintext (str): The text to be encrypted
-        square (list): A Polybius square used to encrypt the plaintext
+        Encrypts text using the Bifid cipher.
+
+        Args:
+            plaintext (str): The text to be encrypted.
+            square (str): A Polybius square used for encryption.
+
+        Returns:
+            str: The encrypted text.
         """
         plaintext, punctuation_map, capitalization_map = process_text(plaintext)
 
@@ -940,9 +1451,14 @@ class bifid:
     @staticmethod
     def decrypt(ciphertext, square):
         """
-        Decrypt a string, text, using the Bifid cipher.
-        ciphertext (str): The text to be decrypted
-        square (list): The Polybius square used to encrypt the plaintext
+        Decrypts text using the Bifid cipher.
+
+        Args:
+            ciphertext (str): The text to be decrypted.
+            square (str): The Polybius square used during encryption.
+
+        Returns:
+            str: The decrypted text.
         """
         ciphertext, punctuation_map, capitalization_map = process_text(ciphertext)
 
@@ -978,32 +1494,54 @@ class bifid:
         return reinflate(ciphertext, punctuation_map, capitalization_map)
 
 class nonsense:
-
+    """
+    A class implementing the Nonsense cipher, which simply provides
+    nonsensical output based on statistical word lengths in the English language.
+    """
     @staticmethod
     def about():
         """
-        A method that returns helpful information about the Nonsense cipher.
+        Provides information about the Nonsense cipher.
+
+        Returns:
+            str: A description of the Nonsense cipher.
         """
         return "A cipher which is just random letters in lengths according to statistical word lengths of the english language (https://github.com/berzerk0/NonsenseCipher/)"
 
     @staticmethod
     def encrypt(length):
         """
-        Generate a Nonsense cipher output of a given length
-        length (int): The length of the output
+        Generates an output of pseudo-random characters based on a given length.
+
+        Args:
+            length (int): The length of nonsense to be returned.
+
+        Returns:
+            str: The nonsensical output of given length.
         """
         return nonsense(length)
 
     @staticmethod
     def decrypt(length):
         """
-        Generate a Nonsense cipher output of a given length
-        length (int): The length of the output
+        Generates an output of pseudo-random characters based on a given length.
+
+        Args:
+            length (int): The length of nonsense to be returned.
+
+        Returns:
+            str: The nonsensical output of given length.
         """
         return nonsense(length)
 
     @staticmethod
     def wordLengthNonsense():
+        """
+        Defines statistical occurences of lengths of words in the English language.
+
+        Returns:
+            int: A randomly chosen word length based on given weights.
+        """
         lengths = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
         weights = [0.037264254570273500,0.175318842199986000,0.236406451194256000,0.189381282342557000,0.111243932166923000,0.078605655153973800,0.063440861055711100,0.040783187304009700,0.029444577786707800,0.017499282688117500,0.009119047190912850,0.006025419813131460,0.002855956737689010,0.001300152218663240,0.000620758184978121,0.000373705809092622,0.000136816980316337,0.000092253735299016,0.000057072226074815,0.000030490641327641]
 

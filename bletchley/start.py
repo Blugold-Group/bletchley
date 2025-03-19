@@ -1,6 +1,7 @@
 """
-The first things ran against a ciphertext
+Handles the initial decryption attempts for a given ciphertext.
 
+This module attempts to decrypt a given ciphertext using:
 1. Cheap brute forcing
     - Caesar
     - Rot13
@@ -16,6 +17,11 @@ TODO:
     - Each brute forcing function creates a new realTest, make start.run() pass a shared engine, and have them only create their own if its not passed (a user might want to use the functions without start.run() or the cli)
     - Right now it just tries each cipher, but I want to get to the point of layering ciphers (ie caesar->vigenere->caesar)
     - Allow passing the plaintext detection tolerance (also from cli)
+
+Dependencies:
+    - 'rich' for console output formatting.
+    - 'bruteforce.py' for bruteforce decryption.
+    - 'ciphers.py' for cipher-realted utilities.    
 
 Rich Colors - https://rich.readthedocs.io/en/stable/appendix/colors.html
 
@@ -34,11 +40,27 @@ from . import bruteforce
 console = Console()
 
 def test_failed(test, verbose):
-    # The logging utility for a failed test
+    """
+    Logs a failed decryption attempt.
+
+    Args:
+        test (str), The name of the cipher that failed.
+        verbose (bool): Whether to display the failure message.
+
+    """
     if verbose:
         console.print(f"[bold red]Test failed:  [/bold red][bold dodger_blue2]{test}[/bold dodger_blue2]")
 
 def test_success(test, cipher, key, confidence):
+    """
+    Logs a successful decryption attempt, including confidence level.
+
+    Args:
+        test (str): The decrypted plaintext.
+        cipher (str): The name of the cipher used.
+        key (str or int): The key used to decrypt the text.
+        confidence (float): Confidence percentage (decimal between 0 and 1) of the decryption's accuracy.
+    """
     # The logging utility for a succeeded test
     #console.print(f"[spring_green3]Text decrypted successfully! With a confidence of {"{:.3f}".format(confidence*100)}%, the plaintext is :[/spring_green3] {test}") # This breaks on certain system for some stupid reason
 
@@ -46,19 +68,45 @@ def test_success(test, cipher, key, confidence):
     console.print(f"[spring_green3]The ciphertext was encrypted with the [/spring_green3][bold]{cipher}[/bold] [spring_green3]cipher and used the key: [/spring_green3][bold dodger_blue3]{key}[/bold dodger_blue3]")
 
 def test_success_no_confidence(test, cipher, key):
-    # The logging utility for a succeeded test. This is for tests which can't handle or report confidence
+    """
+    Logs a successful decryption attempt for ciphers that don't support confidence calculation.
+
+    Args:
+        test (str): The decrypted plaintext.
+        cipher (str): The name of the cipher used.
+        key (str or int): The key used to decrypt the text.
+    """
     console.print(f"[spring_green3]Text decrypted successfully! The plaintext is :[/spring_green3] {test}")
     console.print(f"[spring_green3]The ciphertext was encrypted with the [/spring_green3][bold]{cipher}[/bold] [spring_green3]cipher and used the key: [/spring_green3][bold dodger_blue3]{key}[/bold dodger_blue3]")
 
 def info(text):
+    """
+    Logs an informational message.
+
+    Args:
+        text (str): The informational message to be displayed.
+    """
     console.print(f"[deep_sky_blue1]Info:[/deep_sky_blue1]  {text}")
 
 def unavailable(cipher):
+    """
+    Logs that automatic decryption for a particular cipher is unavailable.
+
+    Args:
+        cipher (str): The name of the cipher that is not supported.
+    """
     version = importlib.metadata.version("bletchley")
     console.print(f"Automatic solving for [bold cyan1]{cipher}[/bold cyan1] is currently [underline]unsupported[/underline]. You are running bletchley version [red][underline]{version}[/underline][/red]")
 
 def run(ciphertext, wordlist="small_specialized", verbose=True):
-    # Run tests to find the cipher a text was encrypted with
+    """
+    Attempts to decrypt the given ciphertext using various bruteforce methods.
+
+    Args:
+        ciphertext (str): The encrypted text to analyze.
+        wordlist (str, optional): The wordlist used for real-word detection. Defaults to "small_specialized".
+        verbose (bool, optional): Whether to display detailed logs. Defaults to True.
+    """
 
     console.print(f"[bold dodger_blue2]Starting decryption for ciphertext:[/bold dodger_blue2]  {ciphertext}")  # Make this look better
 

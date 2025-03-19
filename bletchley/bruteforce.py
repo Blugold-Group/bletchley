@@ -1,9 +1,14 @@
 """
-This file provides functions to brute force weak ciphers
+Bruteforce functions for weak ciphers.
 
-All brute force methods need to be able to work with spaces and no spaces
+This module provides bruteforce decryption methods for various classical ciphers.
+Each function attempts to decrypt ciphertexts without a key by trying all possible keys
+or by using wordlists.
 
-All brute force methods return False if the ciphertext isn't encrypted with that cipher, the [ciphertext, key, percentage_words] if automatic solving worked, and None if the brute forcing isn't implemented yet
+Returns:
+    False: If the ciphertext is not encrypted with the tested cipher.
+    Tuple ([plaintext, key, confidence]) if decryption is successful.
+    None: If the bruteforce implementation is not yet complete.
 
 TODO:
     - Add more ciphers
@@ -29,15 +34,18 @@ tolerance=0.65
 
 def caesar(text, return_type="bg"):
     """
-    Brute forces the caesar cipher
-    Takes a string text and an optional string return_type
+    Bruteforce decrypts a Caesar cipher.
 
-    return_type can be: 
-        bg "best guess" (the version which has the most real words in it)
-        all "all" (a list of all of the possible solutions)
+    Args:
+        text (str): The ciphertext.
+        return_type (str, optional):
+            - "bg" (best guess): Returns the most probable plaintext.
+            - "all": Returns all possible shifts.
 
-    In bg mode, returns the best guess, which is the string with the most instances of real words
-    If there are two strings with the same amount of instances 
+    Returns:
+        tuple(str, int, float) | bool:
+            - Best guess plaintext, key used, confidence percentage.
+            - False if decryption failes.
 
     TODO:
         - Also return the key which was used to encrypt the text
@@ -83,9 +91,17 @@ def caesar(text, return_type="bg"):
     
 def vigenere(text, verbose, tolerance=0.8):
     """
-    Brute forces the vigenere cipher, using a wordlist as the list of keys
-    Takes a string text input, a bool for verbose output, and an optional tolerance parameter.
-    The tolerance parameter is the percentage/100 in confidence for the solution to be considered valid.
+    Bruteforce decrypts a Vigenère cipher using a wordlist.
+
+    Args:
+        text (str): The ciphertext.
+        verbose (bool, optional): If True, prints progress during decryption.
+        tolerance (float, optional): The confidence threshold for a successful decryption.
+
+    Returns:
+        tuple(str, str) | None:
+            - Decrypted plaintext and key if successful.
+            - None if decryption fails
     """
     
     realTest = ciphers.realEngine("small_specialized")
@@ -111,10 +127,15 @@ def vigenere(text, verbose, tolerance=0.8):
 
 def multiplication(text):
     """
-    Bruteforces the multiplication/multiplicative cipher.
-    Takes a string text input.
-    If a valid "best guess" is determined, this outputs the best guess, the key for the best guess, and the level of confidence.
-    Otherwise, it returns False.
+    Bruteforce decrypts the Multiplication cipher.
+
+    Args:
+        text (str): The ciphertext to bruteforce.
+
+    Returns:
+        tuple(str, int, float) | bool:
+            - Buest guess plainext, key used, confidence percentage.
+            - False if decryption failes.
     """
     global tolerance
 
@@ -155,11 +176,7 @@ def multiplication(text):
 
 def multiplicative(text):
     """
-    multiplicative() is an alias for multiplication().
-    Bruteforces the multiplication/multiplicative cipher.
-    Takes a string text input.
-    If a valid "best guess" is determined, this outputs the best guess, the key for the best guess, and the level of confidence.
-    Otherwise, it returns False.
+    Alias for multiplication().
     """
     return multiplication(text)
 
@@ -201,8 +218,15 @@ def playfair(text):
 
 def atbash(text):
     """
-    Bruteforces the Atbash cipher.
-    Takes a string text input.
+    Bruteforce decrypts the Atbash cipher.
+
+    Args:
+        text (str): The ciphertext.
+
+    Returns:
+        str | bool:
+            - Decrypted plaintext if successful.
+            - False if decryption fails.
     """
     realTest = ciphers.realEngine("small_specialized")
 
